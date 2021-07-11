@@ -181,8 +181,8 @@ $.extend(SharkGame, {
         " if you'd like.)</span></p>",
 
     notice:
-        "<p>Welcome to the open <b>alpha</b> of v0.2 for New Frontiers.</p>" +
-        "<p>v0.2 is a total rework.<br/>Right now only three worlds (besides starter) are playable.<br><b>Things will be missing.</b> New stuff will be added.</p>" +
+        "<p>歡迎來到新世界的 v0.2 公開 <b>alpha</b> 版本。</p>" +
+        "<p>我在 v0.2 進行了重做。<br/>目前只能遊玩三個世界（開始世界除外）。<br><b>有些東西會疏漏。</b>有些新的東西會被加入。</p>" +
         "<p>To give feedback or contribute, check out our <a href='https://discord.gg/eYqApFkFPY'>Discord</a>.</p>" +
         "<p>To play the stable (OUTDATED) version (with all planets), visit <a href='https://spencers145.github.io/SharkGame/'>this link</a>.</p>",
 
@@ -392,7 +392,7 @@ SharkGame.TitleBar = {
         name: "donate",
         main: false,
         onClick() {
-            main.showPane("Donate", SharkGame.donate);
+            main.showPane("捐款", SharkGame.donate);
         },
     },
 
@@ -737,7 +737,7 @@ Mod of v ${SharkGame.ORIGINAL_VERSION}`
             if (reqsMet) {
                 // unlock tab!
                 main.discoverTab(tabName);
-                SharkGame.Log.addDiscovery("Discovered " + tab.name + "!");
+                SharkGame.Log.addDiscovery("發現了" + tab.name + "！");
             }
         });
     },
@@ -750,7 +750,7 @@ Mod of v ${SharkGame.ORIGINAL_VERSION}`
     autosave() {
         try {
             SharkGame.Save.saveGame();
-            SharkGame.Log.addMessage("Autosaved.");
+            SharkGame.Log.addMessage("自動保存成功。");
         } catch (err) {
             SharkGame.Log.addError(err);
         }

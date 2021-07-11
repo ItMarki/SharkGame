@@ -74,12 +74,12 @@ SharkGame.Home = {
             {
                 name: "start-machines",
                 unlock: { upgrade: ["automation"] },
-                message: "Machines to do things for you.<br>Machines to do things faster than you or any shark.",
+                message: "機器會幫你做東西。<br>機器做事的速度比你和其他鯊魚還快。",
             },
             {
                 name: "start-chasm",
                 unlock: { upgrade: ["farExploration"] },
-                message: "This place is not your home. You remember a crystal blue ocean.<br>The chasms beckon.",
+                message: "這個地方不是你的家。你記得一個碧藍的海洋。<br>深淵呼喚着你。.",
             },
             {
                 name: "start-gate",
@@ -517,7 +517,7 @@ SharkGame.Home = {
                     sceneDiv = $("<div>").attr("id", "tabSceneImage");
                 }
             }
-            let message = "你是一條鯊魚，在一片" + worldType.shortDesc + "的海洋裡。。";
+            let message = "你是一條鯊魚，在一片" + worldType.shortDesc + "的海洋裡。";
             message += "<br><span id='extraMessage' class='medDesc'><br></span>";
             tabMessage.html(message).prepend(sceneDiv);
 
@@ -634,7 +634,7 @@ SharkGame.Home = {
         } else {
             const costText = res.resourceListToString(actionCost, !enableButton, SharkGame.getElementColor(actionName, "background-color"));
             if (costText !== "") {
-                label += "<br>Cost: " + costText;
+                label += "<br>價格：" + costText;
             }
         }
 

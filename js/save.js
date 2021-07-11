@@ -56,7 +56,7 @@ SharkGame.Save = {
             if (saveString === undefined || saveString === "<~~>") throw new Error("Something went wrong while saving");
             localStorage.setItem(SharkGame.Save.saveFileName, saveString);
         } catch (err) {
-            throw new Error("Couldn't save to local storage. Reason: " + err.message);
+            throw new Error("不能保存至本地儲存。原因：" + err.message);
         }
 
         return saveString;
@@ -67,9 +67,9 @@ SharkGame.Save = {
         let saveDataString = importSaveData || localStorage.getItem(SharkGame.Save.saveFileName);
 
         if (!saveDataString) {
-            throw new Error("Tried to load game, but no game to load.");
+            throw new Error("嘗試加載遊戲，但是沒有遊戲可以加載。");
         } else if (typeof saveDataString !== "string") {
-            throw new Error("Tried to load game, but save wasn't a string.");
+            throw new Error("嘗試加載遊戲，但是存檔不是字串。");
         }
 
         // if first letter of string is <, data is encoded in ascii85, decode it.
@@ -78,7 +78,7 @@ SharkGame.Save = {
                 saveDataString = ascii85.decode(saveDataString);
             } catch (err) {
                 throw new Error(
-                    "Saved data looked like it was encoded in ascii85, but it couldn't be decoded. Can't load. Your save: " + saveDataString
+                    "保存資料看起來是以Ascii85編碼的，但是它不能被解碼。加載失敗。你的存檔：" + saveDataString
                 );
             }
         }
@@ -89,7 +89,7 @@ SharkGame.Save = {
             try {
                 saveDataString = pako.inflate(saveDataString, { to: "string" });
             } catch (err) {
-                throw new Error("Saved data is compressed, but it can't be decompressed. Can't load. Your save: " + saveDataString);
+                throw new Error("保存資料被壓縮，但是它不能被解壓。加載失敗。你的存檔：" + saveDataString);
             }
         }
 
@@ -98,9 +98,9 @@ SharkGame.Save = {
             try {
                 saveData = JSON.parse(saveDataString);
             } catch (err) {
-                let errMessage = "Couldn't load save data. It didn't parse correctly. Your save: " + saveDataString;
+                let errMessage = "加載存檔資料失敗。不能正確分析。你的存檔：" + saveDataString;
                 if (importSaveData) {
-                    errMessage += " Did you paste the entire string?";
+                    errMessage += " 你粘貼了整個字串了嗎？";
                 }
                 throw new Error(errMessage);
             }
@@ -113,7 +113,7 @@ SharkGame.Save = {
                 saveData = SharkGame.Save.saveUpdaters[0](saveData);
             } else if (typeof saveData.saveVersion !== "number" || saveData.saveVersion <= 12) {
                 // After save version 12, packing support was removed; Backwards compatibility is not maintained because gameplay changed significantly after this point.
-                throw new Error("This is a save from before New Frontiers 0.2, after which the save system was changed.");
+                throw new Error("這是在新世界 0.2 版本之前的存檔，在這之後保存系統有改變。");
             }
 
             if (saveData.saveVersion < currentVersion) {
@@ -123,7 +123,7 @@ SharkGame.Save = {
                     saveData.saveVersion = i;
                 }
                 // let player know update went fine
-                SharkGame.Log.addMessage("Updated save data from v " + saveData.version + " to " + SharkGame.VERSION + ".");
+                SharkGame.Log.addMessage("將存檔資料從 v" + saveData.version + " 更新至 " + SharkGame.VERSION + "。");
             }
 
             const currTimestamp = _.now();
@@ -244,7 +244,7 @@ SharkGame.Save = {
 
                 // acknowledge long time gaps
                 if (secondsElapsed > 3600) {
-                    let notification = "Welcome back! It's been ";
+                    let notification = "歡迎回來！從之前遊玩到現在過了";
                     const numHours = Math.floor(secondsElapsed / 3600);
                     if (numHours > 24) {
                         const numDays = Math.floor(numHours / 24);
@@ -270,22 +270,22 @@ SharkGame.Save = {
                                 }
                             } else {
                                 notification +=
-                                    "about " + (numWeeks === 1 ? "a" : numWeeks) + " week" + SharkGame.plural(numWeeks) + ", you were gone a while!";
+                                    "大約 " + numWeeks + " 星期， you were gone a while!";
                             }
                         } else {
                             notification +=
-                                (numDays === 1 ? "a" : numDays) + " day" + SharkGame.plural(numDays) + ", and look at all the stuff you have now!";
+                                numDays + " 天，看看你這裡的所有東西！";
                         }
                     } else {
                         notification +=
-                            (numHours === 1 ? "an" : numHours) + " hour" + SharkGame.plural(numHours) + " since you were seen around here!";
+                             numHours + " 小時！";
                     }
                     SharkGame.Log.addMessage(notification);
                 }
             }
         } else {
             throw new Error(
-                "Couldn't load saved game. I don't know how to break this to you, but I think your save is corrupted. Your save: " + saveDataString
+                "加載保存遊戲失敗。很遺憾跟你說，你的存檔貌似損壞了。你的存檔：" + saveDataString
             );
         }
     },

@@ -78,7 +78,7 @@ SharkGame.Log = {
         });
         // wipe array
         SharkGame.Log.messages = [];
-        if (log) SharkGame.Log.addMessage("Log cleared.");
+        if (log) SharkGame.Log.addMessage("日誌已清除。");
     },
 
     haveAnyMessages() {

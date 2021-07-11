@@ -21,7 +21,7 @@ SharkGame.WorldTypes = {
     start: {
         name: "家",
         desc: "……",
-        shortDesc: "又奇怪又深藍的strange b",
+        shortDesc: "又奇怪又深藍的",
         foresight: {
             longDesc: "……家。",
             missing: [],

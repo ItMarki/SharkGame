@@ -22,8 +22,8 @@ SharkGame.Settings = {
 
     framerate: {
         defaultSetting: 20,
-        name: "Framerate/TPS",
-        desc: "Which rate to update the game at. Lower saves power and might improve performance. Higher looks smoother.",
+        name: "幀率/TPS",
+        desc: "更新遊戲的頻率。數量低會省電，可能會提升效能。數量高會使得更流暢。",
         category: "PERFORMANCE",
         options: [1, 2, 5, 10, 20, 30],
         onChange() {
@@ -33,8 +33,8 @@ SharkGame.Settings = {
 
     showAnimations: {
         defaultSetting: true,
-        name: "Show Animations",
-        desc: "Whether to show animated transitions for some things.",
+        name: "顯示動畫",
+        desc: "對某些東西顯不顯示過渡動畫",
         category: "PERFORMANCE",
         options: [true, false],
     },
@@ -202,8 +202,8 @@ SharkGame.Settings = {
     autosaveFrequency: {
         // times given in minutes
         defaultSetting: 5,
-        name: "Autosave Frequency",
-        desc: "Number of minutes between autosaves.",
+        name: "自動保存頻率",
+        desc: "自動保存之間的分鐘數。",
         category: "SAVES",
         options: [1, 2, 5, 10, 30],
         onChange() {
