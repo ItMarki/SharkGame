@@ -335,7 +335,7 @@ SharkGame.TitleBar = {
             } catch (err) {
                 SharkGame.Log.addError(err);
             }
-            SharkGame.Log.addMessage("Saved game.");
+            SharkGame.Log.addMessage("儲存遊戲。");
         },
     },
 

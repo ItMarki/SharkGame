@@ -64,7 +64,7 @@ SharkGame.HomeActions = {
         // FREEBIES ////////////////////////////////////////////////////////////////////////////////
 
         catchFish: {
-            name: "Catch fish",
+            name: "抓魚",
             effect: {
                 resource: {
                     get fish() {
@@ -75,52 +75,52 @@ SharkGame.HomeActions = {
             cost: {},
             prereq: {},
             outcomes: [
-                "Dropped the bass.",
-                "Ate a kipper. Wait. Hang on.",
-                "You eat a fish hooray!",
-                "Fish.",
-                "Ate a shark. Wait. No, it wasn't a shark.",
-                "Ate an anchovy.",
-                "Ate a catfish.",
-                "Ate a flounder.",
-                "Ate a haddock.",
-                "Ate a herring.",
-                "Ate a mackerel.",
-                "Ate a mullet.",
-                "Ate a perch.",
-                "Ate a pollock.",
-                "Ate a salmon.",
-                "Ate a sardine.",
-                "Ate a sole.",
-                "Ate a tilapia.",
-                "Ate a trout.",
-                "Ate a whitefish.",
-                "Ate a bass.",
-                "Ate a carp.",
-                "Ate a cod.",
-                "Ate a halibut.",
-                "Ate a mahi mahi.",
-                "Ate a monkfish.",
-                "Ate a perch.",
-                "Ate a snapper.",
-                "Ate a bluefish.",
-                "Ate a grouper.",
-                "Ate a sea bass.",
-                "Ate a yellowfin tuna.",
-                "Ate a marlin.",
-                "Ate an orange roughy.",
-                "Ate a shark.",
-                "Ate a swordfish.",
-                "Ate a tilefish.",
-                "Ate a tuna.",
-                "Ate a swedish fish.",
-                "Ate a goldfish.",
+                "不是魚露是鱸魚哦。",
+                "吃了一個鯡魚乾。等等。",
+                "你吃了一條魚好耶！",
+                "魚。",
+                "吃了一條鯊魚。等等，那不是鯊魚。",
+                "吃了一條鯷魚。",
+                "吃了一條鯰魚。",
+                "吃了一條鰈魚。",
+                "吃了一條黑線鱈魚。",
+                "吃了一條鯡魚。",
+                "吃了一條鯖魚。",
+                "吃了一條鯔魚。",
+                "吃了一條河鱸。",
+                "吃了一條狹鱈。",
+                "吃了一條鮭魚。",
+                "吃了一條沙丁魚。",
+                "吃了一條比目魚。",
+                "吃了一條羅非魚。",
+                "吃了一條鱒魚。",
+                "吃了一條白魚。",
+                "吃了一條鱸魚。",
+                "吃了一條鯉魚。",
+                "吃了一條鱈魚。",
+                "吃了一條大比目魚。",
+                "吃了一條鯕鰍。",
+                "吃了一條鮟鱇。",
+                "吃了一條河鱸。",
+                "吃了一條笛鯛。",
+                "吃了一條藍魚。",
+                "吃了一條石斑魚。",
+                "吃了一條海鱸。",
+                "吃了一條黃鰭金槍魚。",
+                "吃了一條旗魚。",
+                "吃了一條大西洋胸棘鯛。",
+                "吃了一條鯊魚。",
+                "吃了一條劍魚。",
+                "吃了一條軟棘魚。",
+                "吃了一條金槍魚。",
+                "吃了一顆瑞典魚。",
+                "吃了一條金魚。",
             ],
-            helpText: "Use your natural shark prowess to find and catch a fish.",
+            helpText: "使用你的自然鯊魚技能尋找並抓捕一條魚。",
         },
 
         debugbutton: {
-            name: "Debug stuff",
+            name: "除錯東西",
             effect: {
                 resource: {
                     fish: 10000000,
@@ -137,17 +137,17 @@ SharkGame.HomeActions = {
                 // no prereqs
             },
             outcomes: [
-                "Tested.",
-                "Debugged.",
-                "Ah, yes...this doesn't work as intended.",
-                "Very interesting results here.",
-                "A gift from the developer.",
-                "You had better be testing something.",
-                "Not intended for actual gameplay.",
-                "...cheater.",
-                "Oh, wow, you went into console and typed sgdebug(). What a hacker!",
+                "已測試。",
+                "已除錯。",
+                "啊，對……這跟我的初衷不一樣。",
+                "非常有趣的結果。",
+                "開發者的禮物。",
+                "你最好在給我測試東西。",
+                "不是用來真正玩的。",
+                "……作弊。",
+                "哇，你去命令行界面打了sgdebug()。真是一個黑客啊！",
             ],
-            helpText: "Use your natural coding prowess to find and catch bugs.",
+            helpText: "使用你的自然編程技能尋找並抓捕缺陷。",
             /* removedBy: {
                 upgrades: ["crystalContainer"],
             }, */
@@ -284,7 +284,7 @@ SharkGame.HomeActions = {
         // CONVERSIONS ////////////////////////////////////////////////////////////////////////////////
 
         seaApplesToScience: {
-            name: "Study sea apples",
+            name: "研究海蘋果",
             effect: {
                 resource: {
                     science: 4,
@@ -299,13 +299,13 @@ SharkGame.HomeActions = {
                 upgrade: ["xenobiology"],
             },
             outcomes: [
-                "There's science inside these things, surely!",
-                "The cause of science is advanced!",
-                "This is perhaps maybe insightful!",
-                "Why are we even doing this? Who knows! Science!",
-                "What is even the point of these things? Why are they named for fruit? They're squirming!",
+                "裡面必然有科學！",
+                "科學的原因玄不可測！",
+                "也許能給我們一些見解！",
+                "為什麼要做這件事？誰知道呢！科學！",
+                "這些東西到底有什麼用途？為什麼要用水果命名？它們在蠕動！",
             ],
-            helpText: "Dissect sea apples to gain additional science. Research!",
+            helpText: "解剖海蘋果獲得額外的科學。研究！",
         },
 
         /*
@@ -394,7 +394,7 @@ SharkGame.HomeActions = {
         // MAKE ADVANCED RESOURCES  ///////////////////////////////////////////////////////////////////////////////
 
         transmuteSharkonium: {
-            name: "Transmute stuff to sharkonium",
+            name: "將東西轉變成鯊魚素",
             effect: {
                 resource: {
                     sharkonium: 1,
@@ -421,19 +421,19 @@ SharkGame.HomeActions = {
                 upgrade: ["transmutation"],
             },
             outcomes: [
-                "Transmutation destination!",
-                "Transmutation rejuvenation!",
-                "Transmogrification revelation!",
+                "轉變目的地！",
+                "轉變復興！",
+                "轉變術！",
                 "Transformation libation!",
                 "Transfiguration nation! ...wait.",
-                "Sharkonium arise!",
-                "Arise, sharkonium!",
-                "More sharkonium!",
-                "The substance that knows no name! Except the name sharkonium!",
-                "The substance that knows no description! It's weird to look at.",
-                "The foundation of a modern shark frenzy!",
+                "鯊魚素出現！",
+                "出現吧，鯊魚素！",
+                "更多鯊魚素！",
+                "不可命名的物質！除了鯊魚素這一名字！",
+                "不可名狀的物質！看上去很奇怪。",
+                "現代鯊魚狂熱的基礎！",
             ],
-            helpText: "Convert ordinary resources into sharkonium, building material of the future!",
+            helpText: "將平凡的資源轉換成鯊魚素，未來的基石！",
         },
 
         smeltCoralglass: {
@@ -464,7 +464,7 @@ SharkGame.HomeActions = {
         // BUY ANIMALS ////////////////////////////////////////////////////////////////////////////////
 
         getShark: {
-            name: "Recruit shark",
+            name: "招募鯊魚",
             effect: {
                 resource: {
                     shark: 1,
@@ -478,55 +478,55 @@ SharkGame.HomeActions = {
                 },
             },
             outcomes: [
-                "A bignose shark joins you.",
-                "A blacktip reef shark joins you.",
-                "A blue shark joins you.",
-                "A bull shark joins you.",
-                "A cat shark joins you.",
-                "A crocodile shark joins you.",
-                "A dusky whaler shark joins you.",
-                "A dogfish joins you.",
-                "A graceful shark joins you.",
-                "A grey reef shark joins you.",
-                "A goblin shark joins you.",
-                "A hammerhead shark joins you.",
-                "A hardnose shark joins you.",
-                "A lemon shark joins you.",
-                "A milk shark joins you.",
-                "A nervous shark joins you.",
-                "An oceanic whitetip shark joins you.",
-                "A pigeye shark joins you.",
-                "A sandbar shark joins you.",
-                "A silky shark joins you.",
-                "A silvertip shark joins you.",
-                "A sliteye shark joins you.",
-                "A speartooth shark joins you.",
-                "A spinner shark joins you.",
-                "A spot-tail shark joins you.",
-                "A mako shark joins you.",
-                "A tiger shark joins you.",
-                "A tawny shark joins you.",
-                "A white shark joins you.",
-                "A zebra shark joins you.",
+                "一條大鼻真鯊加入了你的團隊。",
+                "一條烏翅真鯊加入了你的團隊。",
+                "一條藍鯊加入了你的團隊。",
+                "一條公牛鯊加入了你的團隊。",
+                "一條貓鯊加入了你的團隊。",
+                "一條糙齒鯊加入了你的團隊。。",
+                "一條灰色真鯊加入了你的團隊。",
+                "一條角鯊加入了你的團隊。",
+                "一條鈍吻真鯊加入了你的團隊。",
+                "一條黑尾真鯊加入了你的團隊。",
+                "一條哥布林鯊加入了你的團隊。",
+                "一條錘頭鯊加入了你的團隊。",
+                "一條槍頭真鯊加入了你的團隊。",
+                "一條檸檬鯊加入了你的團隊。",
+                "一條尖頭曲齒鮫加入了你的團隊。",
+                "一條澳洲真鯊加入了你的團隊。",
+                "一條遠洋白鰭鯊加入了你的團隊。",
+                "一條高鰭真鯊加入了你的團隊。",
+                "一條鉛灰真鯊加入了你的團隊。",
+                "一條絲鯊加入了你的團隊。",
+                "一條白邊真鯊加入了你的團隊。",
+                "一條廣鼻曲齒鮫加入了你的團隊。",
+                "一條露齒鯊加入了你的團隊。",
+                "一條薔薇真鯊加入了你的團隊。",
+                "一條沙拉真鯊加入了你的團隊。",
+                "一條鯖鯊加入了你的團隊。",
+                "一條鼬鯊加入了你的團隊。",
+                "一條鏽鬚鮫加入了你的團隊。",
+                "一條大白鯊加入了你的團隊。",
+                "一條豹紋鯊加入了你的團隊。",
             ],
             multiOutcomes: [
-                "A whole bunch of sharks join you.",
-                "That's a lot of sharks.",
-                "The shark community grows!",
-                "More sharks! MORE SHARKS!",
-                "Sharks for the masses. Mass sharks.",
-                "A shiver of sharks! No, that's a legit name. Look it up.",
-                "A school of sharks!",
-                "A shoal of sharks!",
-                "A frenzy of sharks!",
-                "A gam of sharks! Yes, that's correct.",
-                "A college of sharks! They're a little smarter than a school.",
+                "一大堆鯊魚加入了你的團隊。",
+                "鯊魚真多。",
+                "鯊魚社區增長！",
+                "更多鯊魚！更多鯊魚！",
+                "大眾的鯊魚，大量的鯊魚。",
+                "一簇鯊魚！",
+                "一群鯊魚！",
+                "一組鯊魚！",
+                "一批鯊魚！",
+                "一班鯊魚！",
+                "一伙鯊魚！",
             ],
-            helpText: "Recruit a shark to help catch more fish.",
+            helpText: "招募鯊魚幫助你抓更多的魚。",
         },
 
         getManta: {
-            name: "Hire ray",
+            name: "僱用魟魚",
             effect: {
                 resource: {
                     ray: 1,
@@ -540,64 +540,64 @@ SharkGame.HomeActions = {
                 },
             },
             outcomes: [
-                "These guys seem to be kicking up a lot of sand!",
-                "A spotted eagle ray joins you.",
-                "A manta ray joins you.",
-                "A stingray joins you.",
-                "A clownnose ray joins you.",
-                "A bluespotted maskray joins you.",
-                "A bluntnose stingray joins you.",
-                "A oman masked ray joins you.",
-                "A bulls-eye electric ray joins you.",
-                "A shorttailed electric ray joins you.",
-                "A bentfin devil ray joins you.",
-                "A lesser electric ray joins you.",
-                "A cortez electric ray joins you.",
-                "A feathertail stingray joins you.",
-                "A thornback ray joins you.",
-                "A giant shovelnose ray joins you.",
-                "A pacific cownose ray joins you.",
-                "A bluespotted ribbontail ray joins you.",
-                "A marbled ribbontail ray joins you.",
-                "A blackspotted torpedo ray joins you.",
-                "A marbled torpedo ray joins you.",
-                "A atlantic torpedo ray joins you.",
-                "A panther torpedo ray joins you.",
-                "A spotted torpedo ray joins you.",
-                "A ocellated torpedo joins you.",
-                "A caribbean torpedo joins you.",
-                "A striped stingaree joins you.",
-                "A sparesly-spotted stingaree joins you.",
-                "A kapala stingaree joins you.",
-                "A common stingaree joins you.",
-                "A eastern fiddler ray joins you.",
-                "A bullseye stingray joins you.",
-                "A round stingray joins you.",
-                "A yellow stingray joins you.",
-                "A cortez round stingray joins you.",
-                "A porcupine ray joins you.",
-                "A sepia stingaree joins you.",
-                "A banded stingaree joins you.",
-                "A spotted stingaree joins you.",
-                "A sea pancake joins you.",
+                "這些傢伙看來踢上不少的沙子呢！",
+                "一條納氏鷂鱝加入了你的團隊。",
+                "一條魔鬼魚加入了你的團隊。",
+                "一條刺魟加入了你的團隊。",
+                "一條牛鼻鱝加入了你的團隊。",
+                "一條古式魟加入了你的團隊。",
+                "一條薩氏魟加入了你的團隊。",
+                /* oman masked ray */
+                "一條雙電鰩加入了你的團隊。",
+                "一條澳洲睡電鰩加入了你的團隊。",
+                "一條印度蝠鱝加入了你的團隊。",
+                "一條小雙鰭電鰩加入了你的團隊。",
+                /* cortez electric ray */
+                "一條褶尾蘿蔔魟加入了你的團隊。",
+                "一條背棘鰩加入了你的團隊。",
+                "一條藍吻犁頭鰩加入了你的團隊。",
+                "一條斯氏牛鼻鱝加入了你的團隊。",
+                "一條藍斑條尾魟加入了你的團隊。",
+                /* marbled ribbontail ray */
+                "一條黑斑電鰩加入了你的團隊。",
+                /* marbled torpedo ray */
+                "一條地中海電鰩加入了你的團隊。",
+                /* torpedo ray */
+                /* spotted torpedo ray */
+                "一條普通電鰩加入了你的團隊。",
+                /* caribbean torpedo */
+                "一條卵形鷂扁魟加入了你的團隊。",
+                "一條少斑扁魟加入了你的團隊。",
+                /* kapala stingaree */
+                /* common stingaree */
+                "一條斑紋南犁頭鰩加入了你的團隊。",
+                /* bullseye stingray */
+                "一條哈氏大尾扁魟加入了你的團隊。",
+                /* yellow stingray */
+                /* cortez round stingray */
+                "一條糙沙粒魟加入了你的團隊。",
+                "一條褐黃扁魟加入了你的團隊。",
+                "一條帶紋扁魟加入了你的團隊。",
+                "一條巨斑扁魟加入了你的團隊。",
+                /* sea pancake */
             ],
             multiOutcomes: [
-                "A whole bunch of rays join you.",
-                "That's a lot of rays.",
-                "The ray conspiracy grows!",
-                "I can't even deal with all of these rays.",
-                "More rays more rays more more more.",
-                "A school of rays!",
-                "A fever of rays! Yes, seriously. Look it up.",
-                "A whole lotta rays!",
-                "The sand is just flying everywhere!",
-                "So many rays.",
+                "一大堆魟魚加入了你的團隊。",
+                "魟魚不少呢。",
+                "魟魚陰謀變得更大了！",
+                "這麼多魟魚我處理不了呢。",
+                "更多魟魚更多魟魚摩多摩多摩多。",
+                "一班魟魚！",
+                "一簇魟魚！",
+                "大量魟魚！",
+                "沙子在水裡四處飄揚！",
+                "好多魟魚。",
             ],
-            helpText: "Hire a ray to help collect fish. They might kick up some sand from the seabed.",
+            helpText: "僱用魟魚幫你收集魚。牠們可能會從海床踢上一些沙子。",
         },
 
         getCrab: {
-            name: "Acquire crab",
+            name: "獲得螃蟹",
             effect: {
                 resource: {
                     crab: 1,
@@ -612,7 +612,7 @@ SharkGame.HomeActions = {
                 },
             },
             outcomes: [
-                "A crab starts sifting shiny things out of the sand.",
+                "一隻螃蟹開始從沙子裡篩出閃亮的東西。",
                 "A bering hermit joins you.",
                 "A blackeye hermit joins you.",
                 "A butterfly crab joins you.",
@@ -642,17 +642,17 @@ SharkGame.HomeActions = {
                 "A umbrella crab joins you.",
             ],
             multiOutcomes: [
-                "A lot of crabs join you.",
-                "CRABS EVERYWHERE",
-                "Crabs. Crabs. Crabs!",
-                "Feels sort of crab-like around here.",
+                "大量螃蟹加入了你的團隊。",
+                "處處蟹",
+                "螃蟹。螃蟹。螃蟹！",
+                "這裡感覺有點蟹味。",
                 "A cast of crabs!",
                 "A dose of crabs!",
                 "A cribble of crabs! Okay, no, that one's made up.",
                 "So many crabs.",
                 "I'm sorry to say, but you have crabs. Everywhere.",
             ],
-            helpText: "Hire a crab to find things that sharks and rays overlook.",
+            helpText: "僱用螃蟹尋找一些鯊魚和魟魚會忽視的東西。",
         },
 
         getShrimp: {
@@ -902,7 +902,7 @@ SharkGame.HomeActions = {
         },
 
         getScientist: {
-            name: "Train science shark",
+            name: "訓練科學鯊魚",
             effect: {
                 resource: {
                     scientist: 1,
@@ -920,23 +920,23 @@ SharkGame.HomeActions = {
                 },
             },
             outcomes: [
-                "Doctor Shark, coming right up!",
-                "A scientist shark is revealed!",
-                "After many painful years of study, a shark that has developed excellent skills in making excuses-- er, in science!",
-                "PhD approved!",
-                "Graduation complete!",
-                "A new insight drives a new shark to take up the cause of science!",
+                "鯊魚博士，來一份！",
+                "展示出一條科學家鯊魚！",
+                "經過千辛萬苦的學習，一條鯊魚在製造藉口…——啊不是，科學的方面中發展出了一個優秀的技能！",
+                "博士學位批准！",
+                "畢業完成！",
+                "一個新的見識驅動一條新的鯊魚走上科學之路！",
             ],
             multiOutcomes: [
-                "The training program was a success!",
-                "Look at all this science!",
-                "Building a smarter, better shark!",
-                "Beakers! Beakers underwater! It's madness!",
-                "Let the science commence!",
-                "Underwater clipboards! No I don't know how that works either!",
-                "Careful teeth record the discoveries!",
+                "訓練計劃奏效！",
+                "看看這堆科學！",
+                "建立一個更聰明，更好的鯊魚！",
+                "燒杯！水下燒杯！簡直是一場狂熱！",
+                "讓科學開始吧！",
+                "水下寫字板！我也不知道是怎麼可能的！",
+                "小心的牙齒記錄發現！",
             ],
-            helpText: "Train a shark in the fine art of research and the science of, well, science.",
+            helpText: "訓練鯊魚使其熟練研究的藝術和科學的……科學。",
         },
 
         /*
@@ -974,7 +974,7 @@ SharkGame.HomeActions = {
         */
 
         getNurse: {
-            name: "Train nurse shark",
+            name: "訓練護士鯊魚",
             effect: {
                 resource: {
                     nurse: 1,
@@ -992,10 +992,10 @@ SharkGame.HomeActions = {
                 upgrade: ["biology"],
             },
             outcomes: [
-                "A nurse shark is ready!",
-                "Shark manufacturer primed.",
-                "Nurse shark trained.",
-                "Medical exam passed! Nurse shark is go!",
+                "一條護士鯊魚準備好了！",
+                "鯊魚生產者做好了。",
+                "訓練好了護士鯊魚。",
+                "醫學考試及格！護士鯊魚出發！",
             ],
             multiOutcomes: [
                 "More sharks are on the way soon.",
@@ -1011,7 +1011,7 @@ SharkGame.HomeActions = {
         // RAY JOBS ////////////////////////////////////////////////////////////////////////////////
 
         getLaser: {
-            name: "Equip laser ray",
+            name: "裝備激光魟魚",
             effect: {
                 resource: {
                     laser: 1,
@@ -1029,15 +1029,15 @@ SharkGame.HomeActions = {
                 upgrade: ["laserRays"],
             },
             outcomes: [
-                "Laser ray online!",
+                "激光線開動！",
                 "Laser ray! With a laser ray! It's laser ray, with a laaaaaser raaaay!",
                 "Laser ray.",
                 "Ray suited up with a laaaaaaser!",
                 "Ray lasered. To use a laser. Not the subject of a laser.",
             ],
             multiOutcomes: [
-                "Boil the seabed!",
-                "Churn the sand to crystal!",
+                "燒掉海床！",
+                "化沙粒為水晶！Churn the sand to crystal!",
                 "Laser ray armada in position!",
                 "Ray crystal processing initiative is growing stronger every day!",
                 "Welcome to the future! The future is lasers!",
@@ -1084,7 +1084,7 @@ SharkGame.HomeActions = {
         */
 
         getMaker: {
-            name: "Instruct a ray maker",
+            name: "教導一個魟魚製造者",
             effect: {
                 resource: {
                     maker: 1,
@@ -1161,7 +1161,7 @@ SharkGame.HomeActions = {
         // CRAB JOBS ////////////////////////////////////////////////////////////////////////////////
 
         getPlanter: {
-            name: "Gear up planter crab",
+            name: "配備種植螃蟹",
             effect: {
                 resource: {
                     planter: 1,
@@ -1193,7 +1193,7 @@ SharkGame.HomeActions = {
                 "Pat the sand very gently and put kelp in it!",
                 "More kelp. The apples. They hunger. They hunger for kelp.",
             ],
-            helpText: "Equip a crab with the equipment and training to plant kelp across the ocean bottom.",
+            helpText: "給裝備器材和訓練讓其在海底種植海帶。",
         },
 
         /*
@@ -1235,7 +1235,7 @@ SharkGame.HomeActions = {
         */
 
         getBrood: {
-            name: "Form crab brood",
+            name: "形成螃蟹窩",
             effect: {
                 resource: {
                     brood: 1,
@@ -3193,17 +3193,17 @@ SharkGame.HomeActions = {
 SharkGame.HomeActionCategories = {
     all: {
         // This category should be handled specially.
-        name: "All",
+        name: "所有",
         actions: [],
     },
 
     basic: {
-        name: "Basic",
+        name: "基本",
         actions: ["catchFish", "prySponge", "getClam", "getJellyfish"],
     },
 
     frenzy: {
-        name: "Frenzy",
+        name: "狂熱",
         actions: [
             "getShark",
             "getManta",
@@ -3221,7 +3221,7 @@ SharkGame.HomeActionCategories = {
     },
 
     professions: {
-        name: "Jobs",
+        name: "職業",
         actions: [
             "getDiver",
             //"getProspector",
@@ -3248,7 +3248,7 @@ SharkGame.HomeActionCategories = {
     },
 
     breeders: {
-        name: "Producers",
+        name: "生產者",
         actions: [
             "getNurse",
             "getMaker",

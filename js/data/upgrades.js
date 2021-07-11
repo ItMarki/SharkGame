@@ -93,10 +93,10 @@ SharkGame.Upgrades = {
     },
     default: {
         crystalBite: {
-            name: "Crystal Bite-Gear",
-            desc: "Bite the crystals we have into something to help biting!",
-            researchedMessage: "Weird teeth-wear has been developed, and sharks can now catch fish better as a result.",
-            effectDesc: "Sharks are twice as effective with their new biting gear. Turns out they work better outside the mouth!",
+            name: "水晶咬器",
+            desc: "咬我們的水晶，讓它變成有助於我們咬東西的工具！",
+            researchedMessage: "開發出奇怪的牙齒服，使鯊魚更好地抓魚。",
+            effectDesc: "鯊魚帶着牠們的新咬器，生產力翻倍。原來穿在嘴巴外面，效果更好！",
             cost: {
                 science: 50,
                 fish: 10,
@@ -109,10 +109,10 @@ SharkGame.Upgrades = {
             },
         },
         crystalSpade: {
-            name: "Crystal Spades",
-            desc: "Fashion strange harness-tools for the rays.",
-            researchedMessage: "The rays can now bother the sand more effectively, and dig up more sand now!",
-            effectDesc: "Rays are twice as effective with their specially adapted digging tools.",
+            name: "水晶鏟子",
+            desc: "給魟魚製作奇怪的繫帶工具。",
+            researchedMessage: "魟魚現在能更有效率地挖更多的沙！",
+            effectDesc: "魟魚用牠們專門製作的挖掘工具，生產力翻倍。",
             cost: {
                 science: 50,
                 sand: 20,
@@ -125,10 +125,10 @@ SharkGame.Upgrades = {
             },
         },
         crystalContainer: {
-            name: "Crystal Containers",
-            desc: "Make weird bottle things from the crystals we have. Maybe useful??",
-            researchedMessage: "Well, things can go into these containers that aren't water. This makes science easier!",
-            effectDesc: "Scientists are twice as effective at making with the science.",
+            name: "水晶容器",
+            desc: "用我們的水晶做奇怪的瓶子。可能有用？？",
+            researchedMessage: "原來不只是水可以裝進這些容器。科學變得更容易了！",
+            effectDesc: "科學家處理科學的效率翻倍。",
             cost: {
                 science: 100,
                 crystal: 50,
@@ -140,11 +140,11 @@ SharkGame.Upgrades = {
             },
         },
         statsDiscovery: {
-            name: "Storage Caverns",
-            desc: "It's about time to start moving the stores we have to a better place. We've found one but it needs setting up.",
+            name: "倉儲洞穴",
+            desc: "是時候將我們的存儲移到一個更好的地方。我們找到了一個，但是它需要一些改善。",
             researchedMessage:
-                "All the goods we've acquired are now being stored and itemised in a mostly flooded cavern system. We're organized! Sort of!",
-            effectDesc: "By storing things in a centralised location, we now finally have an idea of what we're doing...sort of.",
+                "我們得到的所有物資現在儲存並列出在一個基本上被淹沒的洞穴系統裡。我們整齊了！大致上！",
+            effectDesc: "我們將東西儲存在一個集中位置裡，現在對我們在做什麼有頭緒了……大致上。",
             cost: {
                 science: 150,
             },
@@ -153,10 +153,10 @@ SharkGame.Upgrades = {
             },
         },
         underwaterChemistry: {
-            name: "Underwater Chemistry",
-            desc: "With the weird bottles, we can now put things and other things into them and see what happens.",
-            researchedMessage: "Well, nothing useful was determined, but if we keep on doing it we make tremendous leaps for science!",
-            effectDesc: "Scientists are twice as effective with their new chemical insights.",
+            name: "水下化學",
+            desc: "通過這些奇怪的瓶子，我們現在可以將東西和其他東西放進去，看看會發生什麼。",
+            researchedMessage: "那麼，我們沒發現到任何有用的東西，但是如果我們一直做下去，我們在科學方面會有重大的成就！",
+            effectDesc: "科學家們得到了新的化學見解，效率翻倍。",
             cost: {
                 science: 200,
                 crystal: 50,
@@ -171,10 +171,10 @@ SharkGame.Upgrades = {
             },
         },
         seabedGeology: {
-            name: "Seabed Geology",
-            desc: "Study the bottom of the ocean to determine the rich, deep, juicy secrets it contains.",
-            researchedMessage: "Not only did we find a whole bunch of weird things, the rays found that there was more sand!",
-            effectDesc: "Rays are twice as effective with their understanding of the seabed and its varieties of sediment.",
+            name: "海床地質學",
+            desc: "考察海底，看出它包含着什麼豐富的，深層的，甜蜜的祕密。",
+            researchedMessage: "我們不僅找到了一堆奇怪的東西，而且魟魚發現有更多的沙子！",
+            effectDesc: "魟魚對海床和各種不同的沉澱物的理解使牠們的效率加強多一倍。",
             cost: {
                 science: 250,
                 sand: 250,
@@ -189,10 +189,10 @@ SharkGame.Upgrades = {
             },
         },
         thermalVents: {
-            name: "Thermal Vents",
-            desc: "Investigate the boiling vents that just seem to keep on heating things up.",
-            researchedMessage: "This is a wondrous, unending source of heat! Something good must come from this.",
-            effectDesc: "A power source for future technologies has been discovered.",
+            name: "散熱通風口",
+            desc: "調查一直加熱東西的滾燙的通風口。",
+            researchedMessage: "這是一個絕妙且無窮的熱源！我們一定要充分利用它。",
+            effectDesc: "一個用於未來科技的能源被發現了。",
             cost: {
                 science: 300,
                 sand: 500,
@@ -202,10 +202,10 @@ SharkGame.Upgrades = {
             },
         },
         laserRays: {
-            name: "Laser Rays",
-            desc: "Using arcane shark mystery science, capture the heat of the vents for use by rays.",
-            researchedMessage: "The rays can now be granted gear that will let them fuse sand into crystal! Future!",
-            effectDesc: "Laser rays can now be geared up to burn the very sand to glassy crystal.",
+            name: "激光線",
+            desc: "使用玄妙的鯊魚神祕科學，用魟魚提取通風口的熱作為科技使用。",
+            researchedMessage: "魟魚現在可以被給予裝備，使牠們將沙子融合成水晶！未來啊！",
+            effectDesc: "激光魟魚現在可以被裝備，使其將沙子燃燒成晶瑩剔透的水晶。",
             cost: {
                 science: 100,
                 sand: 2000,
@@ -216,10 +216,10 @@ SharkGame.Upgrades = {
             },
         },
         transmutation: {
-            name: "Transmutation",
-            desc: "By heating things up and doing science things to them, maybe new things can be made!",
-            researchedMessage: "A new form of material has been discovered! It has been named after its discoverer, Dr. Sharkonium.",
-            effectDesc: "Enables transmutation of some random junk we have lying around into sharkonium, material of the future.",
+            name: "轉變",
+            desc: "通過加熱東西並對它們做科學的東西，我們也許能製造新的東西！",
+            researchedMessage: "一個新的材料已被發現！它以其發現者Sharkonium博士的名字命名。",
+            effectDesc: "允許將一些廢料轉變成鯊魚素，未來的材料。",
             cost: {
                 science: 1000,
                 crystal: 2000,
@@ -362,11 +362,11 @@ SharkGame.Upgrades = {
             },
         },
         xenobiology: {
-            name: "Xenobiology",
-            desc: "Determine what is with these weird faceless creatures we keep finding.",
-            researchedMessage: "Results inconclusive! Further research required. It could be such a benefit for science!",
+            name: "異源生物學",
+            desc: "判定出這些奇怪的無臉生物到底是什麼。",
+            researchedMessage: "無定論！需要進一步的研究！可能對科學有重大的好處！",
             effectDesc:
-                "Kelp produces sea apples twice as fast. Also, sea apple isn't a fruit. We can also dissect sea apples and jellyfish for science.",
+                "海帶生產海蘋果的速度加快一倍。還有，海蘋果不是水果。我們也可以以科學的名義解剖海蘋果和水母。",
             cost: {
                 science: 600,
             },
@@ -382,12 +382,12 @@ SharkGame.Upgrades = {
             },
         },
         rayBiology: {
-            name: "Ray Biology",
-            desc: "Though kindred to the sharks, we know so little about the rays. If only we could fix this. We need to bait a sand trap.",
+            name: "魟魚生物學",
+            desc: "雖然魟魚是鯊魚的血肉，但是我們對牠們一知半解。但願可以解決這個問題。我們需要在沙陷阱上放餌。",
             researchedMessage:
-                "Apparently we could have just asked. We learned how rays make more rays. It's kinda similar to sharks, really, but rays.",
+                "原來我們可以直接問。我們知道了魟魚是如何創造更多魟魚的。跟鯊魚相似的，只不過是魟魚而已。",
             effectDesc:
-                "Rays and laser rays are twice as effective. We may never repair the shark-ray relations to their former state after how awkward this whole affair was.",
+                "魟魚和激光魟魚加強多一倍。經過這場尷尬的事情後，我們可能再也不會將鯊魟關係回復如初。",
             cost: {
                 science: 700,
                 sand: 600,
@@ -404,12 +404,12 @@ SharkGame.Upgrades = {
             },
         },
         crabBiology: {
-            name: "Crab Biology",
-            desc: "Crabs are a mystery. They keep to themselves and dig up crystals or put down plants. What is even up with that? What ARE crabs??",
+            name: "螃蟹生物學",
+            desc: "螃蟹是一個謎團。牠們保護自己，挖掘水晶或是種下植物。牠們背後到底有什麼？螃蟹究竟是什麼？？",
             researchedMessage:
-                "It turns out crabs are friendly crustaceans that have revealed to the sharks the secrets of crab generation. It involves eggs, or something. Squirmy eggs.",
+                "原來螃蟹是友善的甲殼動物，向鯊魚透露了螃蟹生產的祕密。它涉及蛋，還是什麼。軟軟的蛋。",
             effectDesc:
-                "Crabs and planter crabs are four and two times as effective, respectively. Crabs are alright but they are also sort of terrifying and weird. Good thing they're on our side!",
+                "螃蟹和種植螃蟹分別強四倍和兩倍。螃蟹還行，但是牠們也有點恐怖奇怪。很好的是牠們站在我們這一方面！",
             cost: {
                 science: 500,
                 kelp: 100,
@@ -463,10 +463,10 @@ SharkGame.Upgrades = {
             },
         },
         farExploration: {
-            name: "Far Exploration",
-            desc: "Explore the vast reaches beyond the home ocean.",
-            researchedMessage: "Crystal-rich deposits were found, as well as strange, deep chasms.",
-            effectDesc: "Crabs are four times as effective. Did you know oceans are actually even bigger than big? Remarkable!",
+            name: "征遠",
+            desc: "探索海洋家之外的廣闊的空間。",
+            researchedMessage: "尋找了一些水晶豐富的礦層，還有一些奇怪的萬丈深淵。",
+            effectDesc: "螃蟹強四倍。你知道嗎，海洋其實比大還要大？妙啊！",
             cost: {
                 science: 8000,
                 fish: 15000,

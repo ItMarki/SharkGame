@@ -17,7 +17,7 @@ SharkGame.Lab = {
 
     listEmpty: true,
 
-    message: "Sort of just off to the side, the science sharks congregate and discuss things with words you've never heard before.",
+    message: "科學鯊魚聚集在一旁，用你沒有聽過的詞語討論東西。",
     messageDone:
         "Sort of just off to the side, the science sharks quietly wrap up their badly disguised party and pretend to work.<br/>" +
         "Looks like that's it! No more things to figure out.",
@@ -71,7 +71,7 @@ SharkGame.Lab = {
         tabMessageSel.html(message);
         content.append(tabMessageSel);
         const buttonListContainer = $("<div>").attr("id", "buttonLeftContainer");
-        buttonListContainer.append($("<div>").attr("id", "buttonList").append($("<h3>").html("Available Upgrades")));
+        buttonListContainer.append($("<div>").attr("id", "buttonList").append($("<h3>").html("現有升級")));
         content.append(buttonListContainer);
         content.append($("<div>").attr("id", "upgradeList"));
         content.append($("<div>").addClass("clear-fix"));
@@ -352,7 +352,7 @@ SharkGame.Lab = {
         const upgradeTable = SharkGame.Upgrades.getUpgradeTable();
         const upgradeList = $("#upgradeList");
         upgradeList.empty();
-        upgradeList.append($("<h3>").html("Researched Upgrades"));
+        upgradeList.append($("<h3>").html("研究完畢的升級"));
         const list = $("<ul>");
 
         // reverse object keys

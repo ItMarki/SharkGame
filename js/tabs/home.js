@@ -2,7 +2,7 @@
 SharkGame.Home = {
     tabId: "home",
     tabDiscovered: true,
-    tabName: "Home Sea",
+    tabName: "主海洋",
     tabBg: "img/bg/bg-homesea.png",
 
     currentButtonTab: null,
@@ -19,57 +19,57 @@ SharkGame.Home = {
             {
                 name: "start-shark",
                 unlock: { resource: { fish: 5 } },
-                message: "You attract the attention of a shark. Maybe they can help you catch fish!",
+                message: "你吸引了一條鯊魚的注意。也許牠能幫你抓魚！",
             },
             {
                 name: "start-sharks",
                 unlock: { resource: { shark: 1 } },
-                message: "More sharks swim over, curious and watchful.",
+                message: "更多的鯊魚過來，好奇地看着你。",
             },
             {
                 name: "start-ray",
                 unlock: { resource: { fish: 15 } },
-                message: "Some rays drift over.",
+                message: "一些魟魚漂流過來。",
             },
             {
                 name: "start-quite-the-group",
                 unlock: { resource: { shark: 1, ray: 1 } },
-                message: "You have quite the group going now.",
+                message: "你現在伴隨着不少魚呢。",
             },
             {
                 name: "start-crab",
                 unlock: { resource: { shark: 4, ray: 4 } },
-                message: "Some curious crabs come over.",
+                message: "一些好奇的螃蟹過來你身邊。",
             },
             {
                 name: "start-tribe",
                 unlock: { resource: { shark: 1, ray: 1, crab: 1 } },
-                message: "Your new tribe is at your command!",
+                message: "你的部落威力無比！",
             },
             {
                 name: "start-crystals",
                 unlock: { resource: { shark: 1, crystal: 10 } },
-                message: "The crystals are shiny. Some sharks stare at them curiously.",
+                message: "水晶閃亮亮的。有一些鯊魚好奇地盯着它們。",
             },
             {
                 name: "start-science",
                 unlock: { resource: { scientist: 1 } },
-                message: "The science sharks swim in their own school.",
+                message: "科學鯊魚分成另一個群游泳。",
             },
             {
                 name: "start-discoveries",
                 unlock: { upgrade: ["crystalContainer"] },
-                message: "More discoveries are needed.",
+                message: "仍需更多發現。",
             },
             {
                 name: "start-nurse",
                 unlock: { resource: { nurse: 1 } },
-                message: "The shark community grows with time.",
+                message: "鯊魚社區隨着時間增長。",
             },
             {
                 name: "start-exploration",
                 unlock: { upgrade: ["exploration"] },
-                message: "You hear faint songs and cries in the distance.",
+                message: "你隱約聽到從遠處傳來的歌聲和哭喊聲。",
             },
             {
                 name: "start-machines",
@@ -517,7 +517,7 @@ SharkGame.Home = {
                     sceneDiv = $("<div>").attr("id", "tabSceneImage");
                 }
             }
-            let message = "You are a shark in a " + worldType.shortDesc + " sea.";
+            let message = "你是一條鯊魚，在一片" + worldType.shortDesc + "的海洋裡。。";
             message += "<br><span id='extraMessage' class='medDesc'><br></span>";
             tabMessage.html(message).prepend(sceneDiv);
 

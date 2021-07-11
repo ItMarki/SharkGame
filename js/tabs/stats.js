@@ -2,7 +2,7 @@
 SharkGame.Stats = {
     tabId: "stats",
     tabDiscovered: false,
-    tabName: "Grotto",
+    tabName: "岩洞",
     tabBg: "img/bg/bg-grotto.png",
 
     sceneImage: "img/events/misc/scene-grotto.png",
@@ -15,9 +15,9 @@ SharkGame.Stats = {
     bannedDisposeCategories: ["special", "harmful", "hidden"],
 
     message:
-        "The grotto is a place to keep a better track of resources." +
-        "</br></br>You can also dispose of those you don't need anymore." +
-        "</br>Disposing specialists returns them to their normal, previous lives.",
+        "岩洞是用來更好地知道資源的地方。" +
+        "</br></br>你也可以棄置你不需要的東西。" +
+        "</br>棄置專家會將牠們回到牠們普通的生活。",
 
     init() {
         // register tab
@@ -51,16 +51,16 @@ SharkGame.Stats = {
         tabMessageSel.html(message);
 
         const disposeSel = $("#disposeResource");
-        disposeSel.append($("<h3>").html("Dispose of Stuff"));
+        disposeSel.append($("<h3>").html("棄置東西"));
         main.createBuyButtons("rid", disposeSel, "append");
         stats.createDisposeButtons();
 
         const table = stats.createIncomeTable();
         const incomeDataSel = $("#incomeData");
-        incomeDataSel.append($("<h3>").html("Income Details"));
+        incomeDataSel.append($("<h3>").html("收入詳情"));
         incomeDataSel.append(
             $("<p>")
-                .html("(Listed below are resources, the income each resource gives you, and the total income you're getting from each thing.)")
+                .html("（下列為資源、各個資源給你的收入以及你從每個東西獲得的總收入。）")
                 .addClass("medDesc")
         );
 
@@ -71,11 +71,11 @@ SharkGame.Stats = {
             clear: "both",
         });
         // TODO NAME BUTTON BETTER
-        SharkGame.Button.makeButton("switchButton", "Swap Producers and Produced", switchButtonDiv, stats.toggleSwitch).addClass("min-block");
+        SharkGame.Button.makeButton("switchButton", "交換生產者和被生產者", switchButtonDiv, stats.toggleSwitch).addClass("min-block");
         if (SharkGame.Settings.current.grottoMode === "simple") {
-            SharkGame.Button.makeButton("modeButton", "Swap to Advanced mode", switchButtonDiv, stats.toggleMode).addClass("min-block");
+            SharkGame.Button.makeButton("modeButton", "切換至進階模式", switchButtonDiv, stats.toggleMode).addClass("min-block");
         } else {
-            SharkGame.Button.makeButton("modeButton", "Swap to Simple mode", switchButtonDiv, stats.toggleMode).addClass("min-block");
+            SharkGame.Button.makeButton("modeButton", "切換至簡單模式", switchButtonDiv, stats.toggleMode).addClass("min-block");
         }
         /*         if (SharkGame.Settings.current.incomeTotalMode === "absolute") {
             SharkGame.Button.makeButton("percentButton", "Show Income as Percentage", switchButtonDiv, stats.togglePercent).addClass("min-block");
@@ -89,15 +89,15 @@ SharkGame.Stats = {
         stats.updateTableKey();
 
         const genStats = $("#generalStats");
-        genStats.append($("<h3>").html("General Stats"));
+        genStats.append($("<h3>").html("一般統計"));
         const firstTime = main.isFirstTime();
-        genStats.append($("<p>").html("Time since you began:<br/><span id='gameTime' class='timeDisplay'></span>").addClass("medDesc"));
+        genStats.append($("<p>").html("開始起的時間：<br/><span id='gameTime' class='timeDisplay'></span>").addClass("medDesc"));
         if (!firstTime) {
             genStats.append(
                 $("<p>").html("Time since you came through the gate:<br/><span id='runTime' class='timeDisplay'></span>").addClass("medDesc")
             );
         }
-        genStats.append($("<h3>").html("Total Ocean Resources Acquired"));
+        genStats.append($("<h3>").html("總獲得海洋資源"));
         if (!firstTime) {
             genStats.append(
                 $("<p>").html("Essence given is the total acquired for the entire game and not just for this world.").addClass("medDesc")
@@ -149,9 +149,9 @@ SharkGame.Stats = {
                 }
                 const disableButton = resourceAmount < amountToDispose || amountToDispose <= 0;
                 let label =
-                    "Dispose of " +
+                    "棄置 " +
                     main.beautify(amountToDispose) +
-                    "<br/>" +
+                    " 個<br/>" +
                     res.getResourceName(
                         resourceName,
                         disableButton,
@@ -160,7 +160,7 @@ SharkGame.Stats = {
                     );
                 if (amountToDispose <= 0) {
                     label =
-                        "Can't dispose any more " +
+                        "不能再棄置更多 " +
                         res.getResourceName(
                             resourceName,
                             disableButton,
@@ -200,7 +200,7 @@ SharkGame.Stats = {
             }
             SharkGame.Log.addMessage(SharkGame.choose(category.disposeMessage));
         } else {
-            SharkGame.Log.addMessage("Can't dispose that much! You don't have enough of it.");
+            SharkGame.Log.addMessage("不能棄置那麼多！你不夠這個東西。");
         }
     },
 
@@ -534,42 +534,42 @@ SharkGame.Stats = {
             if (SharkGame.Settings.current.switchStats) {
                 row.append(
                     $("<td>")
-                        .html("<span><u>" + "RESOURCE".bold() + "</u></span>")
+                        .html("<span><u>" + "資源".bold() + "</u></span>")
                         .addClass("evenRow")
                 );
                 row.append(
                     $("<td>")
-                        .html("<span><u>" + "AMOUNT".bold() + "</u></span>")
+                        .html("<span><u>" + "數量".bold() + "</u></span>")
                         .addClass("evenRow")
                 );
 
                 row.append(
                     $("<td>")
-                        .html("<span><u>" + "GENERATOR".bold() + "</u></span>")
+                        .html("<span><u>" + "生產者".bold() + "</u></span>")
                         .addClass("evenRow")
                 );
             } else {
                 row.append(
                     $("<td>")
-                        .html("<span><u>" + "AMOUNT".bold() + "</u></span>")
+                        .html("<span><u>" + "數量".bold() + "</u></span>")
                         .addClass("evenRow")
                 );
                 row.append(
                     $("<td>")
-                        .html("<span><u>" + "GENERATOR".bold() + "</u></span>")
+                        .html("<span><u>" + "生產者".bold() + "</u></span>")
                         .addClass("evenRow")
                 );
 
                 row.append(
                     $("<td>")
-                        .html("<span><u>" + "RESOURCE".bold() + "</u></span>")
+                        .html("<span><u>" + "資源".bold() + "</u></span>")
                         .addClass("evenRow")
                 );
             }
 
             row.append(
                 $("<td>")
-                    .html("<span><u><b>" + (SharkGame.Settings.current.grottoMode === "advanced" ? "BASE INCOME" : "INCOME PER") + "</b></u></span>")
+                    .html("<span><u><b>" + (SharkGame.Settings.current.grottoMode === "advanced" ? "基本收入" : "每一個的收入") + "</b></u></span>")
                     .addClass("evenRow")
             );
 
@@ -593,7 +593,7 @@ SharkGame.Stats = {
             incomesTable.prepend(row);
             SharkGame.Stats.incomeTableEmpty = false;
         } else {
-            incomesTable.prepend($("<tr>").append($("<td>").html("<span><i><b>There's nothing here.</b></i></span>")));
+            incomesTable.prepend($("<tr>").append($("<td>").html("<span><i><b>什麼都沒有。</b></i></span>")));
             SharkGame.Stats.incomeTableEmpty = true;
         }
         return incomesTable;
@@ -633,10 +633,10 @@ SharkGame.Stats = {
     toggleMode() {
         if (SharkGame.Settings.current.grottoMode === "simple") {
             SharkGame.Settings.current.grottoMode = "advanced";
-            document.getElementById("modeButton").innerHTML = "Swap to Simple mode";
+            document.getElementById("modeButton").innerHTML = "切換至簡單模式";
         } else {
             SharkGame.Settings.current.grottoMode = "simple";
-            document.getElementById("modeButton").innerHTML = "Swap to Advanced mode";
+            document.getElementById("modeButton").innerHTML = "切換至進階模式";
         }
         stats.createIncomeTable();
         stats.updateTableKey();
@@ -650,15 +650,15 @@ SharkGame.Stats = {
 
         if (world.worldType !== "start") {
             document.getElementById("tableKey").innerHTML =
-                "<br> <b><u>TABLE KEY</b></u>" +
-                `<br> <span style='color:${res.UPGRADE_MULTIPLIER_COLOR}'><b>This color</b></span> is for upgrade effects.` +
+                "<br> <b><u>說明</b></u>" +
+                `<br> <span style='color:${res.UPGRADE_MULTIPLIER_COLOR}'><b>這個顏色</b></span>代表升級效果。` +
                 `<br> <span style='color:${res.WORLD_MULTIPLIER_COLOR}'><b>This color</b></span> is for world effects.` +
                 `<br> <span style='color:${res.RESOURCE_AFFECT_MULTIPLIER_COLOR}'><b>This color</b></span> is for how some resources affect each other.` +
                 `<br> <span style='color:${res.ASPECT_MULTIPLIER_COLOR}'><b>This color</b></span> is for aspect effects.`;
         } else {
             document.getElementById("tableKey").innerHTML =
-                "<br> <b><u>TABLE KEY</b></u>" +
-                `<br> <span style='color:${res.UPGRADE_MULTIPLIER_COLOR}'><b>This color</b></span> is for upgrade effects.`;
+                "<br> <b><u>說明</b></u>" +
+                `<br> <span style='color:${res.UPGRADE_MULTIPLIER_COLOR}'><b>這個顏色/b></span>代表升級效果。`;
         }
     },
 };

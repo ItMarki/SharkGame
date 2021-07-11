@@ -3,10 +3,10 @@
     <head>
         <!-- Welcome to a shark. I hope you enjoy this aquatic organism. -->
 
-        <title>Shark Game</title>
+        <title>鯊魚遊戲</title>
         <meta charset="utf-8" />
-        <meta property="og:title" itemprop="name" content="Shark Game" />
-        <meta property="og:description" itemprop="description" name="description" content="A web game about resources, discovery and sharks." />
+        <meta property="og:title" itemprop="name" content="鯊魚遊戲" />
+        <meta property="og:description" itemprop="description" name="description" content="關於資源、發現和鯊魚的網路遊戲。" />
         <!-- Hosted on multiple domains
         <meta property="og:url" content="https://cirri.al/sharks/" />
         <meta property="og:url" content="https://shark.tobot.tech/" />
@@ -93,35 +93,35 @@
             }
             function pause() {
                 if (cad.stop) {
-                    SharkGame.Log.addError("The game is stopped. You can't also pause it.");
-                    return "The game is stopped. You can't also pause it.";
+                    SharkGame.Log.addError("遊戲已停止。你不能也暫停它。");
+                    return "遊戲已停止。你不能也暫停它。";
                 }
                 if (!cad.pause) {
                     cad.pause = true;
-                    return "Paused game.";
+                    return "暫停遊戲。";
                 } else {
-                    SharkGame.Log.addError("The game is already paused.");
+                    SharkGame.Log.addError("遊戲已被暫停。");
                 }
             }
             function unpause() {
                 if (cad.pause || cad.stop) {
                     cad.pause = false;
                     cad.stop = false;
-                    return "Resumed game.";
+                    return "繼續遊戲。";
                 } else {
-                    SharkGame.Log.addError("The game is not paused or stopped.");
+                    SharkGame.Log.addError("遊戲既未被暫停也未被停止。");
                 }
             }
             function stop() {
                 if (cad.pause) {
-                    SharkGame.Log.addError("The game is paused. You can't also stop it.");
-                    return "The game is paused. You can't also stop it.";
+                    SharkGame.Log.addError("遊戲已暫停。你不能也停止它。");
+                    return "遊戲已暫停。你不能也停止它。";
                 }
                 if (!cad.stop) {
                     cad.stop = true;
-                    return "Stopped game.";
+                    return "停止遊戲。";
                 } else {
-                    SharkGame.Log.addError("The game is already stopped.");
+                    SharkGame.Log.addError("遊戲已被停止。");
                 }
             }
             function freezePlease() {
@@ -129,12 +129,12 @@
                 SharkGame.PlayerResources.get("ice").discovered = true;
 
                 SharkGame.Log.addMessage("ICE going, doofus!");
-                return "Game frozen.";
+                return "凍結遊戲。";
             }
             function unfreezePlease() {
                 r.setResource("ice", 0);
                 SharkGame.Log.addMessage("Couldn't handle the big chill?");
-                return "Game unfrozen.";
+                return "解凍遊戲。";
             }
             function exponentialGrowthPlease() {
                 if (world.doesResourceExist("sponge")) {
@@ -206,32 +206,32 @@
                 cad.speed *= 2;
                 switch (cad.speed) {
                     case 2:
-                        msg = "Going twice as fast.";
+                        msg = "遊戲進行兩倍速。";
                         break;
                     case 512:
-                        msg = "Going...really fast.";
+                        msg = "遊戲進行……得非常快。";
                         break;
                     default:
-                        msg = "Going " + cad.speed + " times as fast.";
+                        msg = "遊戲進行 " + cad.speed + " 倍速。";
                         break;
                 }
                 return msg;
             }
             function reallyFastPlease() {
                 cad.speed = 512;
-                return "Set game speed to 512x.";
+                return "設置遊戲速度至 512 倍速。";
             }
             function goSlowerPlease() {
                 cad.speed *= 0.5;
-                return "Slowed things down to " + cad.speed + " times as fast.";
+                return "將遊戲速度減慢至 " + cad.speed + " 倍速。";
             }
             function reallySlowPlease() {
                 cad.speed = 1 / 512;
-                return "Reset game speed to 1/512th speed.";
+                return "設置遊戲速度至 1/512 倍速。";
             }
             function resetSpeedPlease() {
                 cad.speed = 1;
-                return "Reset game speed to 1x.";
+                return "重置遊戲速度至一倍速。";
             }
             function giveMeLotsOfEverythingPlease() {
                 cad.giveEverything(1e41);
@@ -326,11 +326,11 @@
         <span id="updateGameBox" class="tooltip"></span>
         <noscript>
             <div class="section">
-                <h1>Shark Game??</h1>
+                <h1>鯊魚遊戲？？</h1>
 
-                <p>Oh dear! It seems you have Javascript disabled, or that your current browser does not support scripts.</p>
+                <p>我的天！看來你禁用了Javascript，還是你目前的瀏覽器不支持腳本。</p>
 
-                <p>Shark Game requires scripts to work. Otherwise it's just a static webpage that doesn't do much.</p>
+                <p>鯊魚遊戲需要腳本才能運作，否則它會變成一個沒什麼用的固定網頁。</p>
 
                 <div style="margin: auto; width: 20em">
                     <pre>
@@ -354,7 +354,7 @@
         <div id="wrapper">
             <div id="game">
                 <div id="title">
-                    <h1 id="gameName">- SHARK GAME -</h1>
+                    <h1 id="gameName">- 鯊魚遊戲 -</h1>
                     <h4 id="versionNumber"></h4>
                     <h4 id="updateGame"></h4>
 
@@ -371,10 +371,11 @@
                 <div class="clear-fix"></div>
                 <div id="overlay"></div>
                 <div id="copyright" class="copyrightNotice">
-                    The above variably-named Shark Game<br />
-                    &copy; <a href="https://cirri.al/">Cirrial</a>, 2014-2016<br />
-                    &copy; <a href="https://github.com/spencers145/">spencers145</a>, 2020-2021<br />
-                    All rights reserved.
+                    鯊魚遊戲<br />
+                    &copy; <a href="https://cirri.al/">Cirrial原製作</a>，2014-2016<br />
+                    &copy; <a href="https://github.com/spencers145/">spencers145擴充</a>，2020-2021<br />
+                    &copy; <a href="https://github.com/ItMarki/">ItMarki</a>翻譯，2021<br />
+                    權利為最上面兩位開發者所擁有。
                 </div>
                 <div id="preloadedImages"></div>
             </div>

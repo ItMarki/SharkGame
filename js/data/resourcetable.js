@@ -20,9 +20,9 @@ SharkGame.ResourceTable = {
     // FRENZY
 
     shark: {
-        name: "sharks",
-        singleName: "shark",
-        desc: "Apex predators of the seas.",
+        name: "鯊魚",
+        singleName: "鯊魚",
+        desc: "海洋的頂級捕食者。",
         color: "#92C1E0",
         income: {
             fish: 1,
@@ -32,9 +32,9 @@ SharkGame.ResourceTable = {
     },
 
     ray: {
-        name: "rays",
-        singleName: "ray",
-        desc: "Kindred to the sharks.",
+        name: "魟魚",
+        singleName: "魟魚",
+        desc: "鯊魚的骨肉。",
         color: "#797CFC",
         income: {
             fish: 0.2,
@@ -45,9 +45,9 @@ SharkGame.ResourceTable = {
     },
 
     crab: {
-        name: "crabs",
-        singleName: "crab",
-        desc: "Dutiful, loyal crustaceans.",
+        name: "螃蟹",
+        singleName: "螃蟹",
+        desc: "孝順忠誠的甲殼動物。",
         color: "#C03030",
         income: {
             crystal: 0.02,
@@ -177,9 +177,9 @@ SharkGame.ResourceTable = {
     // BREEDERS
 
     nurse: {
-        name: "nurse sharks",
-        singleName: "nurse shark",
-        desc: "Safeguarding the future.",
+        name: "護士鯊魚",
+        singleName: "護士鯊魚",
+        desc: "保衛未來。",
         color: "#C978DE",
         income: {
             shark: 0.01,
@@ -276,9 +276,9 @@ SharkGame.ResourceTable = {
     // SPECIALISTS
 
     scientist: {
-        name: "science sharks",
-        singleName: "science shark",
-        desc: "Creators of the shark future.",
+        name: "科學鯊魚",
+        singleName: "科學鯊魚",
+        desc: "鯊魚未來的創造者。",
         color: "#DCEBF5",
         income: {
             science: 0.5,
@@ -309,9 +309,9 @@ SharkGame.ResourceTable = {
     }, */
 
     laser: {
-        name: "laser rays",
-        singleName: "laser ray",
-        desc: "Destructive forces of creation.",
+        name: "激光魟魚",
+        singleName: "激光魟魚",
+        desc: "創造的破壞力。",
         color: "#E85A5A",
         income: {
             sand: -2,
@@ -331,9 +331,9 @@ SharkGame.ResourceTable = {
     }, */
 
     planter: {
-        name: "planter crabs",
-        singleName: "planter crab",
-        desc: "Stewards of an ecosystem.",
+        name: "種植螃蟹",
+        singleName: "種植螃蟹",
+        desc: "生態系的管家。",
         color: "#AAE03D",
         income: {
             kelp: 0.3,
@@ -775,9 +775,9 @@ SharkGame.ResourceTable = {
     // SCIENCE
 
     science: {
-        name: "science",
-        singleName: "science",
-        desc: "Lifeblood of progress.",
+        name: "科學",
+        singleName: "科學",
+        desc: "進步的命脈。",
         color: "#BBA4E0",
         /* income: {
             knowledge: 0.01,
@@ -788,17 +788,17 @@ SharkGame.ResourceTable = {
     // ANIMALS
 
     fish: {
-        name: "fish",
-        singleName: "fish",
-        desc: "The hunted.",
+        name: "魚",
+        singleName: "魚",
+        desc: "所捕獵之物。",
         color: "#E3D85B",
         value: 2,
     },
 
     seaApple: {
-        name: "sea apples",
-        singleName: "sea apple",
-        desc: "Rooted filters.",
+        name: "海蘋果",
+        singleName: "海蘋果",
+        desc: "有根的濾器。",
         color: "#F0C2C2",
         value: 3,
     },
@@ -833,25 +833,25 @@ SharkGame.ResourceTable = {
     // MATERIALS
 
     sand: {
-        name: "sand",
-        singleName: "sand",
-        desc: "Flesh of the ocean floor.",
+        name: "沙子",
+        singleName: "沙子",
+        desc: "海底之肉。",
         color: "#C7BD75",
         value: 3,
     },
 
     crystal: {
-        name: "crystals",
-        singleName: "crystal",
-        desc: "Inscrutable secrets in solid form.",
+        name: "水晶",
+        singleName: "水晶",
+        desc: "固體的高深莫測的祕密。",
         color: "#6FD9CC",
         value: 15,
     },
 
     kelp: {
-        name: "kelp",
-        singleName: "kelp",
-        desc: "A home for the stranger.",
+        name: "海帶",
+        singleName: "海帶",
+        desc: "外來者之居。",
         color: "#9CC232",
         income: {
             seaApple: 0.001,
