@@ -2,21 +2,21 @@
 SharkGame.Gate = {
     tabId: "gate",
     tabDiscovered: false,
-    tabName: "Strange Gate",
+    tabName: "奇怪的門",
     tabBg: "img/bg/bg-gate.png",
 
     discoverReq: {
         upgrade: ["gateDiscovery", "farAbandonedExploration", "farHavenExploration", "rapidRecharging"],
     },
 
-    message: "A foreboding circular structure, closed shut.<br/>There are many slots, and a sign you know to mean 'insert items here'.",
-    messageOneSlot: "A foreboding circular structure, closed shut.<br/>One slot remains.",
-    messageOpened: "A foreboding circular structure, wide open.<br/>The water glows and shimmers within it. A gentle tug pulls at you.",
-    messagePaid: "The slot accepts your donation and ceases to be.",
+    message: "一個不祥的圓形建築，關着門。<br/>有很多凹槽，還有一個告示牌寫者“請在此插入物件”。",
+    messageOneSlot: "一個不祥的圓形建築，關着門。<br/>剩餘一個凹槽。.",
+    messageOpened: "一個不祥的圓形建築，開着門。<br/>裡面的水閃輝，閃爍。有一個溫柔的力量拉着你。",
+    messagePaid: "凹槽接受你的捐獻，慢慢消失。",
     messageCantPay: "The slot spits everything back out. You get the sense it wants more at once.",
     messagePaidNotOpen: "Every slot is filled, but the structure doesn't open.<br/>Perhaps it needs something else.",
     messageAllPaid: "The last slot closes. The structure opens. The water glows and shimmers within it.<br/>A gentle tug pulls at you.",
-    messageEnter: "You swim through the gate...",
+    messageEnter: "你游到大門的另一邊……",
 
     sceneClosedImage: "img/events/misc/scene-gate-closed.png",
     sceneAlmostOpenImage: "img/events/misc/scene-gate-one-slot.png",
@@ -93,7 +93,7 @@ SharkGame.Gate = {
                         const resourceName = res.getResourceName(resource, false, false, SharkGame.getElementColor("tooltipbox", "background-color"));
                         SharkGame.Button.makeHoverscriptButton(
                             "gateCost-" + resource,
-                            "Insert " + main.beautify(requiredAmount) + " " + resourceName + " into " + resourceName + " slot",
+                            "將 " + main.beautify(requiredAmount) + " " + resourceName + "插入至" + resourceName + "凹槽",
                             buttonList,
                             gate.onGateButton,
                             gate.onHover,
@@ -103,7 +103,7 @@ SharkGame.Gate = {
                 });
             }
         } else {
-            SharkGame.Button.makeButton("gateEnter", "Enter gate", $("#buttonList"), gate.onEnterButton);
+            SharkGame.Button.makeButton("gateEnter", "進入大門", $("#buttonList"), gate.onEnterButton);
         }
 
         let message = gate.getMessage();
@@ -197,7 +197,7 @@ SharkGame.Gate = {
         const required = gate.requirements.slots[resourceName];
         if (amount < required) {
             button.html(
-                `Need <span class='click-passthrough' style='color:#FFDE0A'>${main.beautify(required - amount)}</span> more ${res.getResourceName(
+                `仍需 <span class='click-passthrough' style='color:#FFDE0A'>${main.beautify(required - amount)}</span> ${res.getResourceName(
                     resourceName,
                     false,
                     false,
@@ -213,13 +213,13 @@ SharkGame.Gate = {
         const resourceName = button.attr("id").split("-")[1];
         const required = gate.requirements.slots[resourceName];
         button.html(
-            "Insert " +
+            "將 " +
                 main.beautify(required) +
                 " " +
                 res.getResourceName(resourceName, false, false, SharkGame.getElementColor(button.attr("id"), "background-color")) +
-                " into " +
+                " 插入至" +
                 res.getResourceName(resourceName, false, false, SharkGame.getElementColor(button.attr("id"), "background-color")) +
-                " slot"
+                "凹槽"
         );
     },
 

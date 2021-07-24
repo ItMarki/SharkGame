@@ -87,23 +87,23 @@ SharkGame.Gateway = {
 
         // construct the gateway content
         const gatewayContent = $("<div>");
-        gatewayContent.append($("<p>").html("You are a shark in the space between worlds."));
+        gatewayContent.append($("<p>").html("你是一條鯊魚，在世界之間的空間裡。"));
         if (!SharkGame.wonGame) {
             gatewayContent.append($("<p>").html("It is not clear how you have ended up here, but you remember a bitter defeat.").addClass("medDesc"));
         }
-        gatewayContent.append($("<p>").html("Something unseen says,").addClass("medDesc"));
+        gatewayContent.append($("<p>").html("一個看不清的物件說：").addClass("medDesc"));
         gatewayContent.append($("<em>").attr("id", "gatewayVoiceMessage").html(gateway.getVoiceMessage()));
         if (essenceRewarded > 0) {
             gatewayContent.append(
                 $("<p>").html(
-                    "Entering this place has changed you, granting you <span class='essenceCount'>" +
+                    "進入這個地方改變了你，給予你 <span class='essenceCount'>" +
                         main.beautify(essenceRewarded) +
-                        "</span> essence."
+                        "</span> 精華。"
                 )
             );
         }
         gatewayContent.append(
-            $("<p>").html("You have <span id='essenceHeldDisplay' class='essenceCount'>" + main.beautify(essenceHeld) + "</span> essence.")
+            $("<p>").html("你有 <span id='essenceHeldDisplay' class='essenceCount'>" + main.beautify(essenceHeld) + "</span> 精華。")
         );
         if (numenHeld > 0) {
             const numenName = numenHeld > 1 ? "numina" : "numen";
@@ -122,10 +122,10 @@ SharkGame.Gateway = {
 
         // add navigation buttons
         const navButtons = $("<div>").addClass("gatewayButtonList");
-        SharkGame.Button.makeButton("backToGateway", "aspects", navButtons, () => {
+        SharkGame.Button.makeButton("backToGateway", "特性", navButtons, () => {
             gateway.switchViews(gateway.showAspects);
         });
-        SharkGame.Button.makeButton("backToGateway", "worlds", navButtons, () => {
+        SharkGame.Button.makeButton("backToGateway", "世界", navButtons, () => {
             gateway.switchViews(gateway.showPlanets);
         });
         gatewayContent.append(navButtons);
@@ -137,7 +137,7 @@ SharkGame.Gateway = {
     showRunEndInfo(containerDiv) {
         containerDiv.append(
             $("<p>")
-                .html("<em>Time spent within last ocean:</em><br/>")
+                .html("<em>上一片海洋花費的時間：:</em><br/>")
                 .append(main.formatTime(SharkGame.timestampRunEnd - SharkGame.timestampRunStart))
         );
     },
@@ -147,9 +147,9 @@ SharkGame.Gateway = {
         aspectTreeContent.append(
             $("<strong>")
                 .attr("id", "essenceCount")
-                .html(main.beautify(res.getResource("essence")) + " ESSENCE")
+                .html(main.beautify(res.getResource("essence")) + " 精華")
         );
-        aspectTreeContent.append($("<p>").html("Your will flows into solid shapes beyond your control.<br>Focus."));
+        aspectTreeContent.append($("<p>").html("你的意志不受你的控制而流動成固體形狀。<br>專注。"));
         aspectTreeContent.append(tree.drawCanvas());
 
         tree.setUp();
@@ -160,7 +160,7 @@ SharkGame.Gateway = {
             gateway.switchViews(gateway.showGateway);
         });
 
-        main.showPane("ASPECT TREE", aspectTreeContent, true, 500, true);
+        main.showPane("特性樹", aspectTreeContent, true, 500, true);
 
         gateway.transitioning = false;
     },
@@ -568,13 +568,13 @@ SharkGame.Gateway.Messages = {
         "One more try, perhaps?",
     ],
     generic: [
-        "There is no warmth or cold here. Only numbness.",
-        "What do you seek?",
-        "We are on the edge of infinity, peering into a boundless sea of potential.",
-        "You may not see me. Do not worry. I can see you.",
-        "What am I? Oh, it is not so important. Not so soon.",
-        "Is this the dream of a shark between worlds, or are the worlds a dream and this place your reality?",
-        "A crossroads. Decisions. Decisions that cannot be taken so lightly.",
+        "這裡沒有溫暖和寒冷。只有麻痹。",
+        "你尋求着什麼？",
+        "我們在無限的邊緣上，細看着潛力的無垠海洋。",
+        "你可能看不到我。不用擔心。我看得到你。",
+        "我是誰？噢，現在不重要。沒那麼快。",
+        "這裡是世界之間的鯊魚的夢，還是說世界是一場夢，而這個地方就是現實？",
+        "十字路口。決定。不能輕易作出的決定。",
         "There are such sights to behold for the ones who can see here.",
         "You are to the ocean what we are to the pathways.",
         "You swim through liquid eternity. You are now, always, and forever.",

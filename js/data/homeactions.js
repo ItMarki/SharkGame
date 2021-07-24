@@ -1641,7 +1641,7 @@ SharkGame.HomeActions = {
         // SHARK MACHINES ////////////////////////////////////////////////////////////////////////////////
 
         getCrystalMiner: {
-            name: "Build crystal miner",
+            name: "建造水晶礦工",
             effect: {
                 resource: {
                     crystalMiner: 1,
@@ -1688,7 +1688,7 @@ SharkGame.HomeActions = {
         },
 
         getSandDigger: {
-            name: "Build sand digger",
+            name: "建造挖沙機器",
             effect: {
                 resource: {
                     sandDigger: 1,
@@ -1730,7 +1730,7 @@ SharkGame.HomeActions = {
         },
 
         getFishMachine: {
-            name: "Build fish machine",
+            name: "建造生魚機器",
             effect: {
                 resource: {
                     fishMachine: 1,
@@ -1763,7 +1763,7 @@ SharkGame.HomeActions = {
         },
 
         getAutoTransmuter: {
-            name: "Build auto-transmuter",
+            name: "建造自動轉變機器",
             effect: {
                 resource: {
                     autoTransmuter: 1,

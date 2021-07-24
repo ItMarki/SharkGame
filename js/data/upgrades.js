@@ -230,10 +230,10 @@ SharkGame.Upgrades = {
             },
         },
         automation: {
-            name: "Automation",
-            desc: "Using sharkonium, we can make things to do things so we don't have to do the things!",
-            researchedMessage: "Now we don't have to do all the work, machines can do it for us! Future!!",
-            effectDesc: "Machines can be built to supplement population duties. This is efficient.",
+            name: "自動化",
+            desc: "我們憑借鯊魚素可以做東西幫我們做東西，就可以不用自己做東西！",
+            researchedMessage: "現在我們不用做所有的工作，機器可以幫我們做！未來！！",
+            effectDesc: "可以建造機器來補充人口責任。有效率。",
             cost: {
                 science: 1500,
                 sharkonium: 250,
@@ -243,10 +243,10 @@ SharkGame.Upgrades = {
             },
         },
         engineering: {
-            name: "Engineering",
-            desc: "The machines sort of suck. Let's make them better by learning how!",
-            researchedMessage: "The machines are twice as good now! We've figured out new designs in the process, too!",
-            effectDesc: "Machines are twice as effective. Skimmers and auto-transmuters are now possible to create.",
+            name: "工程",
+            desc: "這些機器有點爛。我們來學怎麼改善它們！",
+            researchedMessage: "機器強多一倍！我們在過程中也想出了新的設計！",
+            effectDesc: "M機器效率加強多一倍。可以創造auto-transmuters are now possible to create.",
             cost: {
                 science: 2500,
                 sharkonium: 1750,
@@ -278,10 +278,10 @@ SharkGame.Upgrades = {
             },
         },
         iterativeDesign: {
-            name: "Iterative Design",
-            desc: "The machines are useful, but they could be better. Maybe it's time we started over?",
-            researchedMessage: "As it turns out, science is about learning from mistakes, or so the scientists say. About their own mistakes.",
-            effectDesc: "All shark machines run twice as fast. Again!",
+            name: "重複設計",
+            desc: "機器有用是有用，但是還能更上一層樓。也許是時候我們重新來過？",
+            researchedMessage: "原來，科學是關於從錯誤中學習，至少是科學家說的話。關於牠們自己的錯誤。",
+            effectDesc: "所有鯊魚機器快多一倍！",
             cost: {
                 science: 15000,
                 sharkonium: 17500,
@@ -426,11 +426,11 @@ SharkGame.Upgrades = {
             },
         },
         sunObservation: {
-            name: "Sun Observation",
-            desc: "We must determine what is with the weird glare on the surface of the water.",
-            researchedMessage: "Shark science has discovered the sun! It has also discovered that looking directly into the sun hurts.",
+            name: "觀日",
+            desc: "我們必須發現水面上的刺眼的光到底是什麼。",
+            researchedMessage: "鯊魚科學發現了太陽！它也發現直看太陽會上眼睛。",
             effectDesc:
-                "Planter crabs are twice as effective. Is a suns worth many fish? We can see a sun, but where is it really? And what is it made of?",
+                "種植螃蟹強多一倍。太陽值很多魚嗎？我們看到太陽，但是它真的在哪裡呢？而且它是什麼做的呢？",
             cost: {
                 science: 5000,
             },
@@ -444,10 +444,10 @@ SharkGame.Upgrades = {
             },
         },
         exploration: {
-            name: "Exploration",
-            desc: "Swim beyond the home seas to see what can be found!",
-            researchedMessage: "Found lots of schools of fish! So many different schools! And such untapped sand reserves!",
-            effectDesc: "Sharks and rays are twice as effective. Did you know oceans are big? Fascinating!",
+            name: "征途",
+            desc: "游到海洋家外面，看看能找到些什麼！",
+            researchedMessage: "找到了很多群小魚！真的很多！還有未開發的沙子儲備！",
+            effectDesc: "鯊魚和魟魚加強多一倍。你知道海洋很大嗎？太有趣了！",
             cost: {
                 science: 5000,
                 fish: 5000,
@@ -463,7 +463,7 @@ SharkGame.Upgrades = {
             },
         },
         farExploration: {
-            name: "征遠",
+            name: "遠征",
             desc: "探索海洋家之外的廣闊的空間。",
             researchedMessage: "尋找了一些水晶豐富的礦層，還有一些奇怪的萬丈深淵。",
             effectDesc: "螃蟹強四倍。你知道嗎，海洋其實比大還要大？妙啊！",
@@ -481,10 +481,10 @@ SharkGame.Upgrades = {
             },
         },
         gateDiscovery: {
-            name: "Chasm Exploration",
-            desc: "A campaign of risky, foolhardy expeditions to the deeps, to find whatever can be found.",
-            researchedMessage: "A strange structure was found from clues within the chasms. The cost was great, but the discovery is greater!",
-            effectDesc: "Something ancient lurked in the depths.",
+            name: "深淵探索",
+            desc: "一場又有風險又魯莽的深處探險運動，尋找可以找到的東西。",
+            researchedMessage: "我們憑藉深淵裡的一些線索找到了一個奇怪的建築物。成本很大，但是發現更大！",
+            effectDesc: "深淵中藏着一個古老的物件。",
             cost: {
                 science: 1e6,
                 shark: 1000,

@@ -860,9 +860,9 @@ SharkGame.ResourceTable = {
     },
 
     coral: {
-        name: "coral",
-        singleName: "coral",
-        desc: "Colors brought to life.",
+        name: "珊瑚",
+        singleName: "珊瑚",
+        desc: "生命的顏色。",
         color: "#CA354F",
         value: 3,
     },
@@ -911,9 +911,9 @@ SharkGame.ResourceTable = {
     // PROCESSED
 
     sharkonium: {
-        name: "sharkonium",
-        singleName: "sharkonium",
-        desc: "Progress incarnate.",
+        name: "鯊魚素",
+        singleName: "鯊魚素",
+        desc: "進步的化身。",
         color: "#8D70CC",
         value: 70,
     },

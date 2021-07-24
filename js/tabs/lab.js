@@ -2,7 +2,7 @@
 SharkGame.Lab = {
     tabId: "lab",
     tabDiscovered: false,
-    tabName: "Laboratory",
+    tabName: "實驗室",
     tabBg: "img/bg/bg-lab.png",
 
     sceneImage: "img/events/misc/scene-lab.png",
@@ -19,8 +19,8 @@ SharkGame.Lab = {
 
     message: "科學鯊魚聚集在一旁，用你沒有聽過的詞語討論東西。",
     messageDone:
-        "Sort of just off to the side, the science sharks quietly wrap up their badly disguised party and pretend to work.<br/>" +
-        "Looks like that's it! No more things to figure out.",
+        "科學鯊魚聚集在一旁，安靜地收拾牠們偽裝得不好的派對，假裝在工作。<br/>" +
+        "就到此為止！現在沒有東西要搞清楚了。",
 
     init() {
         const lab = SharkGame.Lab;
@@ -84,7 +84,7 @@ SharkGame.Lab = {
     setHint(upgradeTable) {
         const lab = SharkGame.Lab;
         if (lab.allResearchDone()) {
-            $("#buttonList").append($("<p>").html("The scientists rest content, sure that they're done with their work."));
+            $("#buttonList").append($("<p>").html("科學家滿意地休息，肯定牠們的工作做好了。"));
         } else if (lab.listEmpty) {
             $("#buttonList").append($("<p>").html("The scientists are out of ideas, but there are always more discoveries to be made."));
 

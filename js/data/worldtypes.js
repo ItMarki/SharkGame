@@ -77,8 +77,8 @@ SharkGame.WorldTypes = {
         },
     },
     haven: {
-        name: "Haven",
-        desc: "An aquamarine world of plenty. So beautiful, yet so vulnerable.",
+        name: "和平之地",
+        desc: "豐富的翠綠世界。如此美麗，卻如此脆弱。",
         shortDesc: "thriving aquamarine",
         foresight: {
             longDesc:
@@ -87,7 +87,7 @@ SharkGame.WorldTypes = {
             present: ["coral", "dolphin", "whale"],
             tip: "The abudance of resources might may your stay here shorter than others.",
         },
-        entry: "Remembering nothing, you find yourself in a beautiful atoll. Life will be good here.",
+        entry: "你什麼都沒記得，發現自己在一個美麗的環礁裡。生活會很美妙。",
         style: "haven",
         includedResources: [
             "essence",

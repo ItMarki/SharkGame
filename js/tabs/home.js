@@ -79,12 +79,12 @@ SharkGame.Home = {
             {
                 name: "start-chasm",
                 unlock: { upgrade: ["farExploration"] },
-                message: "這個地方不是你的家。你記得一個碧藍的海洋。<br>深淵呼喚着你。.",
+                message: "這個地方不是你的家。你記得一個碧藍的海洋。<br>深淵呼喚着你。",
             },
             {
                 name: "start-gate",
                 unlock: { upgrade: ["gateDiscovery"] },
-                message: "The gate beckons. The secret must be unlocked.",
+                message: "深淵呼喚着你。祕密必須被解鎖。",
             },
         ],
 

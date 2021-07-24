@@ -2,7 +2,7 @@
 SharkGame.Recycler = {
     tabId: "recycler",
     tabDiscovered: false,
-    tabName: "Recycler",
+    tabName: "回收器",
     tabBg: "img/bg/bg-recycler.png",
 
     sceneImage: "img/events/misc/scene-recycler.png",
@@ -12,7 +12,7 @@ SharkGame.Recycler = {
     },
 
     message:
-        "The recycler allows for the repurposing of any and all of your unwanted materials.<br/><span class='medDesc'>Feed the machines. Feed them.</span>",
+        "回收器允許重新利用你任何不想要的材料。<br/><span class='medDesc'>Feed the machines. Feed them.</span>",
 
     recyclerInputMessages: [
         "The machines grind and churn.",
@@ -99,7 +99,7 @@ SharkGame.Recycler = {
             junkString = main.beautify(junkAmount);
         }
 
-        const newValue = "CONTAINS:<br/>" + junkString.bold() + " RESIDUE<br/><br/>" + rec.getRecyclerEfficiencyString() + rec.getTarString().bold();
+        const newValue = "含有：<br/>" + junkString.bold() + " 殘留物<br/><br/>" + rec.getRecyclerEfficiencyString() + rec.getTarString().bold();
         const oldValue = junkDisplay.html();
 
         // Fix up beautified strings to match jquery returns for matching purposes.
@@ -205,7 +205,7 @@ SharkGame.Recycler = {
             ) {
                 SharkGame.Button.makeHoverscriptButton(
                     "input-" + resourceName,
-                    "Recycle " + res.getResourceName(resourceName),
+                    "回收 " + res.getResourceName(resourceName),
                     inputButtonDiv,
                     rec.onInput,
                     rec.onInputHover,
@@ -213,7 +213,7 @@ SharkGame.Recycler = {
                 );
                 SharkGame.Button.makeHoverscriptButton(
                     "output-" + resourceName,
-                    "Convert to " + res.getResourceName(resourceName),
+                    "轉換至 " + res.getResourceName(resourceName),
                     outputButtonDiv,
                     rec.onOutput,
                     rec.onOutputHover,
@@ -390,11 +390,11 @@ SharkGame.Recycler = {
 
         return (
             (rec.getEfficiency() * 100).toFixed(2).toString().bold() +
-            "<b>%<br/>EFFICIENCY</b><br/><br/>EQUIVALENT TO:<br/>" +
+            "<b>%<br/>效率</b><br/><br/>等同於：<br/>" +
             amountstring.bold() +
             " " +
             res.getResourceName(rec.hoveredResource).bold() +
-            "<br/>WORTH OF RESIDUE"
+            "<br/>的殘留物"
         );
     },
 
