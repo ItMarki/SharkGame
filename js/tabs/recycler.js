@@ -2,7 +2,8 @@
 SharkGame.Recycler = {
     tabId: "recycler",
     tabDiscovered: false,
-    tabName: "回收器",
+    tabSeen: false,
+    tabName: "Recycler",
     tabBg: "img/bg/bg-recycler.png",
 
     sceneImage: "img/events/misc/scene-recycler.png",
@@ -11,8 +12,7 @@ SharkGame.Recycler = {
         upgrade: ["recyclerDiscovery"],
     },
 
-    message:
-        "回收器允許重新利用你任何不想要的材料。<br/><span class='medDesc'>Feed the machines. Feed them.</span>",
+    message: "Convert things into residue, and residue into things!<br/><span class='medDesc'>Feed the machines. Feed them.</span>",
 
     recyclerInputMessages: [
         "The machines grind and churn.",
@@ -40,7 +40,7 @@ SharkGame.Recycler = {
         animals: "constant",
     },
 
-    bannedResources: ["essence", "junk", "science", "seaApple", "coalescer", "ancientPart", "filter", "world"],
+    bannedResources: ["essence", "junk", "science", "seaApple", "coalescer", "ancientPart", "filter", "world", "sacrifice", "aspectAffect"],
 
     efficiency: "NA",
     hoveredResource: "NA",
@@ -48,14 +48,11 @@ SharkGame.Recycler = {
     expectedJunkSpent: "NA",
 
     init() {
-        // register tab
-        SharkGame.Tabs[rec.tabId] = {
-            id: rec.tabId,
-            name: rec.tabName,
-            discovered: rec.tabDiscovered,
-            discoverReq: rec.discoverReq,
-            code: rec,
-        };
+        SharkGame.TabHandler.registerTab(this);
+    },
+
+    setup() {
+        /* doesnt need to do anything */
     },
 
     switchTo() {
@@ -91,15 +88,16 @@ SharkGame.Recycler = {
         const junkDisplay = $("#junkDisplay");
 
         let junkString = "";
-        if (rec.expectedOutput !== "NA") {
-            junkString = "<span class='click-passthrough' style='color:#FFE436'>" + main.beautify(junkAmount + rec.expectedOutput) + "</span> ";
-        } else if (rec.expectedJunkSpent !== "NA") {
-            junkString = "<span class='click-passthrough' style='color:#FFE436'>" + main.beautify(junkAmount - rec.expectedJunkSpent) + "</span> ";
+        if (rec.expectedOutput !== "NA" && rec.expectedOutput !== 0) {
+            junkString = "<span class='click-passthrough' style='color:#FFE436'>" + sharktext.beautify(junkAmount + rec.expectedOutput) + "</span> ";
+        } else if (rec.expectedJunkSpent !== "NA" && rec.expectedJunkSpent !== 0) {
+            junkString =
+                "<span class='click-passthrough' style='color:#FFE436'>" + sharktext.beautify(junkAmount - rec.expectedJunkSpent) + "</span> ";
         } else {
-            junkString = main.beautify(junkAmount);
+            junkString = sharktext.beautify(junkAmount);
         }
 
-        const newValue = "含有：<br/>" + junkString.bold() + " 殘留物<br/><br/>" + rec.getRecyclerEfficiencyString() + rec.getTarString().bold();
+        const newValue = "CONTAINS:<br/>" + junkString.bold() + " RESIDUE<br/><br/>" + rec.getRecyclerEfficiencyString() + rec.getTarString().bold();
         const oldValue = junkDisplay.html();
 
         // Fix up beautified strings to match jquery returns for matching purposes.
@@ -117,34 +115,34 @@ SharkGame.Recycler = {
                     return true;
                 }
                 const outputButton = $("#output-" + resourceName);
-                const resourceAmount = res.getResource(resourceName);
+                const resourceAmount = new Decimal(res.getResource(resourceName));
 
                 // determine amounts for input and what would be retrieved from output
-                const buy = main.getBuyAmount();
+                const buy = new Decimal(sharkmath.getBuyAmount());
                 let inputAmount = buy;
                 let outputAmount = buy;
                 const maxOutputAmount = rec.getMaxToBuy(resourceName);
                 if (buy < 0) {
-                    const divisor = Math.floor(buy) * -1;
-                    inputAmount = Math.floor(resourceAmount / divisor);
-                    outputAmount = Math.floor(maxOutputAmount / divisor);
+                    const divisor = buy.round().times(-1);
+                    inputAmount = resourceAmount.dividedBy(divisor).round();
+                    outputAmount = maxOutputAmount.dividedBy(divisor).round();
                 }
 
                 // update input button
-                let disableButton = resourceAmount < inputAmount || inputAmount <= 0;
+                let disableButton = resourceAmount.lessThan(inputAmount) || inputAmount.lessThanOrEqualTo(0);
                 let label = "Recycle ";
-                if (inputAmount > 0) {
-                    if (rec.expectedJunkSpent !== "NA" && !disableButton && resourceName === rec.hoveredResource) {
+                if (inputAmount.greaterThan(0)) {
+                    if (rec.expectedJunkSpent !== "NA" && rec.expectedJunkSpent !== 0 && !disableButton && resourceName === rec.hoveredResource) {
                         if (buy < 0) {
                             label +=
                                 "<span class='click-passthrough' style='color:#FFDE0A'>" +
-                                main.beautify(inputAmount + outputAmount / -buy) +
+                                sharktext.beautify(Number(inputAmount.plus(outputAmount).dividedBy(buy.times(-1)))) +
                                 "</span> ";
                         } else {
-                            label += "<span class='click-passthrough' style='color:#FFDE0A'>" + main.beautify(inputAmount) + "</span> ";
+                            label += "<span class='click-passthrough' style='color:#FFDE0A'>" + sharktext.beautify(Number(inputAmount)) + "</span> ";
                         }
                     } else {
-                        label += main.beautify(inputAmount) + " ";
+                        label += sharktext.beautify(Number(inputAmount)) + " ";
                     }
                 }
 
@@ -154,24 +152,24 @@ SharkGame.Recycler = {
                     inputButton.removeClass("disabled");
                 }
 
-                label += res.getResourceName(
+                label += sharktext.getResourceName(
                     resourceName,
                     disableButton,
                     buy,
-                    SharkGame.getElementColor("input-" + resourceName, "background-color")
+                    sharkcolor.getElementColor("input-" + resourceName, "background-color")
                 );
                 if (inputButton.html() !== label.replace(/'/g, '"')) {
                     inputButton.html(label);
                 }
 
                 // update output button
-                disableButton = maxOutputAmount < outputAmount || outputAmount <= 0;
+                disableButton = maxOutputAmount.lessThan(outputAmount) || outputAmount.lessThanOrEqualTo(0);
                 label = "Convert to ";
                 if (outputAmount > 0) {
-                    if (rec.expectedOutput !== "NA" && !disableButton) {
-                        label += "<span class='click-passthrough' style='color:#FFDE0A'>" + main.beautify(outputAmount) + "</span> ";
+                    if (rec.expectedOutput !== "NA" && rec.expectedOutput !== 0 && !disableButton) {
+                        label += "<span class='click-passthrough' style='color:#FFDE0A'>" + sharktext.beautify(Number(outputAmount)) + "</span> ";
                     } else {
-                        label += main.beautify(outputAmount) + " ";
+                        label += sharktext.beautify(Number(outputAmount)) + " ";
                     }
                 }
 
@@ -181,11 +179,11 @@ SharkGame.Recycler = {
                     outputButton.removeClass("disabled");
                 }
 
-                label += res.getResourceName(
+                label += sharktext.getResourceName(
                     resourceName,
                     disableButton,
                     buy,
-                    SharkGame.getElementColor("output-" + resourceName, "background-color")
+                    sharkcolor.getElementColor("output-" + resourceName, "background-color")
                 );
                 if (outputButton.html() !== label.replace(/'/g, '"')) {
                     outputButton.html(label);
@@ -205,7 +203,7 @@ SharkGame.Recycler = {
             ) {
                 SharkGame.Button.makeHoverscriptButton(
                     "input-" + resourceName,
-                    "回收 " + res.getResourceName(resourceName),
+                    "Recycle " + sharktext.getResourceName(resourceName),
                     inputButtonDiv,
                     rec.onInput,
                     rec.onInputHover,
@@ -213,7 +211,7 @@ SharkGame.Recycler = {
                 );
                 SharkGame.Button.makeHoverscriptButton(
                     "output-" + resourceName,
-                    "轉換至 " + res.getResourceName(resourceName),
+                    "Convert to " + sharktext.getResourceName(resourceName),
                     outputButtonDiv,
                     rec.onOutput,
                     rec.onOutputHover,
@@ -229,15 +227,15 @@ SharkGame.Recycler = {
         const resourceName = button.attr("id").split("-")[1];
         const resourceAmount = res.getResource(resourceName);
         const junkPerResource = SharkGame.ResourceMap.get(resourceName).value;
-        const amount = res.getPurchaseAmount(resourceName);
+        const amount = sharkmath.getPurchaseAmount(resourceName);
 
-        if (resourceAmount >= amount) {
+        if (resourceAmount >= amount * (1 - SharkGame.EPSILON)) {
             res.changeResource("junk", amount * junkPerResource * rec.getEfficiency());
             res.changeResource(resourceName, -amount);
             res.changeResource("tar", Math.max(amount * junkPerResource * 0.0000002 + res.getProductAmountFromGeneratorResource("filter", "tar"), 0));
-            SharkGame.Log.addMessage(SharkGame.choose(rec.recyclerInputMessages));
+            log.addMessage(SharkGame.choose(rec.recyclerInputMessages));
         } else {
-            SharkGame.Log.addError("Not enough resources for that transaction. This might be caused by putting in way too many resources at once.");
+            log.addError("Not enough resources for that transaction. This might be caused by putting in way too many resources at once.");
         }
 
         rec.updateEfficiency(resourceName);
@@ -250,36 +248,36 @@ SharkGame.Recycler = {
         const button = $(this);
         if (button.hasClass("disabled")) return;
         const resourceName = button.attr("id").split("-")[1];
-        const junkAmount = res.getResource("junk");
-        const junkPerResource = SharkGame.ResourceMap.get(resourceName).value;
+        const junkAmount = new Decimal(res.getResource("junk"));
+        const junkPerResource = new Decimal(SharkGame.ResourceMap.get(resourceName).value);
 
         if (rec.expectedOutput !== "NA") {
             return;
         }
 
-        const selectedAmount = main.getBuyAmount();
+        const selectedAmount = new Decimal(sharkmath.getBuyAmount());
         let amount = selectedAmount;
         if (selectedAmount < 0) {
-            const divisor = Math.floor(selectedAmount) * -1;
-            amount = rec.getMaxToBuy(resourceName) / divisor;
+            const divisor = selectedAmount.round().times(-1);
+            amount = rec.getMaxToBuy(resourceName).dividedBy(divisor);
         }
 
-        const currentResourceAmount = res.getResource(resourceName);
+        const currentResourceAmount = new Decimal(res.getResource(resourceName));
         let junkNeeded;
 
         const costFunction = rec.allowedCategories[res.getCategoryOfResource(resourceName)];
         if (costFunction === "linear") {
-            junkNeeded = SharkGame.MathUtil.linearCost(currentResourceAmount, currentResourceAmount + amount, junkPerResource);
+            junkNeeded = sharkmath.linearCost(currentResourceAmount, amount, junkPerResource);
         } else if (costFunction === "constant") {
-            junkNeeded = SharkGame.MathUtil.constantCost(currentResourceAmount, currentResourceAmount + amount, junkPerResource);
+            junkNeeded = sharkmath.constantCost(currentResourceAmount, amount, junkPerResource);
         }
 
-        if (junkAmount >= junkNeeded) {
-            res.changeResource(resourceName, amount);
-            res.changeResource("junk", -junkNeeded);
-            SharkGame.Log.addMessage(SharkGame.choose(rec.recyclerOutputMessages));
+        if (junkAmount.greaterThanOrEqualTo(junkNeeded.times(1 - SharkGame.EPSILON))) {
+            res.changeResource(resourceName, Number(amount));
+            res.changeResource("junk", -Number(junkNeeded));
+            log.addMessage(SharkGame.choose(rec.recyclerOutputMessages));
         } else {
-            SharkGame.Log.addMessage("You don't have enough for that!");
+            log.addMessage("You don't have enough for that!");
         }
 
         // disable button until next frame
@@ -287,24 +285,27 @@ SharkGame.Recycler = {
     },
 
     getMaxToBuy(resource) {
-        const resourceAmount = res.getResource(resource);
-        const junkPricePerResource = SharkGame.ResourceMap.get(resource).value;
-        const category = res.getCategoryOfResource(resource);
-        let junkAmount = res.getResource("junk");
+        const resourceAmount = new Decimal(res.getResource(resource));
+        const junkPricePerResource = new Decimal(SharkGame.ResourceMap.get(resource).value);
+        let junkAmount = new Decimal(res.getResource("junk"));
+
         if (rec.expectedOutput !== "NA") {
-            junkAmount += rec.expectedOutput;
+            junkAmount = junkAmount.plus(rec.expectedOutput);
         }
 
-        let max = 0;
+        const category = res.getCategoryOfResource(resource);
+
+        let max = new Decimal(0);
         if (rec.allowedCategories[category]) {
             const costFunction = rec.allowedCategories[category];
+
             if (costFunction === "linear") {
-                max = SharkGame.MathUtil.linearMax(resourceAmount, junkAmount, junkPricePerResource) - resourceAmount;
+                max = sharkmath.linearMax(resourceAmount, junkAmount, junkPricePerResource).minus(resourceAmount);
             } else if (costFunction === "constant") {
-                max = SharkGame.MathUtil.constantMax(resourceAmount, junkAmount, junkPricePerResource) - resourceAmount;
+                max = sharkmath.constantMax(resourceAmount, junkAmount, junkPricePerResource).minus(resourceAmount);
             }
         }
-        return Math.floor(max);
+        return max.round();
     },
 
     onInputHover() {
@@ -345,7 +346,7 @@ SharkGame.Recycler = {
     },
 
     getTarString() {
-        const buy = main.getBuyAmount();
+        const buy = sharkmath.getBuyAmount();
 
         if (world.worldType === "abandoned") {
             if (rec.efficiency === "NA") {
@@ -359,16 +360,16 @@ SharkGame.Recycler = {
             } else {
                 produced *= res.getResource(rec.hoveredResource) / -buy;
             }
-            let amountstring = main.beautify(produced);
-            amountstring = "<br/><br/>AND " + amountstring.bold() + " " + res.getResourceName("tar");
+            let amountstring = sharktext.beautify(produced);
+            amountstring = "<br/><br/>AND " + amountstring.bold() + " " + sharktext.getResourceName("tar");
             if (tarTolerance > 0) {
                 amountstring +=
                     "<br/>(" +
-                    main.beautify(Math.max(produced - tarTolerance, 0)) +
+                    sharktext.beautify(Math.max(produced - tarTolerance, 0)) +
                     " " +
-                    res.getResourceName("tar") +
+                    sharktext.getResourceName("tar") +
                     " WITH<br/>" +
-                    res.getResourceName("filter", false, 2) +
+                    sharktext.getResourceName("filter", false, 2) +
                     ")";
             }
             return amountstring;
@@ -377,24 +378,24 @@ SharkGame.Recycler = {
     },
 
     getRecyclerEfficiencyString() {
-        if (rec.efficiency === "NA" || rec.hoveredResource === "NA") {
+        if (rec.efficiency === "NA" || rec.hoveredResource === "NA" || rec.expectedOutput === 0) {
             return "<br/><br/><br/><br/><br/><br/>";
         }
 
         let amountstring = "";
-        if (main.getBuyAmount() > 0) {
-            amountstring = main.beautify(rec.efficiency * main.getBuyAmount());
+        if (sharkmath.getBuyAmount() > 0) {
+            amountstring = sharktext.beautify(rec.efficiency * sharkmath.getBuyAmount());
         } else {
-            amountstring = main.beautify((rec.efficiency * res.getResource(rec.hoveredResource)) / -main.getBuyAmount());
+            amountstring = sharktext.beautify((rec.efficiency * res.getResource(rec.hoveredResource)) / -sharkmath.getBuyAmount());
         }
 
         return (
             (rec.getEfficiency() * 100).toFixed(2).toString().bold() +
-            "<b>%<br/>效率</b><br/><br/>等同於：<br/>" +
+            "<b>%<br/>EFFICIENCY</b><br/><br/>EQUIVALENT TO:<br/>" +
             amountstring.bold() +
             " " +
-            res.getResourceName(rec.hoveredResource).bold() +
-            "<br/>的殘留物"
+            sharktext.getResourceName(rec.hoveredResource).bold() +
+            "<br/>WORTH OF RESIDUE"
         );
     },
 
@@ -405,12 +406,21 @@ SharkGame.Recycler = {
             return;
         }
         const amount = res.getResource(resource);
-        const buy = main.getBuyAmount();
+        const buy = sharkmath.getBuyAmount();
 
         if (buy > 0) {
-            rec.expectedOutput = buy * rec.getEfficiency() * SharkGame.ResourceMap.get(resource).value;
+            if (buy <= amount) {
+                rec.expectedOutput = 0;
+            } else {
+                rec.expectedOutput = buy * rec.getEfficiency() * SharkGame.ResourceMap.get(resource).value;
+            }
         } else {
-            rec.expectedOutput = (amount * rec.getEfficiency() * SharkGame.ResourceMap.get(resource).value) / -buy;
+            const realBuy = amount / -buy;
+            if (realBuy < 1) {
+                rec.expectedOutput = 0;
+                return;
+            }
+            rec.expectedOutput = realBuy * rec.getEfficiency() * SharkGame.ResourceMap.get(resource).value;
         }
     },
 
@@ -420,13 +430,42 @@ SharkGame.Recycler = {
             rec.expectedJunkSpent = "NA";
             return;
         }
-        const junkAmount = res.getResource("junk");
-        const buy = main.getBuyAmount();
+        const buy = new Decimal(sharkmath.getBuyAmount());
+
+        const max = rec.getMaxToBuy(resource);
+
+        const resourceAmount = new Decimal(res.getResource(resource));
+        const value = new Decimal(SharkGame.ResourceMap.get(resource).value);
 
         if (buy > 0) {
-            rec.expectedJunkSpent = buy * SharkGame.ResourceMap.get(resource).value;
+            if (buy <= max) {
+                switch (rec.allowedCategories[res.getCategoryOfResource(resource)]) {
+                    case "constant":
+                        rec.expectedJunkSpent = Number(buy * value);
+                        break;
+                    case "linear":
+                        rec.expectedJunkSpent = Number(sharkmath.linearCost(resourceAmount, buy, value));
+                }
+            } else {
+                rec.expectedJunkSpent = 0;
+            }
         } else {
-            rec.expectedJunkSpent = junkAmount / -buy;
+            const realBuy = max.dividedBy(buy.times(-1)).round();
+            if (realBuy === 0) {
+                rec.expectedJunkSpent = 0;
+                return;
+            }
+            switch (rec.allowedCategories[res.getCategoryOfResource(resource)]) {
+                case "constant":
+                    rec.expectedJunkSpent = Number(realBuy.times(value));
+                    break;
+                case "linear":
+                    rec.expectedJunkSpent = Number(sharkmath.linearCost(resourceAmount, realBuy, value));
+            }
+        }
+
+        if (rec.expectedJunkSpent < 0) {
+            rec.expectedJunkSpent = 0;
         }
     },
 
@@ -447,7 +486,7 @@ SharkGame.Recycler = {
             baseEfficiency = 1;
         }
 
-        const purchaseAmount = res.getPurchaseAmount(resource);
+        const purchaseAmount = sharkmath.getPurchaseAmount(resource);
         // check if the amount to eat is less than the threshold
         if (purchaseAmount <= Math.pow(10, maxEfficiencyRecyclePowerOfTen)) {
             rec.efficiency = baseEfficiency;

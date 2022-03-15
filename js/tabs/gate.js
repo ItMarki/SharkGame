@@ -2,21 +2,23 @@
 SharkGame.Gate = {
     tabId: "gate",
     tabDiscovered: false,
-    tabName: "奇怪的門",
+    tabSeen: false,
+    tabName: "Strange Gate",
     tabBg: "img/bg/bg-gate.png",
 
     discoverReq: {
-        upgrade: ["gateDiscovery", "farAbandonedExploration", "farHavenExploration", "rapidRecharging"],
+        upgrade: ["gateDiscovery", "farAbandonedExploration", "farHavenExploration", "rapidRecharging", "arcaneCompass"],
     },
 
-    message: "一個不祥的圓形建築，關着門。<br/>有很多凹槽，還有一個告示牌寫者“請在此插入物件”。",
-    messageOneSlot: "一個不祥的圓形建築，關着門。<br/>剩餘一個凹槽。.",
-    messageOpened: "一個不祥的圓形建築，開着門。<br/>裡面的水閃輝，閃爍。有一個溫柔的力量拉着你。",
-    messagePaid: "凹槽接受你的捐獻，慢慢消失。",
+    message: "A foreboding circular structure, closed shut.<br/>There are many slots, and a sign you know to mean 'insert items here'.",
+    messageOneSlot: "A foreboding circular structure, closed shut.<br/>One slot remains.",
+    messageOpened: "A foreboding circular structure, wide open.<br/>The water glows and shimmers within it. A gentle tug pulls at you.",
+    messagePaid: "The slot accepts your donation and ceases to be.",
     messageCantPay: "The slot spits everything back out. You get the sense it wants more at once.",
-    messagePaidNotOpen: "Every slot is filled, but the structure doesn't open.<br/>Perhaps it needs something else.",
+    messagePaidNotOpen:
+        "For some reason, every slot is already filled. The structure doesn't open, though.<br/><strong>Perhaps it needs something else.</strong>",
     messageAllPaid: "The last slot closes. The structure opens. The water glows and shimmers within it.<br/>A gentle tug pulls at you.",
-    messageEnter: "你游到大門的另一邊……",
+    messageEnter: "You swim through the gate...",
 
     sceneClosedImage: "img/events/misc/scene-gate-closed.png",
     sceneAlmostOpenImage: "img/events/misc/scene-gate-one-slot.png",
@@ -27,52 +29,51 @@ SharkGame.Gate = {
     completedRequirements: {},
 
     init() {
-        const gate = SharkGame.Gate;
         // register tab
-        SharkGame.Tabs[gate.tabId] = {
-            id: gate.tabId,
-            name: gate.tabName,
-            discovered: gate.tabDiscovered,
-            discoverReq: gate.discoverReq,
-            code: gate,
-        };
-        gate.opened = false;
+        SharkGame.TabHandler.registerTab(this);
+        SharkGame.Gate.opened = false;
+        // redundant reset of gate requirements
+        SharkGame.Gate.resetSlots();
+    },
+
+    setup() {
+        /* doesnt need to do anything */
+    },
+
+    resetSlots() {
+        SharkGame.Gate.requirements = {};
+        SharkGame.Gate.completedRequirements = {};
     },
 
     createSlots(gateRequirements, gateCostMultiplier) {
         const gate = SharkGame.Gate;
-        gate.requirements = {};
-        gate.completedRequirements = {};
+        const req = gate.requirements;
+        const creq = gate.completedRequirements;
 
         if (gateRequirements.slots) {
-            gate.requirements.slots = {};
-            gate.completedRequirements.slots = {};
-            // create costs and costsMet
+            req.slots = {};
+            sharkmisc.tryAddProperty(creq, `slots`, {});
             $.each(gateRequirements.slots, (resourceId, requiredAmount) => {
-                gate.requirements.slots[resourceId] = Math.floor(requiredAmount * gateCostMultiplier);
-                gate.completedRequirements.slots[resourceId] = false;
+                req.slots[resourceId] = Math.floor(requiredAmount * gateCostMultiplier);
+                sharkmisc.tryAddProperty(creq.slots, resourceId, false);
             });
         }
 
         if (gateRequirements.upgrades) {
-            gate.requirements.upgrades = {};
-            gate.completedRequirements.upgrades = {};
-            // FIXME: https://discord.com/channels/747861699486285974/795148648837021716/845279763077136424
-            // "the way that i set up the system, it needs a key value pair later down the line, but it'll only use the key.
-            // so i set the key to the name of the upgrade and then just make a placeholder value so that it sticks"
+            req.upgrades = [];
+            sharkmisc.tryAddProperty(creq, `upgrades`, {});
             $.each(gateRequirements.upgrades, (_index, upgradeId) => {
-                gate.requirements.upgrades[upgradeId] = "__this_string_is_here_because_this_needs_to_be_an_object__";
-                gate.completedRequirements.upgrades[upgradeId] = false;
+                req.upgrades.push(upgradeId);
+                sharkmisc.tryAddProperty(creq.upgrades, upgradeId, false);
             });
         }
 
         if (gateRequirements.resources) {
-            gate.requirements.resources = {};
-            gate.completedRequirements.resources = {};
-
+            req.resources = {};
+            sharkmisc.tryAddProperty(creq, `resources`, {});
             $.each(gateRequirements.resources, (resourceId, requiredAmount) => {
-                gate.requirements.resources[resourceId] = requiredAmount;
-                gate.completedRequirements.resources[resourceId] = false;
+                req.resources[resourceId] = requiredAmount;
+                sharkmisc.tryAddProperty(creq.resources, resourceId, false);
             });
         }
     },
@@ -90,10 +91,15 @@ SharkGame.Gate = {
                 const buttonList = $("#buttonList");
                 $.each(gate.requirements.slots, (resource, requiredAmount) => {
                     if (!gate.completedRequirements.slots[resource]) {
-                        const resourceName = res.getResourceName(resource, false, false, SharkGame.getElementColor("tooltipbox", "background-color"));
+                        const resourceName = sharktext.getResourceName(
+                            resource,
+                            false,
+                            false,
+                            sharkcolor.getElementColor("tooltipbox", "background-color")
+                        );
                         SharkGame.Button.makeHoverscriptButton(
                             "gateCost-" + resource,
-                            "將 " + main.beautify(requiredAmount) + " " + resourceName + "插入至" + resourceName + "凹槽",
+                            "Insert " + sharktext.beautify(requiredAmount) + " " + resourceName + " into " + resourceName + " slot",
                             buttonList,
                             gate.onGateButton,
                             gate.onHover,
@@ -103,7 +109,7 @@ SharkGame.Gate = {
                 });
             }
         } else {
-            SharkGame.Button.makeButton("gateEnter", "進入大門", $("#buttonList"), gate.onEnterButton);
+            SharkGame.Button.makeButton("gateEnter", "Enter gate", $("#buttonList"), gate.onEnterButton);
         }
 
         let message = gate.getMessage();
@@ -143,7 +149,7 @@ SharkGame.Gate = {
 
         // if there are no upgrades needed, then that implies that there are no gate requirements
         // send an error to the log and return a debug message
-        SharkGame.Log.addError("No gate requirements found.");
+        log.addError("No gate requirements found.");
         return "This is a failsafe message. Something has gone wrong internally.";
     },
 
@@ -170,7 +176,11 @@ SharkGame.Gate = {
 
         // if there are any required upgrades in the first place, return the number of still required upgrades
         // if there are not any required upgrades, return false to identify this fact
-        return _.size(gate.requirements.upgrades) === 0 ? incompleteUpgrades : false;
+        if (gate.requirements.upgrades) {
+            return gate.requirements.upgrades.length === 0 ? incompleteUpgrades : false;
+        } else {
+            return false;
+        }
     },
 
     getResourcesLeft() {
@@ -197,12 +207,19 @@ SharkGame.Gate = {
         const required = gate.requirements.slots[resourceName];
         if (amount < required) {
             button.html(
-                `仍需 <span class='click-passthrough' style='color:#FFDE0A'>${main.beautify(required - amount)}</span> ${res.getResourceName(
+                `Need <span class='click-passthrough' style='color:#FFDE0A'>${sharktext.beautify(
+                    required - amount
+                )}</span> more ${sharktext.getResourceName(
                     resourceName,
                     false,
                     false,
-                    SharkGame.getElementColor(button.attr("id"), "background-color")
-                )} for ${res.getResourceName(resourceName, false, false, SharkGame.getElementColor(button.attr("id"), "background-color"))} slot`
+                    sharkcolor.getElementColor(button.attr("id"), "background-color")
+                )} for ${sharktext.getResourceName(
+                    resourceName,
+                    false,
+                    false,
+                    sharkcolor.getElementColor(button.attr("id"), "background-color")
+                )} slot`
             );
         }
     },
@@ -213,13 +230,13 @@ SharkGame.Gate = {
         const resourceName = button.attr("id").split("-")[1];
         const required = gate.requirements.slots[resourceName];
         button.html(
-            "將 " +
-                main.beautify(required) +
+            "Insert " +
+                sharktext.beautify(required) +
                 " " +
-                res.getResourceName(resourceName, false, false, SharkGame.getElementColor(button.attr("id"), "background-color")) +
-                " 插入至" +
-                res.getResourceName(resourceName, false, false, SharkGame.getElementColor(button.attr("id"), "background-color")) +
-                "凹槽"
+                sharktext.getResourceName(resourceName, false, false, sharkcolor.getElementColor(button.attr("id"), "background-color")) +
+                " into " +
+                sharktext.getResourceName(resourceName, false, false, sharkcolor.getElementColor(button.attr("id"), "background-color")) +
+                " slot"
         );
     },
 
@@ -245,7 +262,7 @@ SharkGame.Gate = {
         } else {
             message = gate.messageCantPay + "<br/>";
             const diff = cost - res.getResource(resourceId);
-            message += main.beautify(diff) + " more.";
+            message += sharktext.beautify(diff) + " more.";
         }
         if (SharkGame.Settings.current.showTabImages) {
             message = "<img width=400 height=200 src='" + gate.getSceneImagePath() + "' id='tabSceneImageEssence'>" + message;
@@ -254,8 +271,12 @@ SharkGame.Gate = {
     },
 
     onEnterButton() {
-        $("#tabMessage").html(SharkGame.Gate.messageEnter);
         $(this).remove();
+        SharkGame.Gate.enterGate();
+    },
+
+    enterGate() {
+        $("#tabMessage").html(SharkGame.Gate.messageEnter);
         SharkGame.wonGame = true;
         main.endGame();
     },

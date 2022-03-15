@@ -1,3 +1,4 @@
+"use strict";
 SharkGame.HomeActions = {
     /**
      * @type Record<string, Record<string, any>>
@@ -8,8 +9,6 @@ SharkGame.HomeActions = {
     /** @param worldType {string} */
     getActionTable(worldType = world.worldType) {
         if (typeof SharkGame.HomeActions[worldType] !== "object" || worldType === "generated") {
-            // This world type doesn't have any special upgrades, so use the default ones.
-            // We don't want to generate the same upgrade table multiple times for no reason.
             worldType = "default";
         }
 
@@ -18,6 +17,30 @@ SharkGame.HomeActions = {
         } else {
             return SharkGame.HomeActions.generated[worldType];
         }
+    },
+
+    /**
+     * Retrieves, modifies, and returns the data for an action. Implemented to intercept retreival of action data to handle special logic where alternatives are inconvenient or impossible.
+     * @param {object} table The table to retrieve the action data from
+     * @param {string} actionName The name of the action
+     */
+    getActionData(table, actionName) {
+        // probably find a way to forego the clonedeep here, but the performance impact seems negligible.
+        const data = _.cloneDeep(table[actionName]);
+
+        if (cad.actionPriceModifier !== 1) {
+            _.each(data.cost, (costData) => {
+                costData.priceIncrease *= cad.actionPriceModifier;
+            });
+        }
+
+        if (home.getActionCategory(actionName) === "frenzy") {
+            _.each(data.cost, (costData) => {
+                costData.priceIncrease *= 0.5 ** SharkGame.Aspects.thePlan.level;
+            });
+        }
+
+        return data;
     },
 
     /**
@@ -60,11 +83,16 @@ SharkGame.HomeActions = {
         return finalTable;
     },
 
+    // something new to keep in mind:
+    // the new system for keeping home actions in check at huge numbers doesn't work if the price increase isn't a whole number
+    // so fractional costs are banned now
+    // that's not a big deal anyways though, just multiply some numbers around to make the equivalent balance work out in the end with a non-fractional cost
+
     default: {
         // FREEBIES ////////////////////////////////////////////////////////////////////////////////
 
         catchFish: {
-            name: "抓魚",
+            name: "捕魚",
             effect: {
                 resource: {
                     get fish() {
@@ -116,11 +144,11 @@ SharkGame.HomeActions = {
                 "吃了一顆瑞典魚。",
                 "吃了一條金魚。",
             ],
-            helpText: "使用你的自然鯊魚技能尋找並抓捕一條魚。",
+            helpText: "使用你自然的鯊魚能力尋找並抓捕一條魚。",
         },
 
         debugbutton: {
-            name: "除錯東西",
+            name: "除錯功能",
             effect: {
                 resource: {
                     fish: 10000000,
@@ -144,13 +172,10 @@ SharkGame.HomeActions = {
                 "開發者的禮物。",
                 "你最好在給我測試東西。",
                 "不是用來真正玩的。",
-                "……作弊。",
-                "哇，你去命令行界面打了sgdebug()。真是一個黑客啊！",
+                "……你作弊。",
+                "哇，你在命令行界面打了sgdebug()。真是一個黑客啊！",
             ],
-            helpText: "使用你的自然編程技能尋找並抓捕缺陷。",
-            /* removedBy: {
-                upgrades: ["crystalContainer"],
-            }, */
+            helpText: "使用你自然的編程能力尋找並抓捕臭蟲。",
             unauthorized: true,
         },
 
@@ -299,13 +324,13 @@ SharkGame.HomeActions = {
                 upgrade: ["xenobiology"],
             },
             outcomes: [
-                "裡面必然有科學！",
+                "裏面必然有科學！",
                 "科學的原因玄不可測！",
                 "也許能給我們一些見解！",
                 "為什麼要做這件事？誰知道呢！科學！",
                 "這些東西到底有什麼用途？為什麼要用水果命名？它們在蠕動！",
             ],
-            helpText: "解剖海蘋果獲得額外的科學。研究！",
+            helpText: "解剖海蘋果以獲得額外的科學。研究！",
         },
 
         /*
@@ -339,31 +364,6 @@ SharkGame.HomeActions = {
         },
         */
 
-        jellyfishToScience: {
-            name: "Dismantle jellyfish",
-            effect: {
-                resource: {
-                    science: 3,
-                },
-            },
-            cost: [{ resource: "jellyfish", costFunction: "constant", priceIncrease: 1 }],
-            max: "jellyfish",
-            prereq: {
-                resource: {
-                    jellyfish: 1,
-                },
-                upgrade: ["xenobiology"],
-            },
-            outcomes: [
-                "Eww eww gross it's so gloopy and fragile and OW IT STUNG ME",
-                "These things are like a bag of wonders. Weird, tasteless wonders.",
-                "Wow, sea apples seemed weird, but these things barely exist.",
-                "Well, they turned out just as fragile as they looked.",
-                "So interesting!",
-            ],
-            helpText: "Examine the goop inside the stinging jellies! Discovery!",
-        },
-
         pearlConversion: {
             name: "Convert clam pearls",
             effect: {
@@ -394,7 +394,7 @@ SharkGame.HomeActions = {
         // MAKE ADVANCED RESOURCES  ///////////////////////////////////////////////////////////////////////////////
 
         transmuteSharkonium: {
-            name: "將東西轉變成鯊魚素",
+            name: "Transmute stuff to sharkonium",
             effect: {
                 resource: {
                     sharkonium: 1,
@@ -421,19 +421,19 @@ SharkGame.HomeActions = {
                 upgrade: ["transmutation"],
             },
             outcomes: [
-                "轉變目的地！",
-                "轉變復興！",
-                "轉變術！",
+                "Transmutation destination!",
+                "Transmutation rejuvenation!",
+                "Transmogrification revelation!",
                 "Transformation libation!",
                 "Transfiguration nation! ...wait.",
-                "鯊魚素出現！",
-                "出現吧，鯊魚素！",
-                "更多鯊魚素！",
-                "不可命名的物質！除了鯊魚素這一名字！",
-                "不可名狀的物質！看上去很奇怪。",
-                "現代鯊魚狂熱的基礎！",
+                "Sharkonium arise!",
+                "Arise, sharkonium!",
+                "More sharkonium!",
+                "The substance that knows no name! Except the name sharkonium!",
+                "The substance that knows no description! It's weird to look at.",
+                "The foundation of a modern shark frenzy!",
             ],
-            helpText: "將平凡的資源轉換成鯊魚素，未來的基石！",
+            helpText: "Convert ordinary resources into sharkonium, building material of the future!",
         },
 
         smeltCoralglass: {
@@ -522,7 +522,7 @@ SharkGame.HomeActions = {
                 "一班鯊魚！",
                 "一伙鯊魚！",
             ],
-            helpText: "招募鯊魚幫助你抓更多的魚。",
+            helpText: "招募鯊魚，幫你抓更多的魚。",
         },
 
         getManta: {
@@ -536,7 +536,7 @@ SharkGame.HomeActions = {
             max: "ray",
             prereq: {
                 resource: {
-                    fish: 15,
+                    shark: 5,
                 },
             },
             outcomes: [
@@ -590,10 +590,10 @@ SharkGame.HomeActions = {
                 "一班魟魚！",
                 "一簇魟魚！",
                 "大量魟魚！",
-                "沙子在水裡四處飄揚！",
+                "沙子在水裏四處飄揚！",
                 "好多魟魚。",
             ],
-            helpText: "僱用魟魚幫你收集魚。牠們可能會從海床踢上一些沙子。",
+            helpText: "僱用魟魚，幫你收集魚。它們可能會從海床踢上一些沙子。",
         },
 
         getCrab: {
@@ -607,12 +607,12 @@ SharkGame.HomeActions = {
             max: "crab",
             prereq: {
                 resource: {
-                    shark: 4,
+                    shark: 10,
                     ray: 4,
                 },
             },
             outcomes: [
-                "一隻螃蟹開始從沙子裡篩出閃亮的東西。",
+                "一隻螃蟹開始從沙子裏篩出閃亮的東西。",
                 "A bering hermit joins you.",
                 "A blackeye hermit joins you.",
                 "A butterfly crab joins you.",
@@ -642,10 +642,10 @@ SharkGame.HomeActions = {
                 "A umbrella crab joins you.",
             ],
             multiOutcomes: [
-                "大量螃蟹加入了你的團隊。",
-                "處處蟹",
-                "螃蟹。螃蟹。螃蟹！",
-                "這裡感覺有點蟹味。",
+                "A lot of crabs join you.",
+                "CRABS EVERYWHERE",
+                "Crabs. Crabs. Crabs!",
+                "Feels sort of crab-like around here.",
                 "A cast of crabs!",
                 "A dose of crabs!",
                 "A cribble of crabs! Okay, no, that one's made up.",
@@ -755,116 +755,6 @@ SharkGame.HomeActions = {
             helpText: "Lobster like clams. Will work for clams. Good work. Many clams.",
         },
 
-        getEel: {
-            name: "Hire eel",
-            effect: {
-                resource: {
-                    eel: 1,
-                },
-            },
-            cost: [{ resource: "fish", costFunction: "linear", priceIncrease: 15 }],
-            max: "eel",
-            prereq: {
-                resource: {
-                    fish: 50,
-                },
-                upgrade: ["seabedGeology"],
-            },
-            outcomes: [
-                "A false moray joins you.",
-                "A mud eel joins you.",
-                "A spaghetti eel joins you.",
-                "A moray eel joins you.",
-                "A thin eel joins you.",
-                "A worm eel joins you.",
-                "A conger joins you.",
-                "A longneck eel joins you.",
-                "A pike conger joins you.",
-                "A duckbill eel joins you.",
-                "A snake eel joins you.",
-                "A snipe eel joins you.",
-                "A sawtooth eel joins you.",
-                "A cutthroat eel joins you.",
-                "An electric eel joins you.",
-                "A bobtail snipe eel joins you.",
-                "A silver eel joins you.",
-                "A long finned eel joins you.",
-                "A short finned eel joins you.",
-            ],
-            multiOutcomes: [
-                "Eels combining elements of the sharks and the eels to create something not quite as good as either.",
-                "The seabed sways with the arrival of new eels.",
-                "Fish and sand go hand in hand with eels! Well, fin and fin.",
-                "Don't mess with the creatures with jaws inside their jaws.",
-                "Eel nation arise!",
-                "That's a lot of eels.",
-                "So there's more eels. Whee.",
-                "The eels increase in number.",
-                "More eels happened. Yay.",
-            ],
-            helpText: "Offer a new home and fish supply to an eel. They can round up fish and sand.",
-        },
-
-        getChimaera: {
-            name: "Procure chimaera",
-            effect: {
-                resource: {
-                    chimaera: 1,
-                },
-            },
-            cost: [{ resource: "jellyfish", costFunction: "linear", priceIncrease: 20 }],
-            max: "chimaera",
-            prereq: {
-                resource: {
-                    jellyfish: 20,
-                },
-                upgrade: ["jellyfishHunting"],
-            },
-            outcomes: [
-                "A ploughnose chimaera joins you.",
-                "A cape elephantfish joins you.",
-                "An australian ghost shark joins you.",
-                "A whitefin chimaera joins you.",
-                "A bahamas ghost shark joins you.",
-                "A southern chimaera joins you.",
-                "A longspine chimaera joins you.",
-                "A cape chimaera joins you.",
-                "A shortspine chimaera joins you.",
-                "A leopard chimaera joins you.",
-                "A silver chimaera joins you.",
-                "A pale ghost shark joins you.",
-                "A spotted ratfish joins you.",
-                "A philippine chimaera joins you.",
-                "A black ghostshark joins you.",
-                "A blackfin ghostshark joins you.",
-                "A marbled ghostshark joins you.",
-                "A striped rabbitfish joins you.",
-                "A large-eyed rabbitfish joins you.",
-                "A spookfish joins you.",
-                "A dark ghostshark joins you.",
-                "A purple chimaera joins you.",
-                "A pointy-nosed blue chimaera joins you.",
-                "A giant black chimaera joins you.",
-                "A smallspine spookfish joins you.",
-                "A pacific longnose chimaera joins you.",
-                "A dwarf sicklefin chimaera joins you.",
-                "A sicklefin chimaera joins you.",
-                "A paddle-nose chimaera joins you.",
-                "A straightnose rabbitfish joins you.",
-            ],
-            multiOutcomes: [
-                "Many chimaeras come from the deep.",
-                "Like ghosts, they come.",
-                "The chimaeras avert your gaze, but set to work quickly.",
-                "The jellyfish stocks shall climb ever higher!",
-                "Well, it saves you the effort of braving the stinging tentacles.",
-                "What have they seen, deep in the chasms?",
-                "They aren't sharks, but they feel so familiar.",
-                "The long-lost kindred return.",
-            ],
-            helpText: "Convince a chimaera to hunt in the darker depths for us.",
-        },
-
         // SHARK JOBS ////////////////////////////////////////////////////////////////////////////////
 
         getDiver: {
@@ -902,7 +792,7 @@ SharkGame.HomeActions = {
         },
 
         getScientist: {
-            name: "訓練科學鯊魚",
+            name: "Train science shark",
             effect: {
                 resource: {
                     scientist: 1,
@@ -920,23 +810,23 @@ SharkGame.HomeActions = {
                 },
             },
             outcomes: [
-                "鯊魚博士，來一份！",
-                "展示出一條科學家鯊魚！",
-                "經過千辛萬苦的學習，一條鯊魚在製造藉口…——啊不是，科學的方面中發展出了一個優秀的技能！",
-                "博士學位批准！",
-                "畢業完成！",
-                "一個新的見識驅動一條新的鯊魚走上科學之路！",
+                "Doctor Shark, coming right up!",
+                "A scientist shark is revealed!",
+                "After many painful years of study, a shark that has developed excellent skills in making excuses-- er, in science!",
+                "PhD approved!",
+                "Graduation complete!",
+                "A new insight drives a new shark to take up the cause of science!",
             ],
             multiOutcomes: [
-                "訓練計劃奏效！",
-                "看看這堆科學！",
-                "建立一個更聰明，更好的鯊魚！",
-                "燒杯！水下燒杯！簡直是一場狂熱！",
-                "讓科學開始吧！",
-                "水下寫字板！我也不知道是怎麼可能的！",
-                "小心的牙齒記錄發現！",
+                "The training program was a success!",
+                "Look at all this science!",
+                "Building a smarter, better shark!",
+                "Beakers! Beakers underwater! It's madness!",
+                "Let the science commence!",
+                "Underwater clipboards! No I don't know how that works either!",
+                "Careful teeth record the discoveries!",
             ],
-            helpText: "訓練鯊魚使其熟練研究的藝術和科學的……科學。",
+            helpText: "Train a shark in the fine art of research and the science of, well, science.",
         },
 
         /*
@@ -974,7 +864,7 @@ SharkGame.HomeActions = {
         */
 
         getNurse: {
-            name: "訓練護士鯊魚",
+            name: "Train nurse shark",
             effect: {
                 resource: {
                     nurse: 1,
@@ -992,10 +882,10 @@ SharkGame.HomeActions = {
                 upgrade: ["biology"],
             },
             outcomes: [
-                "一條護士鯊魚準備好了！",
-                "鯊魚生產者做好了。",
-                "訓練好了護士鯊魚。",
-                "醫學考試及格！護士鯊魚出發！",
+                "A nurse shark is ready!",
+                "Shark manufacturer primed.",
+                "Nurse shark trained.",
+                "Medical exam passed! Nurse shark is go!",
             ],
             multiOutcomes: [
                 "More sharks are on the way soon.",
@@ -1011,7 +901,7 @@ SharkGame.HomeActions = {
         // RAY JOBS ////////////////////////////////////////////////////////////////////////////////
 
         getLaser: {
-            name: "裝備激光魟魚",
+            name: "Equip laser ray",
             effect: {
                 resource: {
                     laser: 1,
@@ -1029,15 +919,15 @@ SharkGame.HomeActions = {
                 upgrade: ["laserRays"],
             },
             outcomes: [
-                "激光線開動！",
+                "Laser ray online!",
                 "Laser ray! With a laser ray! It's laser ray, with a laaaaaser raaaay!",
                 "Laser ray.",
                 "Ray suited up with a laaaaaaser!",
                 "Ray lasered. To use a laser. Not the subject of a laser.",
             ],
             multiOutcomes: [
-                "燒掉海床！",
-                "化沙粒為水晶！Churn the sand to crystal!",
+                "Boil the seabed!",
+                "Churn the sand to crystal!",
                 "Laser ray armada in position!",
                 "Ray crystal processing initiative is growing stronger every day!",
                 "Welcome to the future! The future is lasers!",
@@ -1084,7 +974,7 @@ SharkGame.HomeActions = {
         */
 
         getMaker: {
-            name: "教導一個魟魚製造者",
+            name: "Instruct a ray maker",
             effect: {
                 resource: {
                     maker: 1,
@@ -1093,7 +983,6 @@ SharkGame.HomeActions = {
             cost: [
                 { resource: "ray", costFunction: "constant", priceIncrease: 1 },
                 { resource: "fish", costFunction: "linear", priceIncrease: 300 },
-                { resource: "kelp", costFunction: "linear", priceIncrease: 15 },
             ],
             max: "maker",
             prereq: {
@@ -1161,7 +1050,7 @@ SharkGame.HomeActions = {
         // CRAB JOBS ////////////////////////////////////////////////////////////////////////////////
 
         getPlanter: {
-            name: "配備種植螃蟹",
+            name: "Gear up planter crab",
             effect: {
                 resource: {
                     planter: 1,
@@ -1193,7 +1082,7 @@ SharkGame.HomeActions = {
                 "Pat the sand very gently and put kelp in it!",
                 "More kelp. The apples. They hunger. They hunger for kelp.",
             ],
-            helpText: "給裝備器材和訓練讓其在海底種植海帶。",
+            helpText: "Equip a crab with the equipment and training to plant kelp across the ocean bottom.",
         },
 
         /*
@@ -1235,7 +1124,7 @@ SharkGame.HomeActions = {
         */
 
         getBrood: {
-            name: "形成螃蟹窩",
+            name: "Form crab brood",
             effect: {
                 resource: {
                     brood: 1,
@@ -1267,7 +1156,6 @@ SharkGame.HomeActions = {
                 "Snip snap clack clack burble burble crabs crabs crabs crabs.",
                 "More crabs are always a good idea. Crystals aren't cheap.",
                 "The broods swell in number. The sharks are uneasy, but the concern soon passes.",
-                "Yes. Feed the kelp. Feed it. Feeeeeed it.",
             ],
             helpText: "Meld several crabs into a terrifying, incomprehensible crab-producing brood cluster.",
         },
@@ -1458,190 +1346,10 @@ SharkGame.HomeActions = {
             helpText: "Train a lobster to cut down kelp faster than anything can plant it. Sustainable!",
         },
 
-        // EEL JOBS ////////////////////////////////////////////////////////////////////////////////
-
-        getPit: {
-            name: "Dig eel pit",
-            effect: {
-                resource: {
-                    pit: 1,
-                },
-            },
-            cost: [
-                { resource: "eel", costFunction: "constant", priceIncrease: 3 },
-                { resource: "fish", costFunction: "linear", priceIncrease: 50 },
-                { resource: "sand", costFunction: "linear", priceIncrease: 20 },
-            ],
-            max: "pit",
-            prereq: {
-                resource: {
-                    eel: 1,
-                },
-                upgrade: ["eelHabitats"],
-            },
-            outcomes: [
-                "Why does it take three eels? Oh well. We don't really need to know.",
-                "Dig that pit. We can dig it.",
-                "Let's get digging.",
-                "Oh, hey, this hole's already empty. Well, isn't that something.",
-            ],
-            multiOutcomes: [
-                "Let's get digging.",
-                "Eel tide rises.",
-                "More eels! They're handy to have.",
-                "Many eyes from the caves.",
-                "Secret homes!",
-                "The eels are content.",
-            ],
-            helpText: "Find a suitable pit for eels to make more eels.",
-        },
-
-        getTechnician: {
-            name: "Teach eel technician",
-            effect: {
-                resource: {
-                    technician: 1,
-                },
-            },
-            cost: [
-                { resource: "eel", costFunction: "constant", priceIncrease: 1 },
-                { resource: "fish", costFunction: "linear", priceIncrease: 30 },
-                { resource: "crystal", costFunction: "linear", priceIncrease: 5 },
-            ],
-            max: "technician",
-            prereq: {
-                resource: {
-                    eel: 1,
-                },
-                upgrade: ["eelHabitats"],
-            },
-            outcomes: [
-                "We have a technician!",
-                "Technical problems no more!",
-                "No, the eel won't fix your computer.",
-                "Eel technician!",
-            ],
-            multiOutcomes: [
-                "Let's get technical!",
-                "Qualified and certified!",
-                "Support squad on the rise!",
-                "Let us not question the nature of eel technical training.",
-                "Science progresses!",
-            ],
-            helpText: "Instruct an eel in the fine art of shark science.",
-        },
-
-        getSifter: {
-            name: "Train eel sifter",
-            effect: {
-                resource: {
-                    sifter: 1,
-                },
-            },
-            cost: [
-                { resource: "eel", costFunction: "constant", priceIncrease: 1 },
-                { resource: "fish", costFunction: "linear", priceIncrease: 30 },
-            ],
-            max: "sifter",
-            prereq: {
-                resource: {
-                    eel: 1,
-                },
-                upgrade: ["eelHabitats"],
-            },
-            outcomes: [
-                "Eel sifter ready to find things!",
-                "Eel ready to sift through the sands!",
-                "Time to sift, eel. Time to seek, search and sift.",
-                "Time for this little guy to find some goodies.",
-            ],
-            multiOutcomes: [
-                "Time to find the things!",
-                "Sift. It's a fun word. Siiiiffft.",
-                "Sifters scouring the seabed for some special stuff.",
-                "Shifters ready to shift! Wait. No. Hang on.",
-                "Sifting the seabed for scores of surprises!",
-            ],
-            helpText: "Specialise an eel in finding interesting things on the seabed.",
-        },
-
-        // CHIMAERA JOBS ////////////////////////////////////////////////////////////////////////////////
-
-        getTransmuter: {
-            name: "Induct chimaera transmuter",
-            effect: {
-                resource: {
-                    transmuter: 1,
-                },
-            },
-            cost: [
-                { resource: "chimaera", costFunction: "constant", priceIncrease: 1 },
-                { resource: "jellyfish", costFunction: "linear", priceIncrease: 10 },
-                { resource: "sharkonium", costFunction: "linear", priceIncrease: 10 },
-            ],
-            max: "transmuter",
-            prereq: {
-                resource: {
-                    chimaera: 1,
-                },
-                upgrade: ["chimaeraMysticism"],
-            },
-            outcomes: [
-                "Transmuter taught.",
-                "The chimaera's eyes flicker with power.",
-                "The water glows around the chimaera.",
-                "The chimaera forms the material of progress.",
-            ],
-            multiOutcomes: [
-                "The chimaeras are now masters of matter.",
-                "The transmuters revel in our revealed secrets.",
-                "The process continues.",
-                "The matter matters.",
-                "The immaterial made material.",
-            ],
-            helpText: "Reveal the mysteries of transmutation to a chimaera.",
-        },
-
-        getExplorer: {
-            name: "Prepare chimaera explorer",
-            effect: {
-                resource: {
-                    explorer: 1,
-                },
-            },
-            cost: [
-                { resource: "chimaera", costFunction: "constant", priceIncrease: 1 },
-                { resource: "jellyfish", costFunction: "linear", priceIncrease: 30 },
-                { resource: "crystal", costFunction: "linear", priceIncrease: 30 },
-            ],
-            max: "explorer",
-            prereq: {
-                resource: {
-                    chimaera: 1,
-                },
-                upgrade: ["chimaeraMysticism"],
-            },
-            outcomes: [
-                "A seeker of mysteries is prepared.",
-                "The chimaera explorer is ready for their journey.",
-                "Explorer ready for some answers!",
-                "The chimaera swims down to the ocean below.",
-            ],
-            multiOutcomes: [
-                "The exploration party is ready.",
-                "Learn the secrets of the deeps!",
-                "More mysteries to uncover.",
-                "Ancient riddles for ancient creatures.",
-                "Find the truth beneath the waves!",
-            ],
-            helpText:
-                "Help prepare a chimaera for exploration to parts unknown. Their efforts will be good for science.",
-        },
-
         // SHARK MACHINES ////////////////////////////////////////////////////////////////////////////////
 
         getCrystalMiner: {
-            name: "建造水晶礦工",
+            name: "Build crystal miner",
             effect: {
                 resource: {
                     crystalMiner: 1,
@@ -1688,7 +1396,7 @@ SharkGame.HomeActions = {
         },
 
         getSandDigger: {
-            name: "建造挖沙機器",
+            name: "Build sand digger",
             effect: {
                 resource: {
                     sandDigger: 1,
@@ -1730,7 +1438,7 @@ SharkGame.HomeActions = {
         },
 
         getFishMachine: {
-            name: "建造生魚機器",
+            name: "Build fish machine",
             effect: {
                 resource: {
                     fishMachine: 1,
@@ -1763,14 +1471,20 @@ SharkGame.HomeActions = {
         },
 
         getAutoTransmuter: {
-            name: "建造自動轉變機器",
+            name: "Build auto-transmuter",
             effect: {
                 resource: {
                     autoTransmuter: 1,
                 },
             },
             cost: [
-                { resource: "crystal", costFunction: "linear", priceIncrease: 100 },
+                {
+                    resource: "crystal",
+                    costFunction: "linear",
+                    get priceIncrease() {
+                        return 100 - 50 * SharkGame.Aspects.amorphousAssembly.level;
+                    },
+                },
                 { resource: "sharkonium", costFunction: "linear", priceIncrease: 100 },
             ],
             max: "autoTransmuter",
@@ -1805,7 +1519,13 @@ SharkGame.HomeActions = {
                 },
             },
             cost: [
-                { resource: "junk", costFunction: "linear", priceIncrease: 400 },
+                {
+                    resource: "junk",
+                    costFunction: "linear",
+                    get priceIncrease() {
+                        return 400 - 200 * SharkGame.Aspects.amorphousAssembly.level;
+                    },
+                },
                 { resource: "sharkonium", costFunction: "linear", priceIncrease: 200 },
             ],
             max: "skimmer",
@@ -2138,8 +1858,20 @@ SharkGame.HomeActions = {
                 },
             },
             cost: [
-                { resource: "sponge", costFunction: "constant", priceIncrease: 5 },
-                { resource: "junk", costFunction: "constant", priceIncrease: 15 },
+                {
+                    resource: "sponge",
+                    costFunction: "constant",
+                    get priceIncrease() {
+                        return 5 - SharkGame.Aspects.syntheticTransmutation.level;
+                    },
+                },
+                {
+                    resource: "junk",
+                    costFunction: "constant",
+                    get priceIncrease() {
+                        return 15 - 3 * SharkGame.Aspects.syntheticTransmutation.level;
+                    },
+                },
             ],
             max: "spronge",
             prereq: {
@@ -2164,8 +1896,20 @@ SharkGame.HomeActions = {
                 },
             },
             cost: [
-                { resource: "crystal", costFunction: "constant", priceIncrease: 100 },
-                { resource: "clam", costFunction: "constant", priceIncrease: 300 },
+                {
+                    resource: "crystal",
+                    costFunction: "constant",
+                    get priceIncrease() {
+                        return 100 - 20 * SharkGame.Aspects.syntheticTransmutation.level;
+                    },
+                },
+                {
+                    resource: "clam",
+                    costFunction: "constant",
+                    get priceIncrease() {
+                        return 300 - 60 * SharkGame.Aspects.syntheticTransmutation.level;
+                    },
+                },
             ],
             max: "ancientPart",
             prereq: {
@@ -2533,8 +2277,20 @@ SharkGame.HomeActions = {
                 },
             },
             cost: [
-                { resource: "coral", costFunction: "constant", priceIncrease: 15 },
-                { resource: "crystal", costFunction: "constant", priceIncrease: 5 },
+                {
+                    resource: "coral",
+                    costFunction: "constant",
+                    get priceIncrease() {
+                        return 15 - 3 * SharkGame.Aspects.syntheticTransmutation.level;
+                    },
+                },
+                {
+                    resource: "crystal",
+                    costFunction: "constant",
+                    get priceIncrease() {
+                        return 5 - SharkGame.Aspects.syntheticTransmutation.level;
+                    },
+                },
             ],
             max: "delphinium",
             prereq: {
@@ -2807,8 +2563,16 @@ SharkGame.HomeActions = {
                 },
             },
             cost: [
-                { resource: "whale", costFunction: "unique", priceIncrease: 3000 },
-                { resource: "dolphin", costFunction: "unique", priceIncrease: 100000 },
+                {
+                    resource: "whale",
+                    costFunction: "unique",
+                    priceIncrease: 3000,
+                },
+                {
+                    resource: "dolphin",
+                    costFunction: "unique",
+                    priceIncrease: 100000,
+                },
             ],
             max: "chorus",
             prereq: {
@@ -2851,7 +2615,13 @@ SharkGame.HomeActions = {
             },
             cost: [
                 { resource: "delphinium", costFunction: "linear", priceIncrease: 75 },
-                { resource: "coral", costFunction: "linear", priceIncrease: 300 },
+                {
+                    resource: "coral",
+                    costFunction: "linear",
+                    get priceIncrease() {
+                        return 300 - 150 * SharkGame.Aspects.amorphousAssembly.level;
+                    },
+                },
             ],
             max: "crimsonCombine",
             prereq: {
@@ -2883,7 +2653,13 @@ SharkGame.HomeActions = {
             },
             cost: [
                 { resource: "delphinium", costFunction: "linear", priceIncrease: 100 },
-                { resource: "seaApple", costFunction: "linear", priceIncrease: 25 },
+                {
+                    resource: "seaApple",
+                    costFunction: "linear",
+                    get priceIncrease() {
+                        return 25 - 12.5 * SharkGame.Aspects.amorphousAssembly.level;
+                    },
+                },
             ],
             max: "kelpCultivator",
             prereq: {
@@ -2914,8 +2690,20 @@ SharkGame.HomeActions = {
             },
             cost: [
                 { resource: "delphinium", costFunction: "linear", priceIncrease: 100 },
-                { resource: "crystal", costFunction: "linear", priceIncrease: 100 },
-                { resource: "coral", costFunction: "linear", priceIncrease: 100 },
+                {
+                    resource: "crystal",
+                    costFunction: "linear",
+                    get priceIncrease() {
+                        return 100 - 50 * SharkGame.Aspects.amorphousAssembly.level;
+                    },
+                },
+                {
+                    resource: "coral",
+                    costFunction: "linear",
+                    get priceIncrease() {
+                        return 100 - 50 * SharkGame.Aspects.amorphousAssembly.level;
+                    },
+                },
             ],
             max: "tirelessCrafter",
             prereq: {
@@ -2966,23 +2754,30 @@ SharkGame.HomeActions = {
                 upgrade: ["civilContact"],
             },
             outcomes: [
-                "Skwid. I mean, squid.",
-                "You. Hunting duty. Get on it.",
-                "Squid at your service.",
-                "Squid ready to hunt.",
-                "The squid ventures out in search of fish.",
-                "The squid has no qualms about joining the frenzy.",
-                "The squid offers its utmost respect.",
+                "A giant squid joins you.",
+                "A bush-club squid joins you.",
+                "A comb-finned squid joins you.",
+                "A glass squid joins you.",
+                "An armhook squid joins you.",
+                "A jewel squid joins you.",
+                "A scaled squid joins you.",
+                "A big-fin squid joins you.",
+                "A whip-lash squid joins you.",
+                "A flying squid joins you.",
+                "A hooked squid joins you.",
+                "A glacial squid joins you.",
+                "A fire squid joins you.",
+                "A grass squid joins you.",
             ],
             multiOutcomes: [
-                "Squids? Squid.",
                 "The squid join the frenzy, but stay close to the village.",
                 "The squid are cooperative and obedient. They do as directed.",
                 "A squiggle of squid! No, of course that's not real.",
-                "A...group! Of squid!",
-                "A shoal of squid!",
-                "A squad of squid! A squid squad!",
-                "A school of squid!",
+                "You all. Hunting duty. Get on it.",
+                "Squid are ready to hunt.",
+                "The squid venture out in search of fish.",
+                "The squid have no qualms about joining the frenzy.",
+                "The squid offer their utmost respect.",
             ],
             helpText: "Enlist a squid to help us hunt down fish. Squid are used to the cold.",
         },
@@ -3008,7 +2803,21 @@ SharkGame.HomeActions = {
             prereq: {
                 upgrade: ["urchinAttraction"],
             },
-            outcomes: ["OUCH!", "OW!", "YEOUCH!", "OUCHIE!", "insert pain noise", "OOCH!"],
+            outcomes: [
+                "A collector urchin joins you.",
+                "A burrowing urchin joins you.",
+                "A fire urchin joins you.",
+                "A lance urchin joins you.",
+                "A long-spined urchin joins you.",
+                "A reef urchin joins you.",
+                "A rock-boring urchin joins you.",
+                "A pencil urchin joins you.",
+                "A needle urchin joins you.",
+                "A violet urchin joins you.",
+                "A purple urchin joins you.",
+                "A double-spined urchin joins you.",
+                "A flower urchin joins you.",
+            ],
             multiOutcomes: [
                 "ow ow ow spikes hurt",
                 "The urchins join the frenzy. The frenzy keeps its distance.",
@@ -3109,7 +2918,7 @@ SharkGame.HomeActions = {
 
         // URCHIN JOB ////////////////////////////////////////////////////////////////////////////////////
 
-        getSpanwer: {
+        getSpawner: {
             name: "Designate urchin spawner",
             effect: {
                 resource: {
@@ -3160,7 +2969,13 @@ SharkGame.HomeActions = {
             },
             cost: [
                 { resource: "sharkonium", costFunction: "linear", priceIncrease: 100 },
-                { resource: "kelp", costFunction: "linear", priceIncrease: 750 },
+                {
+                    resource: "kelp",
+                    costFunction: "linear",
+                    get priceIncrease() {
+                        return 750 - 375 * SharkGame.Aspects.amorphousAssembly.level;
+                    },
+                },
             ],
             max: "heater",
             prereq: {
@@ -3188,22 +3003,981 @@ SharkGame.HomeActions = {
             },
         },
     },
+    shrouded: {
+        catchFish: {},
+
+        debugbutton: {},
+
+        getJellyfish: {},
+
+        // CONVERSIONS ////////////////////////////////////////////////////////////////////////////////
+
+        jellyfishToScience: {
+            name: "Dismantle jellyfish",
+            effect: {
+                resource: {
+                    science: 4,
+                },
+            },
+            cost: [{ resource: "jellyfish", costFunction: "constant", priceIncrease: 1 }],
+            max: "jellyfish",
+            prereq: {
+                resource: {
+                    jellyfish: 150,
+                },
+                upgrade: ["xenobiology"],
+            },
+            outcomes: [
+                "Eww eww gross it's so gloopy and fragile and OW IT STUNG ME",
+                "These things are like a bag of wonders. Weird, tasteless wonders.",
+                "Wow, sea apples seemed weird, but these things barely exist.",
+                "Well, they turned out just as fragile as they looked.",
+                "So interesting!",
+            ],
+            helpText: "Examine the goop inside the stinging jellies! Discovery!",
+        },
+
+        makeSacrifice: {
+            name: "Perform Arcane Sacrifice",
+            effect: {
+                resource: {
+                    sacrifice: 1,
+                },
+            },
+            cost: [{ resource: "arcana", costFunction: "constant", priceIncrease: 1 }],
+            max: "arcana",
+            prereq: {
+                upgrade: ["arcaneSacrifice"],
+            },
+            outcomes: [
+                "For the greater good.",
+                "For the good of us all.",
+                "The power within these shards is now ours.",
+                "The flash is dizzying, but the power is worth it.",
+                "The shards rupture into tiny pieces that disintegrate everywhere.",
+                "That familiar feeling.",
+                "Feel the power. Feel the flow of energy.",
+            ],
+            helpText:
+                "Smash large quantities of arcana to release the energy contained within, so that it might be used for the greater good.",
+        },
+
+        // MAKE ADVANCED RESOURCES  ///////////////////////////////////////////////////////////////////////////////
+
+        transmuteSharkonium: {},
+
+        // BUY ANIMALS ////////////////////////////////////////////////////////////////////////////////
+
+        getShark: {
+            name: "Recruit shark",
+            effect: {
+                resource: {
+                    shark: 1,
+                },
+            },
+            cost: [{ resource: "fish", costFunction: "linear", priceIncrease: 5 }],
+            max: "shark",
+            prereq: {
+                resource: {
+                    fish: 5,
+                },
+            },
+            outcomes: [
+                "A bignose shark joins you.",
+                "A blacktip reef shark joins you.",
+                "A blue shark joins you.",
+                "A bull shark joins you.",
+                "A cat shark joins you.",
+                "A crocodile shark joins you.",
+                "A dusky whaler shark joins you.",
+                "A dogfish joins you.",
+                "A graceful shark joins you.",
+                "A grey reef shark joins you.",
+                "A goblin shark joins you.",
+                "A hammerhead shark joins you.",
+                "A hardnose shark joins you.",
+                "A lemon shark joins you.",
+                "A milk shark joins you.",
+                "A nervous shark joins you.",
+                "An oceanic whitetip shark joins you.",
+                "A pigeye shark joins you.",
+                "A sandbar shark joins you.",
+                "A silky shark joins you.",
+                "A silvertip shark joins you.",
+                "A sliteye shark joins you.",
+                "A speartooth shark joins you.",
+                "A spinner shark joins you.",
+                "A spot-tail shark joins you.",
+                "A mako shark joins you.",
+                "A tiger shark joins you.",
+                "A tawny shark joins you.",
+                "A white shark joins you.",
+                "A zebra shark joins you.",
+            ],
+            multiOutcomes: [
+                "A whole bunch of sharks join you.",
+                "That's a lot of sharks.",
+                "The shark community grows!",
+                "More sharks! MORE SHARKS!",
+                "Sharks for the masses. Mass sharks.",
+                "A shiver of sharks! No, that's a legit name. Look it up.",
+                "A school of sharks!",
+                "A shoal of sharks!",
+                "A frenzy of sharks!",
+                "A gam of sharks! Yes, that's correct.",
+                "A college of sharks! They're a little smarter than a school.",
+            ],
+            helpText: "Recruit a shark to help catch more fish.",
+        },
+
+        getManta: {
+            name: "Hire ray",
+            effect: {
+                resource: {
+                    ray: 1,
+                },
+            },
+            cost: [{ resource: "fish", costFunction: "linear", priceIncrease: 15 }],
+            max: "ray",
+            prereq: {
+                resource: {
+                    shark: 10,
+                },
+            },
+            outcomes: [
+                "These guys seem to be kicking up a lot of sand!",
+                "A spotted eagle ray joins you.",
+                "A manta ray joins you.",
+                "A stingray joins you.",
+                "A clownnose ray joins you.",
+                "A bluespotted maskray joins you.",
+                "A bluntnose stingray joins you.",
+                "A oman masked ray joins you.",
+                "A bulls-eye electric ray joins you.",
+                "A shorttailed electric ray joins you.",
+                "A bentfin devil ray joins you.",
+                "A lesser electric ray joins you.",
+                "A cortez electric ray joins you.",
+                "A feathertail stingray joins you.",
+                "A thornback ray joins you.",
+                "A giant shovelnose ray joins you.",
+                "A pacific cownose ray joins you.",
+                "A bluespotted ribbontail ray joins you.",
+                "A marbled ribbontail ray joins you.",
+                "A blackspotted torpedo ray joins you.",
+                "A marbled torpedo ray joins you.",
+                "A atlantic torpedo ray joins you.",
+                "A panther torpedo ray joins you.",
+                "A spotted torpedo ray joins you.",
+                "A ocellated torpedo joins you.",
+                "A caribbean torpedo joins you.",
+                "A striped stingaree joins you.",
+                "A sparesly-spotted stingaree joins you.",
+                "A kapala stingaree joins you.",
+                "A common stingaree joins you.",
+                "A eastern fiddler ray joins you.",
+                "A bullseye stingray joins you.",
+                "A round stingray joins you.",
+                "A yellow stingray joins you.",
+                "A cortez round stingray joins you.",
+                "A porcupine ray joins you.",
+                "A sepia stingaree joins you.",
+                "A banded stingaree joins you.",
+                "A spotted stingaree joins you.",
+                "A sea pancake joins you.",
+            ],
+            multiOutcomes: [
+                "A whole bunch of rays join you.",
+                "That's a lot of rays.",
+                "The ray conspiracy grows!",
+                "I can't even deal with all of these rays.",
+                "More rays more rays more more more.",
+                "A school of rays!",
+                "A fever of rays! Yes, seriously. Look it up.",
+                "A whole lotta rays!",
+                "The sand is just flying everywhere!",
+                "So many rays.",
+            ],
+            helpText: "Hire a ray to help collect fish. They might kick up some sand from the seabed.",
+        },
+
+        getEel: {
+            name: "Hire eel",
+            effect: {
+                resource: {
+                    eel: 1,
+                },
+            },
+            cost: [{ resource: "fish", costFunction: "linear", priceIncrease: 15 }],
+            max: "eel",
+            prereq: {
+                upgrade: ["seabedGeology"],
+            },
+            outcomes: [
+                "A false moray joins you.",
+                "A mud eel joins you.",
+                "A spaghetti eel joins you.",
+                "A moray eel joins you.",
+                "A thin eel joins you.",
+                "A worm eel joins you.",
+                "A conger joins you.",
+                "A longneck eel joins you.",
+                "A pike conger joins you.",
+                "A duckbill eel joins you.",
+                "A snake eel joins you.",
+                "A snipe eel joins you.",
+                "A sawtooth eel joins you.",
+                "A cutthroat eel joins you.",
+                "An electric eel joins you.",
+                "A bobtail snipe eel joins you.",
+                "A silver eel joins you.",
+                "A long finned eel joins you.",
+                "A short finned eel joins you.",
+            ],
+            multiOutcomes: [
+                "Eels combining elements of the sharks and the eels to create something not quite as good as either.",
+                "The seabed sways with the arrival of new eels.",
+                "Fish and sand go hand in hand with eels! Well, fin and fin.",
+                "Don't mess with the creatures with jaws inside their jaws.",
+                "Eel nation arise!",
+                "That's a lot of eels.",
+                "So there's more eels. Whee.",
+                "The eels increase in number.",
+                "More eels happened. Yay.",
+            ],
+            helpText: "Offer a new home and fish supply to an eel. They can round up fish and sand.",
+        },
+
+        getChimaera: {
+            name: "Procure chimaera",
+            effect: {
+                resource: {
+                    chimaera: 1,
+                },
+            },
+            cost: [{ resource: "jellyfish", costFunction: "linear", priceIncrease: 20 }],
+            max: "chimaera",
+            prereq: {
+                resource: {
+                    jellyfish: 20,
+                },
+                upgrade: ["chimaeraReunification"],
+            },
+            outcomes: [
+                "A ploughnose chimaera joins you.",
+                "A cape elephantfish joins you.",
+                "An australian ghost shark joins you.",
+                "A whitefin chimaera joins you.",
+                "A bahamas ghost shark joins you.",
+                "A southern chimaera joins you.",
+                "A longspine chimaera joins you.",
+                "A cape chimaera joins you.",
+                "A shortspine chimaera joins you.",
+                "A leopard chimaera joins you.",
+                "A silver chimaera joins you.",
+                "A pale ghost shark joins you.",
+                "A spotted ratfish joins you.",
+                "A philippine chimaera joins you.",
+                "A black ghostshark joins you.",
+                "A blackfin ghostshark joins you.",
+                "A marbled ghostshark joins you.",
+                "A striped rabbitfish joins you.",
+                "A large-eyed rabbitfish joins you.",
+                "A spookfish joins you.",
+                "A dark ghostshark joins you.",
+                "A purple chimaera joins you.",
+                "A pointy-nosed blue chimaera joins you.",
+                "A giant black chimaera joins you.",
+                "A smallspine spookfish joins you.",
+                "A pacific longnose chimaera joins you.",
+                "A dwarf sicklefin chimaera joins you.",
+                "A sicklefin chimaera joins you.",
+                "A paddle-nose chimaera joins you.",
+                "A straightnose rabbitfish joins you.",
+            ],
+            multiOutcomes: [
+                "Many chimaeras come from the deep.",
+                "Like ghosts, they come.",
+                "The chimaeras avert your gaze, but set to work quickly.",
+                "The jellyfish stocks shall climb ever higher!",
+                "Well, it saves you the effort of braving the stinging tentacles.",
+                "What have they seen, deep in the chasms?",
+                "They aren't sharks, but they feel so familiar.",
+                "The long-lost kindred return.",
+            ],
+            helpText: "Convince a chimaera to hunt in the darker depths for us.",
+        },
+
+        // SHARK JOBS ////////////////////////////////////////////////////////////////////////////////
+
+        getDiver: {
+            name: "Prepare diver shark",
+            effect: {
+                resource: {
+                    diver: 1,
+                },
+            },
+            cost: [
+                { resource: "shark", costFunction: "constant", priceIncrease: 1 },
+                { resource: "fish", costFunction: "linear", priceIncrease: 30 },
+            ],
+            max: "diver",
+            prereq: {
+                resource: {
+                    shark: 3,
+                },
+            },
+            outcomes: [
+                "Well, better you than me.",
+                "Good luck down there!",
+                "You're doing good work for us, diver shark.",
+                "Fare well on your expeditions, shark!",
+            ],
+            multiOutcomes: [
+                "Follow the crystals!",
+                "We will find the secrets of the deep!",
+                "Brave the deep!",
+                "Find the crystals for science!",
+                "Deep, dark, scary waters. Good luck, all of you.",
+            ],
+            helpText: "Let a shark go deep into the darkness for more crystals and whatever else they may find.",
+        },
+
+        getScientist: {
+            name: "Train science shark",
+            effect: {
+                resource: {
+                    scientist: 1,
+                },
+            },
+            cost: [
+                { resource: "shark", costFunction: "constant", priceIncrease: 1 },
+                { resource: "crystal", costFunction: "linear", priceIncrease: 20 },
+            ],
+            max: "scientist",
+            prereq: {
+                resource: {
+                    crystal: 20,
+                    shark: 1,
+                },
+            },
+            outcomes: [
+                "Doctor Shark, coming right up!",
+                "A scientist shark is revealed!",
+                "After many painful years of study, a shark that has developed excellent skills in making excuses-- er, in science!",
+                "PhD approved!",
+                "Graduation complete!",
+                "A new insight drives a new shark to take up the cause of science!",
+            ],
+            multiOutcomes: [
+                "The training program was a success!",
+                "Look at all this science!",
+                "Building a smarter, better shark!",
+                "Beakers! Beakers underwater! It's madness!",
+                "Let the science commence!",
+                "Underwater clipboards! No I don't know how that works either!",
+                "Careful teeth record the discoveries!",
+            ],
+            helpText: "Train a shark in the fine art of research and the science of, well, science.",
+        },
+
+        getNurse: {
+            name: "Train nurse shark",
+            effect: {
+                resource: {
+                    nurse: 1,
+                },
+            },
+            cost: [
+                { resource: "shark", costFunction: "constant", priceIncrease: 1 },
+                { resource: "fish", costFunction: "linear", priceIncrease: 100 },
+            ],
+            max: "nurse",
+            prereq: {
+                resource: {
+                    shark: 1,
+                },
+                upgrade: ["biology"],
+            },
+            outcomes: [
+                "A nurse shark is ready!",
+                "Shark manufacturer primed.",
+                "Nurse shark trained.",
+                "Medical exam passed! Nurse shark is go!",
+            ],
+            multiOutcomes: [
+                "More sharks are on the way soon.",
+                "Shark swarm begins!",
+                "There will be no end to the sharks!",
+                "Sharks forever!",
+                "The sharks will never end. The sharks are eternal.",
+                "More sharks to make more sharks to make more sharks...",
+            ],
+            helpText: "Remove a shark from fish duty and set them to shark making duty.",
+        },
+
+        // RAY JOBS ////////////////////////////////////////////////////////////////////////////////
+
+        getMaker: {
+            name: "Instruct a ray maker",
+            effect: {
+                resource: {
+                    maker: 1,
+                },
+            },
+            cost: [
+                { resource: "ray", costFunction: "constant", priceIncrease: 1 },
+                { resource: "fish", costFunction: "linear", priceIncrease: 400 },
+            ],
+            max: "maker",
+            prereq: {
+                resource: {
+                    ray: 1,
+                },
+                upgrade: ["rayBiology"],
+            },
+            outcomes: [
+                "The application of kelp supplements has made a ray very productive.",
+                "More rays lets you get more rays which you can then use to get more rays.",
+                "The ray singularity begins!",
+                "A ray maker is ready.",
+                "Looks like you gave them quite the ray maker blow! 'Them' being the intangible enemy that is lacking in resources.",
+                "The ray seems concerned, but obliges. The mission has been given.",
+            ],
+            multiOutcomes: [
+                "All these makers. What are they making? What is it for? Oh. It's rays, and it's probably for sand or something.",
+                "More ray makers means more rays. Do you understand what that means?! Do you?! It means more rays. Good. On the same page, then.",
+                "Rapidly breeding aquatic wildlife is probably a severe ecological hazard. Good thing this isn't Earth's oceans, probably!",
+                "Have you ever thought about what the rays wanted? Because this might have been what they wanted after all.",
+                "MORE LASER RAYS FOR THE LASER ARMY-- oh. Well, this is good too.",
+            ],
+            helpText: "Remove a ray from sand business and let them concentrate on making more rays.",
+        },
+
+        getScholar: {
+            name: "Train ray scholar",
+            effect: {
+                resource: {
+                    scholar: 1,
+                },
+            },
+            cost: [
+                { resource: "ray", costFunction: "constant", priceIncrease: 1 },
+                { resource: "crystal", costFunction: "linear", priceIncrease: 250 },
+            ],
+            max: "scholar",
+            prereq: {
+                upgrade: ["arcaneStudy"],
+            },
+            outcomes: [
+                "Study buddy!",
+                "Another scholar receives their doctorate in magical stuff.",
+                "The ray receives their degree.",
+                "The ray receives a certificate.",
+                "Ray, ready to learn!",
+                "Congratulations buddy, you've earned the right to speculate about weird fragment thingies!",
+            ],
+            multiOutcomes: [
+                "No, not ray scientists, scholars!",
+                "Curious minds begin to tinker and toy with the strange substance that composes arcana.",
+                "Just how much is there to learn about this stuff?",
+                "They don't do science. They do study.",
+                "The other side of the coin of research.",
+                "The scientists and the scholars rarely collaborate, so they form their own schools.",
+            ],
+            helpText: "Train a ray to study the mystical properties of arcana.",
+        },
+
+        // EEL JOBS ////////////////////////////////////////////////////////////////////////////////
+
+        getPit: {
+            name: "Dig eel pit",
+            effect: {
+                resource: {
+                    pit: 1,
+                },
+            },
+            cost: [
+                { resource: "eel", costFunction: "constant", priceIncrease: 3 },
+                { resource: "fish", costFunction: "linear", priceIncrease: 50 },
+                { resource: "sand", costFunction: "linear", priceIncrease: 20 },
+            ],
+            max: "pit",
+            prereq: {
+                resource: {
+                    eel: 1,
+                },
+                upgrade: ["eelHabitats"],
+            },
+            outcomes: [
+                "Why does it take three eels? Oh well. We don't really need to know.",
+                "Dig that pit. We can dig it.",
+                "Let's get digging.",
+                "Oh, hey, this hole's already empty. Well, isn't that something.",
+            ],
+            multiOutcomes: [
+                "Let's get digging.",
+                "Eel tide rises.",
+                "More eels! They're handy to have.",
+                "Many eyes from the caves.",
+                "Secret homes!",
+                "The eels are content.",
+            ],
+            helpText: "Find a suitable pit for eels to make more eels.",
+        },
+
+        getSifter: {
+            name: "Train eel sifter",
+            effect: {
+                resource: {
+                    sifter: 1,
+                },
+            },
+            cost: [
+                { resource: "eel", costFunction: "constant", priceIncrease: 1 },
+                { resource: "fish", costFunction: "linear", priceIncrease: 1000 },
+            ],
+            max: "sifter",
+            prereq: {
+                upgrade: ["arcaneSifting"],
+            },
+            outcomes: [
+                "Eel sifter ready to find things!",
+                "Eel ready to sift through the sands!",
+                "Time to sift, eel. Time to seek, search and sift.",
+                "Time for this little guy to find some goodies.",
+            ],
+            multiOutcomes: [
+                "Time to find the things!",
+                "Sift. It's a fun word. Siiiiffft.",
+                "Sifters scouring the seabed for some special stuff.",
+                "Shifters ready to shift! Wait. No. Hang on.",
+                "Sifting the seabed for scores of surprises!",
+            ],
+            helpText: "Specialise an eel in finding interesting things on the seabed.",
+        },
+
+        // CHIMAERA JOBS ////////////////////////////////////////////////////////////////////////////////
+
+        getExplorer: {
+            name: "Prepare chimaera explorer",
+            effect: {
+                resource: {
+                    explorer: 1,
+                },
+            },
+            cost: [
+                { resource: "chimaera", costFunction: "constant", priceIncrease: 1 },
+                { resource: "jellyfish", costFunction: "linear", priceIncrease: 150 },
+            ],
+            max: "explorer",
+            prereq: {
+                upgrade: ["abyssalEnigmas"],
+            },
+            outcomes: [
+                "A seeker of mysteries is prepared.",
+                "The chimaera explorer is ready for their journey.",
+                "Explorer ready for some answers!",
+                "The chimaera swims down to the ocean below.",
+            ],
+            multiOutcomes: [
+                "The exploration party is ready.",
+                "Learn the secrets of the deeps!",
+                "More mysteries to uncover.",
+                "Ancient riddles for ancient creatures.",
+                "Find the truth beneath the waves!",
+            ],
+            helpText:
+                "Help prepare a chimaera for exploration to parts unknown in search of the mysterious and elusive arcana.",
+        },
+
+        // SHARK MACHINES ////////////////////////////////////////////////////////////////////////////////
+
+        getCrystalMiner: {},
+
+        getSandDigger: {},
+
+        getFishMachine: {},
+    },
+    marine: {
+        catchFish: {},
+
+        debugbutton: {},
+
+        getClam: {
+            name: "Get clam",
+            effect: {
+                resource: {
+                    get clam() {
+                        return SharkGame.Aspects.apotheosis.level > 0 ? SharkGame.Aspects.apotheosis.level * 4 : 1;
+                    },
+                },
+            },
+            cost: {},
+            prereq: {
+                upgrade: ["clamScooping"],
+            },
+            outcomes: [
+                "Got a grooved carpet shell.",
+                "Got a hard clam.",
+                "Got a manila clam.",
+                "Got a soft clam.",
+                "Got an atlantic surf clam.",
+                "Got an ocean quahog.",
+                "Got a pacific razor clam.",
+                "Got a pismo clam.",
+                "Got a geoduck.",
+                "Got an atlantic jackknife clam.",
+                "Got a lyrate asiatic hard clam.",
+                "Got an ark clam.",
+                "Got a nut clam.",
+                "Got a duck clam.",
+                "Got a marsh clam.",
+                "Got a file clam.",
+                "Got a giant clam.",
+                "Got an asiatic clam.",
+                "Got a peppery furrow shell.",
+                "Got a pearl oyster.",
+            ],
+            helpText: "Fetch a clam. Why do we need clams now? Who knows.",
+        },
+
+        // CONVERSIONS ////////////////////////////////////////////////////////////////////////////////
+
+        seaApplesToScience: {
+            name: "Study sea apples",
+            effect: {
+                resource: {
+                    science: 4,
+                },
+            },
+            cost: [{ resource: "seaApple", costFunction: "constant", priceIncrease: 1 }],
+            max: "seaApple",
+            prereq: {
+                resource: {
+                    seaApple: 1,
+                },
+                upgrade: ["xenobiology"],
+            },
+            outcomes: [
+                "There's science inside these things, surely!",
+                "The cause of science is advanced!",
+                "This is perhaps maybe insightful!",
+                "Why are we even doing this? Who knows! Science!",
+                "What is even the point of these things? Why are they named for fruit? They're squirming!",
+            ],
+            helpText: "Dissect sea apples to gain additional science. Research!",
+        },
+
+        pearlConversion: {
+            name: "Convert clam pearls",
+            effect: {
+                resource: {
+                    crystal: 1,
+                },
+            },
+            cost: [{ resource: "clam", costFunction: "constant", priceIncrease: 5 }],
+            max: "clam",
+            prereq: {
+                resource: {
+                    clam: 1,
+                },
+                upgrade: ["pearlConversion"],
+            },
+            outcomes: [
+                "Pearls to crystals! One day. One day, we will get this right and only use the pearl.",
+                "Welp, we somehow turned rocks to crystals. Oh. Nope, those were clams. Not rocks. It's so hard to tell sometimes.",
+                "Okay, we managed to only use the pearls this time, but we, uh, had to break the clams open pretty roughly.",
+                "Pearls to... nope. Clams to crystals. Science is hard.",
+            ],
+            helpText: "Convert a pearl (and the clam around it) into crystal.",
+        },
+
+        // MAKE ADVANCED RESOURCES  ///////////////////////////////////////////////////////////////////////////////
+
+        transmuteSharkonium: {
+            name: "Transmute stuff to sharkonium",
+            effect: {
+                resource: {
+                    sharkonium: 1,
+                },
+            },
+            cost: [
+                {
+                    resource: "crystal",
+                    costFunction: "constant",
+                    get priceIncrease() {
+                        return 5 - SharkGame.Aspects.syntheticTransmutation.level;
+                    },
+                },
+                {
+                    resource: "sand",
+                    costFunction: "constant",
+                    get priceIncrease() {
+                        return 15 - 3 * SharkGame.Aspects.syntheticTransmutation.level;
+                    },
+                },
+            ],
+            max: "sharkonium",
+            prereq: {
+                upgrade: ["transmutation"],
+            },
+            outcomes: [
+                "Transmutation destination!",
+                "Transmutation rejuvenation!",
+                "Transmogrification revelation!",
+                "Transformation libation!",
+                "Transfiguration nation! ...wait.",
+                "Sharkonium arise!",
+                "Arise, sharkonium!",
+                "More sharkonium!",
+                "The substance that knows no name! Except the name sharkonium!",
+                "The substance that knows no description! It's weird to look at.",
+                "The foundation of a modern shark frenzy!",
+            ],
+            helpText: "Convert ordinary resources into sharkonium, building material of the future!",
+        },
+
+        fuseCalcinium: {
+            name: "Fuse stuff to calcinium",
+            effect: {
+                resource: {
+                    calcinium: 1,
+                },
+            },
+            cost: [
+                {
+                    resource: "clam",
+                    costFunction: "constant",
+                    get priceIncrease() {
+                        return 15 - 3 * SharkGame.Aspects.syntheticTransmutation.level;
+                    },
+                },
+                {
+                    resource: "crystal",
+                    costFunction: "constant",
+                    get priceIncrease() {
+                        return 5 - SharkGame.Aspects.syntheticTransmutation.level;
+                    },
+                },
+            ],
+            max: "calcinium",
+            prereq: {
+                upgrade: [""],
+            },
+            outcomes: [],
+            helpText: "Smelt resources into calcinium for use in crustacean machines.",
+        },
+
+        // BUY ANIMALS ////////////////////////////////////////////////////////////////////////////////
+
+        getShark: {},
+
+        getManta: {},
+
+        getCrab: {},
+
+        getLobster: {
+            name: "Gain lobster",
+            effect: {
+                resource: {
+                    lobster: 1,
+                },
+            },
+            cost: [{ resource: "clam", costFunction: "linear", priceIncrease: 10 }],
+            max: "lobster",
+            prereq: {
+                resource: {
+                    clam: 10,
+                },
+                upgrade: ["clamScooping"],
+            },
+            outcomes: [
+                "A scampi joins you.",
+                "A crayfish joins you.",
+                "A clawed lobster joins you.",
+                "A spiny lobster joins you.",
+                "A slipper lobster joins you.",
+                "A hummer lobster joins you.",
+                "A crawfish joins you.",
+                "A rock lobster joins you.",
+                "A langouste joins you.",
+                "A shovel-nose lobster joins you.",
+                "A crawdad joins you.",
+            ],
+            multiOutcomes: [
+                "Lobsters lobsters lobsters lobsters.",
+                "But they weren't rocks...",
+                "The clam forecast is looking good!",
+                "They're all about the clams!",
+                "More lobsters, because why not?",
+                "HEAVY LOBSTERS",
+                "More lobsters for the snipping and the cutting and the clam grab!",
+                "Clam patrol, here we go.",
+            ],
+            helpText: "",
+        },
+
+        // SHARK JOBS ////////////////////////////////////////////////////////////////////////////////
+
+        getScientist: {},
+
+        getNurse: {},
+
+        // RAY JOBS ////////////////////////////////////////////////////////////////////////////////
+
+        getMaker: {},
+
+        getExtractor: {
+            name: "Assemble extractor ray",
+            effect: {
+                resource: {
+                    extractor: 1,
+                },
+            },
+            cost: [
+                { resource: "ray", costFunction: "constant", priceIncrease: 1 },
+                { resource: "calcinium", costFunction: "linear", priceIncrease: 15 },
+                { resource: "fish", costFunction: "linear", priceIncrease: 500 },
+            ],
+            max: "extractor",
+            prereq: {
+                resource: {
+                    calcinium: 1,
+                },
+                upgrade: ["calciniumBiosynergy"],
+            },
+            outcomes: [],
+            multiOutcomes: [],
+            helpText: "",
+        },
+
+        // CRAB JOBS ////////////////////////////////////////////////////////////////////////////////
+
+        getPlanter: {},
+
+        getBrood: {},
+
+        getSeabedStripper: {
+            name: "Build seabed stripper",
+            effect: {
+                resource: {
+                    seabedStripper: 1,
+                },
+            },
+            cost: [
+                { resource: "calcinium", costFunction: "linear", priceIncrease: 150 },
+                { resource: "crab", costFunction: "constant", priceIncrease: 1 },
+            ],
+            max: "seabedStripper",
+            prereq: {
+                resource: {
+                    calcinium: 1,
+                },
+                upgrade: ["crustaceanTransmutation"],
+            },
+            outcomes: [],
+            multiOutcomes: [],
+            helpText: "",
+        },
+
+        // LOBSTER JOBS ////////////////////////////////////////////////////////////////////////////////
+
+        getBerrier: {
+            name: "Form lobster berrier",
+            effect: {
+                resource: {
+                    berrier: 1,
+                },
+            },
+            cost: [
+                { resource: "lobster", costFunction: "constant", priceIncrease: 1 },
+                { resource: "clam", costFunction: "linear", priceIncrease: 30 },
+            ],
+            max: "berrier",
+            prereq: {
+                resource: {
+                    lobster: 1,
+                },
+                upgrade: ["crustaceanBiology"],
+            },
+            outcomes: [
+                "We didn't need to see the process behind this.",
+                "One lobster brimming with eggs to go.",
+                "It's like some weird counterpart to the planter crab. But with eggs.",
+                "Lobster with rocks ready to make a move. Oh, okay, eggs, whatever, see, they look like shiny pebbles from a distance and... oh, forget it.",
+            ],
+            multiOutcomes: [
+                "Berrier isn't even a word!",
+                "Berries and eggs aren't even the same thing!",
+                "How do these things swim with this much weighing them down?",
+                "We aren't running out of volunteers any time soon.",
+                "Did you see them fight for this job? Claws everywhere, I tell you!",
+            ],
+            helpText: "Dedicate a lobster to egg production. We don't know how it works. Ask the lobsters.",
+        },
+
+        // SHARK MACHINES ////////////////////////////////////////////////////////////////////////////////
+
+        getCrystalMiner: {},
+
+        getSandDigger: {},
+
+        getFishMachine: {},
+
+        getAutoTransmuter: {},
+
+        // CRUSTACEAN MACHINES /////////////////////////////////////////////////////////
+
+        getCalciniumConverter: {
+            name: "Build calcinium converter",
+            effect: {
+                resource: {
+                    calciniumConverter: 1,
+                },
+            },
+            cost: [
+                { resource: "calcinium", costFunction: "linear", priceIncrease: 100 },
+                { resource: "lobster", costFunction: "constant", priceIncrease: 1 },
+            ],
+            max: "calciniumConverter",
+            prereq: {
+                resource: {
+                    calcinium: 1,
+                },
+                upgrade: ["crustaceanTransmutation"],
+            },
+            outcomes: [
+                /*                 "Berry sprayer is active.",
+                "Berry sprayer capable.",
+                "This egg spraying machine clatters to life.",
+                "This automated caretaker gets to work.", */
+            ],
+            multiOutcomes: [
+                /*                 "Automation of population? What a terrifying concept.",
+                "The machine rears lobster eggs. Wouldn't the shrimp want something like this too?",
+                "There is an uneasiness about these machines that fills the sharks with concern.",
+                "Why was this machine invented? Are we helping to prepare an army?", */
+            ],
+            helpText: "", // This crustacean machine distributes lobster eggs for optimal hatching conditions.
+        },
+    },
 };
 
 SharkGame.HomeActionCategories = {
     all: {
         // This category should be handled specially.
-        name: "所有",
+        name: "All",
         actions: [],
     },
 
     basic: {
-        name: "基本",
-        actions: ["catchFish", "prySponge", "getClam", "getJellyfish"],
+        name: "Basic",
+        actions: ["catchFish", "debugbutton", "prySponge", "getClam", "getJellyfish"],
     },
 
     frenzy: {
-        name: "狂熱",
+        name: "Frenzy",
         actions: [
             "getShark",
             "getManta",
@@ -3221,7 +3995,7 @@ SharkGame.HomeActionCategories = {
     },
 
     professions: {
-        name: "職業",
+        name: "Jobs",
         actions: [
             "getDiver",
             //"getProspector",
@@ -3244,11 +4018,13 @@ SharkGame.HomeActionCategories = {
             "getScavenger",
             "getHistorian",
             "getExtractionTeam",
+            "getScholar",
+            "getExtractor",
         ],
     },
 
     breeders: {
-        name: "生產者",
+        name: "Producers",
         actions: [
             "getNurse",
             "getMaker",
@@ -3278,6 +4054,7 @@ SharkGame.HomeActionCategories = {
             "fuseDelphinium",
             "forgeSpronge",
             "fuseAncientPart",
+            "makeSacrifice",
         ],
     },
 
@@ -3301,16 +4078,15 @@ SharkGame.HomeActionCategories = {
             "getSpongeFarmer",
             "getBerrySprayer",
             "getGlassMaker",
-            "getSilentArchivist",
             "getTirelessCrafter",
             "getClamCollector",
             "getEggBrooder",
             "getSprongeSmelter",
-            "getSeaScourer",
-            "getProstheticPolyp",
             //"getCoalescer",
             "getCrimsonCombine",
             "getKelpCultivator",
+            "getSeabedStripper",
+            "getCalciniumConverter",
         ],
     },
 

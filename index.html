@@ -5,8 +5,8 @@
 
         <title>鯊魚遊戲</title>
         <meta charset="utf-8" />
-        <meta property="og:title" itemprop="name" content="鯊魚遊戲" />
-        <meta property="og:description" itemprop="description" name="description" content="關於資源、發現和鯊魚的網路遊戲。" />
+        <meta property="og:title" itemprop="name" content="Shark Game" />
+        <meta property="og:description" itemprop="description" name="description" content="A web game about resources, discovery and sharks." />
         <!-- Hosted on multiple domains
         <meta property="og:url" content="https://cirri.al/sharks/" />
         <meta property="og:url" content="https://shark.tobot.tech/" />
@@ -43,6 +43,9 @@
         <!-- Single-file version of pako, for compression/decompression -->
         <script type="text/javascript" src="js/lib/pako.js"></script>
 
+        <!-- big numbers -->
+        <script type="text/javascript" src="js/lib/decimal.js"></script>
+
         <!-- Cirr's code starts here. I hope you find it insightful if you came here to peer at it,
         but Javascript is hardly my most familiar language. The code here likely stinks. -->
 
@@ -58,10 +61,15 @@
         <script type="text/javascript" src="js/data/aspects.js"></script>
         <script type="text/javascript" src="js/data/sprites.js"></script>
 
+        <script type="text/javascript" src="js/overlay.js"></script>
         <script type="text/javascript" src="js/eventhandler.js"></script>
+        <script type="text/javascript" src="js/keybinds.js"></script>
         <script type="text/javascript" src="js/resources.js"></script>
         <script type="text/javascript" src="js/world.js"></script>
         <script type="text/javascript" src="js/log.js"></script>
+        <script type="text/javascript" src="js/tabs.js"></script>
+        <script type="text/javascript" src="js/panes.js"></script>
+        <script type="text/javascript" src="js/titlebar.js"></script>
         <script type="text/javascript" src="js/save.js"></script>
         <script type="text/javascript" src="js/settings.js"></script>
         <script type="text/javascript" src="js/gateway.js"></script>
@@ -73,6 +81,7 @@
         <script type="text/javascript" src="js/tabs/recycler.js"></script>
         <script type="text/javascript" src="js/tabs/gate.js"></script>
         <script type="text/javascript" src="js/tabs/reflection.js"></script>
+        <script type="text/javascript" src="js/tabs/cheatdevice.js"></script>
         <script>
             var res = SharkGame.Resources;
             var main = SharkGame.Main;
@@ -82,303 +91,91 @@
             var world = SharkGame.World;
             var home = SharkGame.Home;
             var tree = SharkGame.AspectTree;
-            var cad = SharkGame.cheatsAndDebug;
-            var cheats = "When you find a cheat code, put () after it and hit enter. I'm not going to tell you them.";
-            var cheatcodes = "When you find a cheat code, put () after it and hit enter. I'm not going to tell you them.";
-            var cheatCodes = "When you find a cheat code, put () after it and hit enter. I'm not going to tell you them.";
-            var cheatsPlease = "When you find a cheat code, put () after it and hit enter. I'm not going to tell you them.";
-            function sgdebug() {
-                // debug is a command-line API
-                SharkGame.HomeActions.getActionTable().debugbutton.unauthorized = false;
-            }
-            function pause() {
-                if (cad.stop) {
-                    SharkGame.Log.addError("遊戲已停止。你不能也暫停它。");
-                    return "遊戲已停止。你不能也暫停它。";
-                }
-                if (!cad.pause) {
-                    cad.pause = true;
-                    return "暫停遊戲。";
-                } else {
-                    SharkGame.Log.addError("遊戲已被暫停。");
-                }
-            }
-            function unpause() {
-                if (cad.pause || cad.stop) {
-                    cad.pause = false;
-                    cad.stop = false;
-                    return "繼續遊戲。";
-                } else {
-                    SharkGame.Log.addError("遊戲既未被暫停也未被停止。");
-                }
-            }
-            function stop() {
-                if (cad.pause) {
-                    SharkGame.Log.addError("遊戲已暫停。你不能也停止它。");
-                    return "遊戲已暫停。你不能也停止它。";
-                }
-                if (!cad.stop) {
-                    cad.stop = true;
-                    return "停止遊戲。";
-                } else {
-                    SharkGame.Log.addError("遊戲已被停止。");
-                }
-            }
-            function freezePlease() {
-                world.forceExistence("ice");
-                SharkGame.PlayerResources.get("ice").discovered = true;
+            var log = SharkGame.Log;
 
-                SharkGame.Log.addMessage("ICE going, doofus!");
-                return "凍結遊戲。";
-            }
-            function unfreezePlease() {
-                r.setResource("ice", 0);
-                SharkGame.Log.addMessage("Couldn't handle the big chill?");
-                return "解凍遊戲。";
-            }
-            function exponentialGrowthPlease() {
-                if (world.doesResourceExist("sponge")) {
-                    res.addNetworkNode(SharkGame.ResourceIncomeAffectedApplicable, "sponge", "multiply", "sponge", 0.00000001);
-                    if (world.doesResourceExist("algae") && world.doesResourceExist("shrimp")) {
-                        res.addNetworkNode(SharkGame.ResourceIncomeAffectedApplicable, "algae", "multiply", "sponge", 0.00000001);
-                        res.addNetworkNode(SharkGame.GeneratorIncomeAffectedApplicable, "shrimp", "multiply", "algae", 0.0000001);
-                    }
-                }
-                if (world.doesResourceExist("shark") && world.doesResourceExist("fish")) {
-                    res.addNetworkNode(SharkGame.GeneratorIncomeAffectedApplicable, "shark", "multiply", "fish", 0.000001);
-                }
-                if (world.doesResourceExist("ray") && world.doesResourceExist("sand")) {
-                    res.addNetworkNode(SharkGame.GeneratorIncomeAffectedApplicable, "ray", "multiply", "sand", 0.000001);
-                }
-                if (world.doesResourceExist("crab") && world.doesResourceExist("crystal")) {
-                    res.addNetworkNode(SharkGame.GeneratorIncomeAffectedApplicable, "crab", "multiply", "crystal", 0.001);
-                }
-                if (world.doesResourceExist("science") && world.doesResourceExist("scientist")) {
-                    res.addNetworkNode(SharkGame.GeneratorIncomeAffectedApplicable, "scientist", "multiply", "science", 0.000001);
-                }
-                if (world.doesResourceExist("kelp") && world.doesResourceExist("seaApple")) {
-                    res.addNetworkNode(SharkGame.GeneratorIncomeAffectedApplicable, "kelp", "multiply", "seaApple", 0.0001);
-                }
-                return "Growing exponentially.";
-            }
-            function stupidExponentialGrowthPlease() {
-                if (world.doesResourceExist("sponge")) {
-                    res.addNetworkNode(SharkGame.ResourceIncomeAffectedApplicable, "sponge", "multiply", "sponge", 0.001);
-                    if (world.doesResourceExist("algae") && world.doesResourceExist("shrimp")) {
-                        res.addNetworkNode(SharkGame.ResourceIncomeAffectedApplicable, "algae", "multiply", "sponge", 0.001);
-                        res.addNetworkNode(SharkGame.GeneratorIncomeAffectedApplicable, "shrimp", "multiply", "algae", 0.001);
-                    }
-                }
-                if (world.doesResourceExist("shark") && world.doesResourceExist("fish")) {
-                    res.addNetworkNode(SharkGame.GeneratorIncomeAffectedApplicable, "shark", "multiply", "fish", 0.001);
-                }
-                if (world.doesResourceExist("ray") && world.doesResourceExist("sand")) {
-                    res.addNetworkNode(SharkGame.GeneratorIncomeAffectedApplicable, "ray", "multiply", "sand", 0.001);
-                }
-                if (world.doesResourceExist("crab") && world.doesResourceExist("crystal")) {
-                    res.addNetworkNode(SharkGame.GeneratorIncomeAffectedApplicable, "crab", "multiply", "crystal", 0.01);
-                }
-                if (world.doesResourceExist("science") && world.doesResourceExist("scientist")) {
-                    res.addNetworkNode(SharkGame.GeneratorIncomeAffectedApplicable, "scientist", "multiply", "science", 0.001);
-                }
-                if (world.doesResourceExist("kelp") && world.doesResourceExist("seaApple")) {
-                    res.addNetworkNode(SharkGame.GeneratorIncomeAffectedApplicable, "kelp", "multiply", "seaApple", 0.01);
-                }
-                return "Growing really fast.";
-            }
-            function freeEssencePlease() {
-                res.changeResource("essence", 1000);
-                return "Okay, but only because you asked nicely.";
-            }
-            function aLotOfEssencePlease() {
-                res.changeResource("essence", 1000000);
-                return "Is this enough?.";
-            }
-            function tooMuchEssencePlease() {
-                res.changeResource("essence", 1e41);
-                return "You asked for it.";
-            }
-            function goFasterPlease() {
-                if (cad.speed === 512) {
-                    return "I think you've had enough.";
-                }
-                let msg = "";
-                cad.speed *= 2;
-                switch (cad.speed) {
-                    case 2:
-                        msg = "遊戲進行兩倍速。";
-                        break;
-                    case 512:
-                        msg = "遊戲進行……得非常快。";
-                        break;
-                    default:
-                        msg = "遊戲進行 " + cad.speed + " 倍速。";
-                        break;
-                }
-                return msg;
-            }
-            function reallyFastPlease() {
-                cad.speed = 512;
-                return "設置遊戲速度至 512 倍速。";
-            }
-            function goSlowerPlease() {
-                cad.speed *= 0.5;
-                return "將遊戲速度減慢至 " + cad.speed + " 倍速。";
-            }
-            function reallySlowPlease() {
-                cad.speed = 1 / 512;
-                return "設置遊戲速度至 1/512 倍速。";
-            }
-            function resetSpeedPlease() {
-                cad.speed = 1;
-                return "重置遊戲速度至一倍速。";
-            }
-            function giveMeLotsOfEverythingPlease() {
-                cad.giveEverything(1e41);
-                return "Gave you lots of everything.";
-            }
-            function giveMeMoreOfEverythingPlease() {
-                SharkGame.ResourceMap.forEach((v, key) => {
-                    SharkGame.PlayerResources.get(key).amount *= 10;
-                });
-                return "Gave you ten times more of everything.";
-            }
-            function giveMeWayMoreOfEverythingPlease() {
-                SharkGame.ResourceMap.forEach((v, key) => {
-                    SharkGame.PlayerResources.get(key).amount *= 1000;
-                });
-                return "Gave you one-thousand times more of everything.";
-            }
-            /*
-            function fixMyGamePlease() {
-                SharkGame.ResourceMap.forEach((v, key) => {
-                    res.setResource(key, 0);
-                });
-                return "Set everything back to 0. This should 'fix' everything.";
-            }
-            */
-            function doSomethingCoolPlease() {
-                return "Did something really cool.";
-                // this doesn't do anything
-            }
-            function beatWorldPlease() {
-                SharkGame.wonGame = true;
-                main.endGame();
-                return "You got it, boss.";
-            }
-            /*
-            function rollTheDicePlease() {
-                switch Math.floor(Math.random()*20+1) {
-                    case 1:
-                        SharkGame.ResourceMap.forEach((v, key) => {
-                            if (key !== "essence") {
-                                SharkGame.PlayerResources.get(key).amount *= 1/3;
-                            }
-                        });
-                        return "Rolled a one...you lost a third of all your resources.";
-                    case 2:
-                        res.changeResource("shark",res.getResource("shark")*3);
-                        return "Rolled a two. Your sharks have been quadrupled.";
-                    case 3:
-                        return "Rolled a three. Nothing happened.";
-                    case 4:
-                        SharkGame.ResourceMap.forEach((v, key) => {
-                            if (key !== "essence") {
-                                if (world.doesResourceExist(key)) {
-                                    SharkGame.PlayerResources.get(key).amount += 4;
-                                }
-                            }
-                        });
-                        return "Rolled a four. You got exactly 4 more of EVERYTHING.";
+            var sharktext = SharkGame.TextUtil;
+            var sharkcolor = SharkGame.ColorUtil;
+            var sharkmath = SharkGame.MathUtil;
+            var sharkmisc = SharkGame.MiscUtil;
 
-                }
-            }
-            function easyModePlease() {
+            var cad = SharkGame.CheatsAndDebug;
 
-                return "And isn't that what cheats are all about?";
-            }
-            */
-            function listAllCheatsPlease() {
-                return "Nice try.";
-            }
-            /*
-            function discretePlease() {
-                if (cad.chunky) {
-                    return "Game is already discrete.";
-                }
-                cad.chunky = true;
-                return "Forced discrete ticks.";
-            }
-            function smoothPlease() {
-                if (!cad.chunky) {
-                    return "Game is already smooth.";
-                }
-                cad.chunky = false;
-                SharkGame.INTERVAL = 100;
-                SharkGame.dt = 1 / 10;
-                return "Returned game to smoothness.";
-            }
-            */
+            var DecimalHalfRound = Decimal.clone({ rounding: Decimal.ROUND_HALF_FLOOR });
+            Decimal.set({ rounding: Decimal.ROUND_FLOOR });
         </script>
     </head>
     <body>
         <span id="tooltipbox" class="tooltip click-passthrough"></span>
         <span id="updateGameBox" class="tooltip"></span>
         <noscript>
+            <style>
+                #wrapper {
+                    display: none;
+                }
+            </style>
             <div class="section">
-                <h1>鯊魚遊戲？？</h1>
+                <h1>鯊魚遊戲？</h1>
 
-                <p>我的天！看來你禁用了Javascript，還是你目前的瀏覽器不支持腳本。</p>
+                <p>我的天哪！看來你關閉了 Javascript，抑或你的瀏覽器不支持腳本。</p>
 
-                <p>鯊魚遊戲需要腳本才能運作，否則它會變成一個沒什麼用的固定網頁。</p>
+                <p>鯊魚遊戲需要腳本才能運行，否則它會變成一個沒用的不動網頁。</p>
 
                 <div style="margin: auto; width: 20em">
                     <pre>
-     ,
-       .';
-   .-'` .'
- ,`.-'-.`\
-; /     '-'
-| \       ,-,
-\  '-.__   )_`'._
- '.     ```      ``'--._
-.-' ,                   `'-.
- '-'`-._           ((   o   )  - scripts plz.
-  jgs   `'--....(`- ,__..--'
-                 '-'`
-
-                    </pre>
+                ,                                   
+              .';                                   
+          .-'` .'                                   
+        ,`.-'-.`\                                   
+       ; /     '-'                                  
+       | \       ,-,                                
+       \  '-.__   )_`'._                            
+        '.     ```      ``'--._                     
+       .-' ,                   `'-.                 
+        '-'`-._           ((   o   )  - scripts plz.
+         jgs   `'--....(`- ,__..--'                 
+                        '-'`                        </pre
+                    >
                 </div>
             </div>
         </noscript>
         <div id="wrapper">
-            <div id="game">
-                <div id="title">
-                    <h1 id="gameName">- 鯊魚遊戲 -</h1>
+            <div id="game" class="clear-fix">
+                <header id="title">
+                    <h1 id="gameName">- SHARK GAME -</h1>
                     <h4 id="versionNumber"></h4>
                     <h4 id="updateGame"></h4>
 
-                    <div id="titlebar">
+                    <div id="titlebackground"></div>
+                    <nav id="titlebar">
                         <ul id="titlemenu"></ul>
                         <ul id="subtitlemenu"></ul>
-                    </div>
-                </div>
-                <div id="sidebar">
+                    </nav>
+                </header>
+                <aside id="sidebar">
                     <div id="status"></div>
-                    <div id="log"></div>
+                </aside>
+                <aside id="rightLogContainer"></aside>
+                <div id="log" class="rightlog"></div>
+                <nav id="contentMenu"></nav>
+                <main id="content"></main>
+                <div id="idle-overlay" class="click-passthrough">
+                    <h1>放置模式</h1>
+                    <span
+                        >看來你不活躍多於 2 分鐘！<br />資源表上的按鈕正在貯存離線時間。<br /><br
+                    /></span>
+                    <strong>你可以在選項菜單永久關閉這個模式。</strong>
+                    <i>請點擊以無視。</i>
                 </div>
-                <div id="content"></div>
-                <div class="clear-fix"></div>
                 <div id="overlay"></div>
-                <div id="copyright" class="copyrightNotice">
-                    鯊魚遊戲<br />
-                    &copy; <a href="https://cirri.al/">Cirrial原製作</a>，2014-2016<br />
-                    &copy; <a href="https://github.com/spencers145/">spencers145擴充</a>，2020-2021<br />
-                    &copy; <a href="https://github.com/ItMarki/">ItMarki</a>翻譯，2021<br />
-                    權利為最上面兩位開發者所擁有。
-                </div>
                 <div id="preloadedImages"></div>
             </div>
+            <footer id="copyright" class="copyrightNotice">
+                鯊魚遊戲<br />
+                &copy; <a href="https://cirri.al/">Cirrial</a>，2014-2016<br />
+                &copy; <a href="https://github.com/spencers145/">spencers145</a>，2020-2021<br />
+                &copy; <a href="https://github.com/itmarki/">ItMarki（翻譯）</a>，2021-<br />
+                Cirrial和spencers145保留所有權利。
+            </footer>
         </div>
     </body>
 </html>

@@ -2,7 +2,8 @@
 SharkGame.Reflection = {
     tabId: "reflection",
     tabDiscovered: false,
-    tabName: "反思",
+    tabSeen: false,
+    tabName: "Reflection",
     tabBg: "img/bg/bg-gate.png",
 
     sceneImage: "img/events/misc/scene-reflection.png",
@@ -14,19 +15,15 @@ SharkGame.Reflection = {
     },
 
     message:
-        "你可能不會記得所有東西，但是你現在不只是一條鯊魚。" +
-        "</br><span='medDesc'>反思你自己的改變和你創造的現實。</span>",
+        "You may not remember everything, but you are something more than a shark now." +
+        "</br><span='medDesc'>Reflect upon the changes in yourself and reality you have made here.</span>",
 
     init() {
-        const ref = SharkGame.Reflection;
-        // register tab
-        SharkGame.Tabs[ref.tabId] = {
-            id: ref.tabId,
-            name: ref.tabName,
-            discovered: ref.tabDiscovered,
-            discoverReq: ref.discoverReq,
-            code: ref,
-        };
+        SharkGame.TabHandler.registerTab(this);
+    },
+
+    setup() {
+        /* doesnt need to do anything */
     },
 
     switchTo() {
@@ -51,16 +48,13 @@ SharkGame.Reflection = {
         const listSel = $("#aspectList");
         $.each(SharkGame.Aspects, (aspectId, aspectData) => {
             if (aspectData.level > 0 && !aspectData.ignore) {
-                let aspectLabel = aspectData.name + "<br><span class='medDesc'>";
+                let aspectLabel = aspectData.name + "<br><span class='medDesc reflectionText'>";
                 if (aspectData.level >= aspectData.max) {
-                    aspectLabel += "(Maximum Power)";
+                    aspectLabel += "(Maximum Level)";
                 } else {
-                    aspectLabel += "(Power: " + main.beautify(aspectData.level) + ")";
+                    aspectLabel += "(Level: " + sharktext.beautify(aspectData.level) + ")";
                 }
                 aspectLabel += `<br>${aspectData.getEffect(aspectData.level)}</span>`;
-                // FIXME: Either add flavourtext to aspects, or delete this line
-                // aspectLabel += `<br><em>${aspectData.flavour}</em>`;
-                // base: this will be better to address once functional aspect prototypes are implemented
 
                 const item = $("<div>").addClass("aspectDiv");
                 item.append(aspectLabel);
@@ -69,7 +63,7 @@ SharkGame.Reflection = {
                 if (SharkGame.Settings.current.showIcons) {
                     // FIXME: artifacts -> aspects
                     // base: ditto what i said above
-                    const iconDiv = SharkGame.changeSprite(SharkGame.spriteIconPath, "artifacts/" + aspectId, null, "general/missing-artifact");
+                    const iconDiv = SharkGame.changeSprite(SharkGame.spriteIconPath, "aspects/" + aspectId, null, "aspects/apotheosis");
                     if (iconDiv) {
                         iconDiv.addClass("button-icon");
                         iconDiv.addClass("gatewayButton");

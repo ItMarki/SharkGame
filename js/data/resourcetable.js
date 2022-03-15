@@ -1,3 +1,4 @@
+"use strict";
 SharkGame.ResourceTable = {
     // SPECIAL
 
@@ -17,11 +18,186 @@ SharkGame.ResourceTable = {
         value: -1,
     },
 
+    world: {
+        name: "the world",
+        singleName: "the world",
+        desc: "how are you seeing this",
+        color: "#FFFFFF",
+        value: 123456789,
+        forceIncome: true,
+    },
+
+    aspectAffect: {
+        name: "aspects",
+        singleName: "aspects",
+        desc: "what",
+        income: {
+            get crystal() {
+                if (SharkGame.Aspects.crystallineSkin.level) {
+                    const crystalAmount = res.getResource("crystal");
+                    if (crystalAmount < 25 * 2 ** SharkGame.Aspects.crystallineSkin.level) {
+                        return (25 * 2 ** SharkGame.Aspects.crystallineSkin.level - crystalAmount) / 2;
+                    }
+                }
+                return 0;
+            },
+        },
+    },
+
+    // MAGICAL
+
+    sacrifice: {
+        name: "sacrifices",
+        singleName: "sacrifice",
+        desc: "The cost of progress.",
+        color: "#FFD6FC",
+        value: 1,
+    },
+
+    arcana: {
+        name: "arcana",
+        singleName: "arcana",
+        desc: "Inscrutable mysteries.",
+        color: "#E791FF",
+        value: 1,
+    },
+
+    // SCIENCE
+
+    science: {
+        name: "科學",
+        singleName: "science",
+        desc: "進步的命脈。",
+        color: "#BBA4E0",
+        value: 100,
+    },
+
+    // ANIMALS
+
+    fish: {
+        name: "魚",
+        singleName: "fish",
+        desc: "被捕者。",
+        color: "#E3D85B",
+        value: 2,
+    },
+
+    seaApple: {
+        name: "海蘋果",
+        singleName: "sea apple",
+        desc: "有根的過濾器。",
+        color: "#F0C2C2",
+        value: 3,
+    },
+
+    sponge: {
+        name: "海綿",
+        singleName: "sponge",
+        desc: "又軟綿綿又多孔的食肉動物。",
+        color: "#ED9847",
+        income: {
+            sponge: 0.002,
+            algae: -0.01,
+        },
+        value: 18,
+    },
+
+    jellyfish: {
+        name: "水母",
+        singleName: "jellyfish",
+        color: "#E3B8FF",
+        value: 110,
+    },
+
+    clam: {
+        name: "clams",
+        singleName: "clam",
+        desc: "An acquired taste.",
+        color: "#828FB5",
+        value: 10,
+    },
+
+    // MATERIALS
+
+    sand: {
+        name: "沙",
+        singleName: "sand",
+        desc: "海床的血肉。",
+        color: "#C7BD75",
+        value: 3,
+    },
+
+    crystal: {
+        name: "晶石",
+        singleName: "crystal",
+        desc: "固體的奧妙秘密。",
+        color: "#6FD9CC",
+        value: 10,
+    },
+
+    kelp: {
+        name: "kelp",
+        singleName: "kelp",
+        desc: "A home for the stranger.",
+        color: "#9CC232",
+        income: {
+            seaApple: 0.001,
+        },
+        value: 9,
+    },
+
+    coral: {
+        name: "coral",
+        singleName: "coral",
+        desc: "Color brought to life.",
+        color: "#CA354F",
+        value: 3,
+    },
+
+    algae: {
+        name: "algae",
+        singleName: "algae",
+        color: "#549572",
+        value: 0.4,
+    },
+
+    /* gravel: {
+        name: "gravel",
+        singleName: "gravel",
+        color: "#ABABAB",
+        value: 2,
+    },
+
+    stone: {
+        name: "stones",
+        singleName: "stone",
+        color: "#6B6B6B",
+        value: 3,
+    }, */
+
+    // PROCESSED
+
+    sharkonium: {
+        name: "sharkonium",
+        singleName: "sharkonium",
+        desc: "Progress incarnate.",
+        color: "#8D70CC",
+        value: 70,
+    },
+
+    junk: {
+        name: "residue",
+        singleName: "residue",
+        desc: "Industrial potential.",
+        color: "#ABABAB",
+        value: 1,
+    },
+
     // FRENZY
 
     shark: {
         name: "鯊魚",
-        singleName: "鯊魚",
+        singleName: "shark",
         desc: "海洋的頂級捕食者。",
         color: "#92C1E0",
         income: {
@@ -33,8 +209,8 @@ SharkGame.ResourceTable = {
 
     ray: {
         name: "魟魚",
-        singleName: "魟魚",
-        desc: "鯊魚的骨肉。",
+        singleName: "ray",
+        desc: "鯊魚的骨肉兄弟。",
         color: "#797CFC",
         income: {
             fish: 0.2,
@@ -46,8 +222,8 @@ SharkGame.ResourceTable = {
 
     crab: {
         name: "螃蟹",
-        singleName: "螃蟹",
-        desc: "孝順忠誠的甲殼動物。",
+        singleName: "crab",
+        desc: "勤力又忠實的甲殼動物。",
         color: "#C03030",
         income: {
             crystal: 0.02,
@@ -57,129 +233,10 @@ SharkGame.ResourceTable = {
         value: 1000,
     },
 
-    shrimp: {
-        name: "shrimp",
-        singleName: "shrimp",
-        color: "#EF5D22",
-        income: {
-            algae: 0.5,
-        },
-        jobs: ["queen", "worker"],
-        value: 500,
-    },
-
-    lobster: {
-        name: "lobsters",
-        singleName: "lobster",
-        color: "#BF0F00",
-        income: {
-            clam: 1,
-            sand: 0.5,
-        },
-        jobs: ["berrier", "harvester"],
-        value: 1000,
-    },
-
-    dolphin: {
-        name: "dolphins",
-        singleName: "dolphin",
-        desc: "Fallen from greatness.",
-        color: "#C6BAC6",
-        income: {
-            coral: 0.2,
-        },
-        jobs: ["philosopher", "treasurer", "biologist"],
-        value: 1000,
-    },
-
-    whale: {
-        name: "whales",
-        singleName: "whale",
-        desc: "The gatekeepers.",
-        color: "#37557C",
-        income: {
-            fish: 10000,
-        },
-        jobs: ["chorus"],
-        value: 5000,
-    },
-
-    chimaera: {
-        name: "chimaeras",
-        singleName: "chimaera",
-        color: "#7D77A5",
-        income: {
-            jellyfish: 1.5,
-            fish: 0.1,
-        },
-        jobs: ["transmuter", "explorer"],
-        value: 3000,
-    },
-
-    octopus: {
-        name: "octopuses", // the word 'octopus' in english is taken from latin
-        // which in turn took it from greek
-        // when it was taken from greek and made into latin it kept the original plural
-        // now the word is taken from latin and maybe we should take the original plural but
-        // look basically the point is this is a long and storied word
-        // and the english plural system should apply because we're talking about octopus, not ὀκτώπους, so just
-        // why are you reading this
-        singleName: "octopus",
-        desc: "Lifeforms of pure reason.",
-        color: "#965F37",
-        income: {
-            clam: 2,
-        },
-        jobs: ["collector", "scavenger"],
-        value: 3000,
-    },
-
-    eel: {
-        name: "eels",
-        singleName: "eel",
-        color: "#718D68",
-        income: {
-            fish: 0.3,
-            sand: 0.3,
-        },
-        jobs: ["technician", "pit", "sifter"],
-        value: 3000,
-    },
-
-    squid: {
-        name: "squid",
-        singleName: "squid",
-        // when referring to a group of squid, they are squid.
-        // when referring to various kinds of squids, they are squids.
-        // therefore references to the different professions lumped in with other squids will use 'squids'
-        // and other circumstances referring to a single kind, like this one, will use 'squid'
-        // why are you reading this
-        desc: "Indebted, and forever loyal.",
-        color: "#FA9272",
-        income: {
-            fish: 4,
-        },
-        value: 3000,
-    },
-
-    urchin: {
-        name: "sea urchins",
-        singleName: "sea urchin",
-        desc: "Simple-minded. Others will do thinking for them.",
-        color: "#B98DE0",
-        income: {
-            sand: 0.1,
-            kelp: 0.1,
-        },
-        value: 3000,
-    },
-
-    // BREEDERS
-
     nurse: {
         name: "護士鯊魚",
-        singleName: "護士鯊魚",
-        desc: "保衛未來。",
+        singleName: "nurse shark",
+        desc: "保衛著未來。",
         color: "#C978DE",
         income: {
             shark: 0.01,
@@ -209,76 +266,10 @@ SharkGame.ResourceTable = {
         value: 4000,
     },
 
-    queen: {
-        name: "shrimp queens",
-        singleName: "shrimp queen",
-        color: "#EEA271",
-        income: {
-            shrimp: 1,
-            sponge: -0.01,
-        },
-        value: 2000,
-    },
-
-    berrier: {
-        name: "lobster berriers",
-        singleName: "lobster berrier",
-        color: "#719188",
-        income: {
-            lobster: 0.05,
-        },
-        value: 4000,
-    },
-
-    biologist: {
-        name: "dolphin biologists",
-        singleName: "dolphin biologist",
-        desc: "Why are we encouraging them to multiply??",
-        color: "#5C9976",
-        income: {
-            dolphin: 0.005,
-        },
-        value: 4000,
-    },
-
-    pit: {
-        name: "eel pits",
-        singleName: "eel pit",
-        color: "#3F6E86",
-        income: {
-            eel: 0.01,
-        },
-        value: 4000,
-    },
-
-    spawner: {
-        name: "urchin spawners",
-        singleName: "urchin spawner",
-        desc: "A hope for offspring, with no coordinated effort.",
-        color: "#B056FF",
-        income: {
-            urchin: 0.05,
-        },
-        value: 4000,
-    },
-
-    collective: {
-        name: "squid collectives",
-        singleName: "squid collective",
-        desc: "Group interaction leads to better selection.",
-        color: "#FF4E28",
-        income: {
-            squid: 0.05,
-        },
-        value: 4000,
-    },
-
-    // SPECIALISTS
-
     scientist: {
-        name: "科學鯊魚",
-        singleName: "科學鯊魚",
-        desc: "鯊魚未來的創造者。",
+        name: "science sharks",
+        singleName: "science shark",
+        desc: "Creators of the shark future.",
         color: "#DCEBF5",
         income: {
             science: 0.5,
@@ -286,230 +277,28 @@ SharkGame.ResourceTable = {
         value: 3000,
     },
 
-    diver: {
-        name: "diver sharks",
-        singleName: "diver shark",
-        color: "#6A74AB",
-        income: {
-            crystal: 0.5,
-            jellyfish: 0.5,
-        },
-        value: 3000,
-    },
-
-    /* prospector: {
-        name: "prospector sharks",
-        singleName: "prospector shark",
-        color: "#7C819C",
-        income: {
-            crystal: 0.5,
-            stone: 0.5,
-        },
-        value: 2500,
-    }, */
-
     laser: {
-        name: "激光魟魚",
-        singleName: "激光魟魚",
-        desc: "創造的破壞力。",
+        name: "laser rays",
+        singleName: "laser ray",
+        desc: "Destructive forces of creation.",
         color: "#E85A5A",
         income: {
-            sand: -2,
+            sand: -50,
             crystal: 1,
         },
         value: 3500,
     },
 
-    /* shoveler: {
-        name: "shoveler rays",
-        singleName: "shoveler ray",
-        color: "#7792A3",
-        income: {
-            gravel: 1,
-        },
-        value: 3500,
-    }, */
-
     planter: {
-        name: "種植螃蟹",
-        singleName: "種植螃蟹",
-        desc: "生態系的管家。",
+        name: "planter crabs",
+        singleName: "planter crab",
+        desc: "Stewards of an ecosystem.",
         color: "#AAE03D",
         income: {
             kelp: 0.3,
         },
         value: 4000,
     },
-
-    collector: {
-        name: "collector crabs",
-        singleName: "collector crab",
-        desc: "Harvesters of a dying world.",
-        color: "#ff7847",
-        income: {
-            sponge: 0.5,
-        },
-        value: 4000,
-    },
-
-    /* miller: {
-        name: "miller crabs",
-        singleName: "miller crab",
-        color: "#473E3B",
-        income: {
-            gravel: -0.6,
-            sand: 0.2,
-        },
-        value: 2000,
-    }, */
-
-    worker: {
-        name: "worker shrimp",
-        singleName: "worker shrimp",
-        color: "#D83902",
-        income: {
-            coral: 0.1,
-            sponge: 1,
-        },
-        value: 3000,
-    },
-
-    harvester: {
-        name: "harvester lobsters",
-        singleName: "harvester lobster",
-        color: "#718493",
-        income: {
-            sponge: 0.3,
-            kelp: 1,
-        },
-        value: 3000,
-    },
-
-    /* rockLobster: {
-        name: "rock lobsters",
-        singleName: "rock lobster",
-        color: "#9C706D",
-        income: {
-            stone: -0.5,
-            gravel: 1.5,
-        },
-        value: 2000,
-    }, */
-
-    treasurer: {
-        name: "dolphin treasurers",
-        singleName: "dolphin treasurer",
-        desc: "Guardians of the reefs.",
-        color: "#B4DBBC",
-        income: {
-            crystal: 1,
-            coral: 2,
-        },
-        value: 3000,
-    },
-
-    historian: {
-        name: "dolphin historians",
-        singleName: "dolphin historian",
-        desc: "Dissecters of the past looking onward to the future.",
-        color: "#9FBCBF",
-        value: 3000,
-    },
-
-    philosopher: {
-        name: "dummy dolphin",
-        singleName: "dummy",
-        color: "#000000",
-    },
-
-    chorus: {
-        name: "great chorus",
-        singleName: "great chorus",
-        desc: "A grand ensemble, singing to the tune of life itself.",
-        color: "#85BBA9",
-        value: 100000,
-    },
-
-    transmuter: {
-        name: "chimaera transmuters",
-        singleName: "chimaera transmuter",
-        color: "#6A4BA3",
-        income: {
-            sharkonium: 15,
-            sand: -90,
-            crystal: -10,
-        },
-        value: 3000,
-    },
-
-    explorer: {
-        name: "chimaera explorers",
-        singleName: "chimaera explorer",
-        color: "#64685A",
-        income: {
-            science: 5,
-            jellyfish: 1,
-        },
-        value: 3000,
-    },
-
-    investigator: {
-        name: "octopus investigators",
-        singleName: "octopus investigator",
-        desc: "Curiousity is the seed of progress.",
-        color: "#4c5cad",
-        income: {
-            science: 2,
-        },
-        value: 3000,
-    },
-
-    scavenger: {
-        name: "octopus scavengers",
-        singleName: "octopus scavenger",
-        desc: "Soon, the city will hold no secrets.",
-        color: "#B43B02",
-        income: {
-            ancientPart: 0.01,
-        },
-        value: 3000,
-    },
-
-    technician: {
-        name: "eel technicians",
-        singleName: "eel technician",
-        color: "#7FB6A3",
-        income: {
-            science: 0.8,
-        },
-        value: 3000,
-    },
-
-    sifter: {
-        name: "eel sifters",
-        singleName: "eel sifter",
-        color: "#473E21",
-        income: {
-            sand: 1,
-            crystal: 0.05,
-            kelp: 0.01,
-            // this is not the original incomes for this specialist
-        },
-        value: 3000,
-    },
-
-    extractionTeam: {
-        name: "extraction teams",
-        singleName: "extraction team",
-        desc: "We work better together.",
-        color: "#ff7847", //needs new color
-        income: {
-            crystal: 1,
-        },
-        value: 4000,
-    },
-
-    // MACHINES
 
     crystalMiner: {
         name: "crystal miners",
@@ -519,7 +308,7 @@ SharkGame.ResourceTable = {
         income: {
             crystal: 100,
             //stone: 10,
-            tar: 0.02,
+            tar: 0.04,
         },
         value: 33500, //100 crystal 100 sand 25 sharkonium (3550)
     },
@@ -531,7 +320,7 @@ SharkGame.ResourceTable = {
         color: "#D6CF9F",
         income: {
             sand: 200,
-            tar: 0.01,
+            tar: 0.02,
         },
         value: 120000, //500 sand 150 sharkonium (12000)
     },
@@ -542,8 +331,12 @@ SharkGame.ResourceTable = {
         desc: "Mystic processes automated.",
         color: "#B5A7D1",
         income: {
-            crystal: -90,
-            sand: -250,
+            get crystal() {
+                return -90 + 45 * SharkGame.Aspects.mechanicalManifestation.level;
+            },
+            get sand() {
+                return -250 + 125 * SharkGame.Aspects.mechanicalManifestation.level;
+            },
             sharkonium: 20,
         },
         value: 155000, //100 crystal 200 sharkonium (15500)
@@ -556,7 +349,7 @@ SharkGame.ResourceTable = {
         color: "#C9C7A7",
         income: {
             fish: 400,
-            tar: 0.01,
+            tar: 0.02,
         },
         value: 70000, //100 sharkonium (7000)
     },
@@ -568,71 +361,129 @@ SharkGame.ResourceTable = {
         color: "#8D4863",
         income: {
             junk: 750,
-            sand: -50,
-            fish: -300,
-            tar: 0.01,
+            get sand() {
+                return -50 + 25 * SharkGame.Aspects.mechanicalManifestation.level;
+            },
+            get fish() {
+                return -300 + 150 * SharkGame.Aspects.mechanicalManifestation.level;
+            },
+            tar: 0.02,
         },
         value: 50000,
     },
 
-    purifier: {
-        name: "purifiers",
-        singleName: "purifier",
-        color: "#C2D7D0",
+    // MARINE
+
+    lobster: {
+        name: "lobsters",
+        singleName: "lobster",
+        color: "#BF0F00",
+        desc: "",
         income: {
-            tar: -1,
+            clam: 2,
         },
-        value: 50000,
-        forceIncome: true,
+        value: 1000,
     },
 
-    heater: {
-        name: "heaters",
-        singleName: "heater",
-        desc: "Bringer of life to the frozen wasteland.",
-        color: "#D13F32",
+    berrier: {
+        name: "lobster berriers",
+        singleName: "lobster berrier",
+        color: "#719188",
         income: {
-            kelp: -500,
-            ice: -0.02,
+            lobster: 0.05,
         },
-        value: 50000,
+        value: 4000,
     },
 
-    /* coalescer: {
-        name: "coalescers",
-        singleName: "coalescer",
-        color: "#D2F9E9",
-        income: {
-            knowledge: 0.001,
-        },
-        value: 200000,
-        forceIncome: true,
+    harvester: {
+        name: "harvester lobsters",
+        singleName: "harvester lobster",
+        desc: "",
+        color: "#718493",
+        value: 3000,
     },
 
-    crusher: {
-        name: "stone crushers",
-        singleName: "stone crusher",
-        color: "#75677A",
+    extractor: {
+        name: "clam extractors",
+        singleName: "clam extractor",
+        desc: "",
+        color: "#C3C4DD",
         income: {
-            stone: -5,
-            gravel: 15,
+            clam: 50,
         },
-        value: 175000, // 250 sharkonium (17500)
-        forceIncome: true,
+        value: 3500,
     },
 
-    pulverizer: {
-        name: "gravel pulverizers",
-        singleName: "gravel pulverizer",
-        color: "#B1A5B5",
+    seabedStripper: {
+        name: "seabed strippers",
+        singleName: "seabed stripper",
+        desc: "",
+        color: "#836E5F",
         income: {
-            gravel: -15,
-            sand: 45,
+            kelp: 100,
         },
-        value: 180000, // 250 sharkonium, 250 gravel (18000)
-    }, */
+        value: 20000, // remember to set this value
+    },
 
-    // OTHER MACHINES
+    calciniumConverter: {
+        name: "calcinium converters",
+        singleName: "calcinium converter",
+        desc: "",
+        color: "#836E5F",
+        income: {
+            get crystal() {
+                return -100 + 50 * SharkGame.Aspects.mechanicalManifestation.level;
+            },
+            get clam() {
+                return -300 + 150 * SharkGame.Aspects.mechanicalManifestation.level;
+            },
+            calcinium: 30,
+        },
+        value: 20000, // remember to set this value
+    },
+
+    calcinium: {
+        name: "calcinium",
+        singleName: "calcinium",
+        desc: "",
+        color: "#000000",
+        value: 75,
+    },
+
+    // VIOLENT
+
+    shrimp: {
+        name: "shrimp",
+        singleName: "shrimp",
+        color: "#EF5D22",
+        income: {
+            algae: 0.5,
+        },
+        jobs: ["queen", "worker"],
+        value: 500,
+    },
+
+    queen: {
+        name: "shrimp queens",
+        singleName: "shrimp queen",
+        color: "#EEA271",
+        income: {
+            shrimp: 1,
+            sponge: -0.01,
+        },
+        value: 2000,
+    },
+
+    worker: {
+        name: "worker shrimp",
+        singleName: "worker shrimp",
+        color: "#D83902",
+        income: {
+            coral: 0.1,
+            sponge: 1,
+        },
+        value: 3000,
+    },
 
     spongeFarmer: {
         name: "sponge farmers",
@@ -667,13 +518,89 @@ SharkGame.ResourceTable = {
         value: 50000,
     },
 
+    coralglass: {
+        name: "coralglass",
+        singleName: "coralglass",
+        color: "#FDD5B4",
+        value: 70,
+    },
+
+    // TEMPESTUOUS
+
+    // nothing here yet lol
+
+    // HAVEN
+
+    dolphin: {
+        name: "dolphins",
+        singleName: "dolphin",
+        desc: "Fallen from greatness.",
+        color: "#C6BAC6",
+        income: {
+            coral: 0.2,
+        },
+        jobs: ["treasurer", "biologist"],
+        value: 1000,
+    },
+
+    whale: {
+        name: "whales",
+        singleName: "whale",
+        desc: "The gatekeepers.",
+        color: "#37557C",
+        income: {
+            fish: 10000,
+        },
+        jobs: ["chorus"],
+        value: 5000,
+    },
+
+    biologist: {
+        name: "dolphin biologists",
+        singleName: "dolphin biologist",
+        desc: "Why are we encouraging them to multiply??",
+        color: "#5C9976",
+        income: {
+            dolphin: 0.005,
+        },
+        value: 4000,
+    },
+
+    treasurer: {
+        name: "dolphin treasurers",
+        singleName: "dolphin treasurer",
+        desc: "Guardians of the reefs.",
+        color: "#B4DBBC",
+        income: {
+            crystal: 1,
+            coral: 2,
+        },
+        value: 3000,
+    },
+
+    historian: {
+        name: "dolphin historians",
+        singleName: "dolphin historian",
+        desc: "Dissecters of the past looking onward to the future.",
+        color: "#9FBCBF",
+        value: 3000,
+    },
+
+    chorus: {
+        name: "great chorus",
+        singleName: "great chorus",
+        desc: "A grand ensemble, singing to the tune of life itself.",
+        color: "#85BBA9",
+        value: 100000,
+    },
+
     crimsonCombine: {
         name: "crimson combines",
         singleName: "crimson combine",
         desc: "Harvesters, cloaked in a red mist of coral.",
         color: "#E79E88",
         income: {
-            coral: 150,
+            coral: 250,
         },
         value: 50000,
     },
@@ -684,17 +611,7 @@ SharkGame.ResourceTable = {
         desc: "Gardeners in machine form.",
         color: "#68E06B",
         income: {
-            kelp: 75,
-        },
-        value: 50000,
-    },
-
-    silentArchivist: {
-        name: "silent archivists",
-        singleName: "silent archivist",
-        color: "#608B8F",
-        income: {
-            science: 150,
+            kelp: 200,
         },
         value: 50000,
     },
@@ -705,10 +622,152 @@ SharkGame.ResourceTable = {
         color: "#9AEBCF",
         income: {
             delphinium: 15,
-            coral: -150,
-            crystal: -50,
+            get coral() {
+                return -150 + 75 * SharkGame.Aspects.mechanicalManifestation.level;
+            },
+            get crystal() {
+                return -50 + 25 * SharkGame.Aspects.mechanicalManifestation.level;
+            },
         },
         value: 50000,
+    },
+
+    delphinium: {
+        name: "delphinium",
+        singleName: "delphinium",
+        desc: "Shiny, but probably worthless.",
+        color: "#5BD1A8",
+        value: 70,
+    },
+
+    // SHROUDED
+
+    chimaera: {
+        name: "chimaeras",
+        singleName: "chimaera",
+        desc: "The artisans.",
+        color: "#7D77A5",
+        income: {
+            jellyfish: 2.5,
+        },
+        jobs: ["explorer"],
+        value: 3000,
+    },
+
+    eel: {
+        name: "eels",
+        singleName: "eel",
+        desc: "The builders.",
+        color: "#718D68",
+        income: {
+            fish: 2,
+            sand: 0.3,
+        },
+        jobs: ["pit", "sifter"],
+        value: 3000,
+    },
+
+    pit: {
+        name: "eel pits",
+        singleName: "eel pit",
+        color: "#3F6E86",
+        income: {
+            eel: 0.02,
+        },
+        value: 4000,
+    },
+
+    diver: {
+        name: "diver sharks",
+        singleName: "diver shark",
+        desc: "Daring souls, braving the deep for all of sharkkind.",
+        color: "#6A74AB",
+        income: {
+            crystal: 0.5,
+        },
+        value: 3000,
+    },
+
+    scholar: {
+        name: "ray scholars",
+        singleName: "ray scholar",
+        desc: "Even the arcane unfolds at the hands of study.",
+        color: "#C3C4FF",
+        value: 3500,
+    },
+
+    explorer: {
+        name: "chimaera explorers",
+        singleName: "chimaera explorer",
+        color: "#FFF2D6",
+        income: {
+            arcana: 0.004,
+        },
+        value: 3000,
+    },
+
+    sifter: {
+        name: "eel sifters",
+        singleName: "eel sifter",
+        color: "#A3915A",
+        income: {
+            sand: 100,
+            arcana: 0.001,
+        },
+        value: 3000,
+    },
+
+    // ABANDONED
+
+    octopus: {
+        name: "octopuses", // the word 'octopus' in english is taken from latin
+        // which in turn took it from greek
+        // when it was taken from greek and made into latin it kept the original plural
+        // now the word is taken from latin and maybe we should take the original plural but
+        // look basically the point is this is a long and storied word
+        // and the english plural system should apply because we're talking about octopus, not ὀκτώπους, so just
+        // why are you reading this
+        singleName: "octopus",
+        desc: "Lifeforms of pure reason.",
+        color: "#965F37",
+        income: {
+            clam: 2,
+        },
+        jobs: ["collector", "scavenger"],
+        value: 3000,
+    },
+
+    investigator: {
+        name: "octopus investigators",
+        singleName: "octopus investigator",
+        desc: "Curiousity is the seed of progress.",
+        color: "#4c5cad",
+        income: {
+            science: 2,
+        },
+        value: 3000,
+    },
+
+    scavenger: {
+        name: "octopus scavengers",
+        singleName: "octopus scavenger",
+        desc: "Soon, the city will hold no secrets.",
+        color: "#B43B02",
+        income: {
+            ancientPart: 0.01,
+        },
+        value: 3000,
+    },
+
+    collector: {
+        name: "collector crabs",
+        singleName: "collector crab",
+        desc: "Harvesters of a dying world.",
+        color: "#ff7847",
+        income: {
+            sponge: 0.5,
+        },
+        value: 4000,
     },
 
     clamCollector: {
@@ -717,7 +776,7 @@ SharkGame.ResourceTable = {
         desc: "Directive: amass resources.",
         color: "#727887",
         income: {
-            clam: 250,
+            clam: 300,
             tar: 0.2,
         },
         value: 50000,
@@ -730,32 +789,13 @@ SharkGame.ResourceTable = {
         color: "#76614C",
         income: {
             spronge: 45,
-            sponge: -75,
-            junk: -225,
-            tar: 0.05,
-        },
-        value: 50000,
-    },
-
-    seaScourer: {
-        name: "sea scourers",
-        singleName: "sea scourer",
-        color: "#8E8F91",
-        income: {
-            tar: -0.2,
-            junk: 400,
-        },
-        value: 50000,
-        forceIncome: true,
-    },
-
-    prostheticPolyp: {
-        name: "prosthetic polyps",
-        singleName: "prosthetic polyp",
-        color: "#A39497",
-        income: {
-            coral: 30,
-            tar: 0.01,
+            get sponge() {
+                return -75 + 32.5 * SharkGame.Aspects.mechanicalManifestation.level;
+            },
+            get junk() {
+                return -225 + 112.5 * SharkGame.Aspects.mechanicalManifestation.level;
+            },
+            tar: 0.04,
         },
         value: 50000,
     },
@@ -772,167 +812,6 @@ SharkGame.ResourceTable = {
         value: 50000,
     },
 
-    // SCIENCE
-
-    science: {
-        name: "科學",
-        singleName: "科學",
-        desc: "進步的命脈。",
-        color: "#BBA4E0",
-        /* income: {
-            knowledge: 0.01,
-        }, */
-        value: 100,
-    },
-
-    // ANIMALS
-
-    fish: {
-        name: "魚",
-        singleName: "魚",
-        desc: "所捕獵之物。",
-        color: "#E3D85B",
-        value: 2,
-    },
-
-    seaApple: {
-        name: "海蘋果",
-        singleName: "海蘋果",
-        desc: "有根的濾器。",
-        color: "#F0C2C2",
-        value: 3,
-    },
-
-    sponge: {
-        name: "sponge",
-        singleName: "sponge",
-        desc: "Soft, porous carnivores.",
-        color: "#ED9847",
-        income: {
-            sponge: 0.002,
-            algae: -0.01,
-        },
-        value: 12,
-    },
-
-    jellyfish: {
-        name: "jellyfish",
-        singleName: "jellyfish",
-        color: "#E3B8FF",
-        value: 10,
-    },
-
-    clam: {
-        name: "clams",
-        singleName: "clam",
-        desc: "An acquired taste.",
-        color: "#828FB5",
-        value: 3,
-    },
-
-    // MATERIALS
-
-    sand: {
-        name: "沙子",
-        singleName: "沙子",
-        desc: "海底之肉。",
-        color: "#C7BD75",
-        value: 3,
-    },
-
-    crystal: {
-        name: "水晶",
-        singleName: "水晶",
-        desc: "固體的高深莫測的祕密。",
-        color: "#6FD9CC",
-        value: 15,
-    },
-
-    kelp: {
-        name: "海帶",
-        singleName: "海帶",
-        desc: "外來者之居。",
-        color: "#9CC232",
-        income: {
-            seaApple: 0.001,
-        },
-        value: 9,
-    },
-
-    coral: {
-        name: "珊瑚",
-        singleName: "珊瑚",
-        desc: "生命的顏色。",
-        color: "#CA354F",
-        value: 3,
-    },
-
-    algae: {
-        name: "algae",
-        singleName: "algae",
-        color: "#549572",
-        value: 0.4,
-    },
-
-    ancientPart: {
-        name: "ancient parts",
-        singleName: "ancient part",
-        desc: "The mistakes of our predecessors.",
-        color: "#8a6853",
-        value: 500,
-    },
-
-    filter: {
-        name: "sponge filters",
-        singleName: "sponge filter",
-        desc: "The solution to our mistakes.",
-        color: "#FFC89C",
-        income: {
-            tar: -0.01,
-        },
-        value: 1000,
-        forceIncome: true,
-    },
-
-    /* gravel: {
-        name: "gravel",
-        singleName: "gravel",
-        color: "#ABABAB",
-        value: 2,
-    },
-
-    stone: {
-        name: "stones",
-        singleName: "stone",
-        color: "#6B6B6B",
-        value: 3,
-    }, */
-
-    // PROCESSED
-
-    sharkonium: {
-        name: "鯊魚素",
-        singleName: "鯊魚素",
-        desc: "進步的化身。",
-        color: "#8D70CC",
-        value: 70,
-    },
-
-    coralglass: {
-        name: "coralglass",
-        singleName: "coralglass",
-        color: "#FDD5B4",
-        value: 70,
-    },
-
-    delphinium: {
-        name: "delphinium",
-        singleName: "delphinium",
-        desc: "Shiny, but probably worthless.",
-        color: "#5BD1A8",
-        value: 70,
-    },
-
     spronge: {
         name: "spronge",
         singleName: "spronge",
@@ -940,23 +819,6 @@ SharkGame.ResourceTable = {
         color: "#A97D53",
         value: 70,
     },
-
-    /* calcinium: {
-        name: "calcinium",
-        singleName: "calcinium",
-        color: "#000000",
-        value: 75,
-    }, */
-
-    junk: {
-        name: "residue",
-        singleName: "residue",
-        desc: "Industrial potential.",
-        color: "#ABABAB",
-        value: 1,
-    },
-
-    // HARMFUL
 
     tar: {
         name: "tar",
@@ -986,18 +848,115 @@ SharkGame.ResourceTable = {
             planter: -0.001,
             worker: -0.001,
             harvester: -0.001,
-            philosopher: -0.001,
             treasurer: -0.001,
-            transmuter: -0.001,
             explorer: -0.001,
             collector: -0.001,
             scavenger: -0.005,
             investigator: -0.005,
-            technician: -0.001,
             sifter: -0.001,
+            squid: -0.001,
+            urchin: -0.001,
+            collective: -0.001,
+            extractionTeam: -0.001,
+            spawner: -0.001,
         },
         value: -100,
         forceIncome: true,
+    },
+
+    ancientPart: {
+        name: "ancient parts",
+        singleName: "ancient part",
+        desc: "The mistakes of our predecessors.",
+        color: "#8a6853",
+        value: 500,
+    },
+
+    filter: {
+        name: "sponge filters",
+        singleName: "sponge filter",
+        desc: "The solution to our mistakes.",
+        color: "#FFC89C",
+        income: {
+            tar: -0.01,
+        },
+        value: 1000,
+        forceIncome: true,
+    },
+
+    // FRIGID
+
+    squid: {
+        name: "squid",
+        singleName: "squid",
+        // when referring to a group of squid, they are squid.
+        // when referring to various kinds of squids, they are squids.
+        // therefore references to the different professions lumped in with other squids will use 'squids'
+        // and other circumstances referring to a single kind, like this one, will use 'squid'
+        // why are you reading this
+        desc: "Indebted, and forever loyal.",
+        color: "#FA9272",
+        income: {
+            fish: 4,
+        },
+        value: 3000,
+    },
+
+    urchin: {
+        name: "sea urchins",
+        singleName: "sea urchin",
+        desc: "Simple-minded. Others will do thinking for them.",
+        color: "#B98DE0",
+        income: {
+            sand: 0.1,
+            kelp: 0.1,
+        },
+        value: 3000,
+    },
+
+    spawner: {
+        name: "urchin spawners",
+        singleName: "urchin spawner",
+        desc: "A hope for offspring, with no coordinated effort.",
+        color: "#B056FF",
+        income: {
+            urchin: 0.05,
+        },
+        value: 4000,
+    },
+
+    collective: {
+        name: "squid collectives",
+        singleName: "squid collective",
+        desc: "Group interaction leads to better selection.",
+        color: "#FF4E28",
+        income: {
+            squid: 0.05,
+        },
+        value: 4000,
+    },
+
+    extractionTeam: {
+        name: "extraction teams",
+        singleName: "extraction team",
+        desc: "We work better together.",
+        color: "#ff7847", //needs new color
+        income: {
+            crystal: 1,
+        },
+        value: 4000,
+    },
+
+    heater: {
+        name: "heaters",
+        singleName: "heater",
+        desc: "Bringer of life to the frozen wasteland.",
+        color: "#D13F32",
+        income: {
+            kelp: -500,
+            ice: -0.02,
+        },
+        value: 50000,
     },
 
     ice: {
@@ -1009,14 +968,83 @@ SharkGame.ResourceTable = {
         forceIncome: true,
     },
 
-    world: {
-        name: "world",
-        singleName: "world",
-        desc: "how are you seeing this",
-        color: "#FFFFFF",
-        value: 123456789,
+    // SPECIALISTS
+
+    /* prospector: {
+        name: "prospector sharks",
+        singleName: "prospector shark",
+        color: "#7C819C",
+        income: {
+            crystal: 0.5,
+            stone: 0.5,
+        },
+        value: 2500,
+    }, */
+    /* shoveler: {
+        name: "shoveler rays",
+        singleName: "shoveler ray",
+        color: "#7792A3",
+        income: {
+            gravel: 1,
+        },
+        value: 3500,
+    }, */
+    /* miller: {
+        name: "miller crabs",
+        singleName: "miller crab",
+        color: "#473E3B",
+        income: {
+            gravel: -0.6,
+            sand: 0.2,
+        },
+        value: 2000,
+    }, */
+    /* rockLobster: {
+        name: "rock lobsters",
+        singleName: "rock lobster",
+        color: "#9C706D",
+        income: {
+            stone: -0.5,
+            gravel: 1.5,
+        },
+        value: 2000,
+    }, */
+
+    // MACHINES
+
+    /* coalescer: {
+        name: "coalescers",
+        singleName: "coalescer",
+        color: "#D2F9E9",
+        income: {
+            knowledge: 0.001,
+        },
+        value: 200000,
         forceIncome: true,
     },
+
+    crusher: {
+        name: "stone crushers",
+        singleName: "stone crusher",
+        color: "#75677A",
+        income: {
+            stone: -5,
+            gravel: 15,
+        },
+        value: 175000, // 250 sharkonium (17500)
+        forceIncome: true,
+    },
+
+    pulverizer: {
+        name: "gravel pulverizers",
+        singleName: "gravel pulverizer",
+        color: "#B1A5B5",
+        income: {
+            gravel: -15,
+            sand: 45,
+        },
+        value: 180000, // 250 sharkonium, 250 gravel (18000)
+    }, */
 };
 
 SharkGame.GeneratorIncomeAffectorsOriginal = {
@@ -1051,9 +1079,11 @@ SharkGame.GeneratorIncomeAffectorsOriginal = {
     ice: {
         multiply: {
             shark: -0.001,
+            ray: -0.001,
             crab: -0.001,
             scientist: -0.001,
             nurse: -0.001,
+            maker: -0.001,
             brood: -0.001,
             world: -0.00125,
         },
@@ -1065,6 +1095,13 @@ SharkGame.GeneratorIncomeAffectorsOriginal = {
             sandDigger: 0.99,
         },
     },
+    // cool tooltip test crab
+    /*     crab: {
+        exponentiate: {
+            squid: 0.99,
+            shark: 0.99,
+        },
+    }, */
 };
 
 SharkGame.GeneratorIncomeAffected = {
@@ -1078,9 +1115,33 @@ SharkGame.ResourceIncomeAffectorsOriginal = {
             science: 0.01,
         },
     },
-    /*     ice: {
+    scholar: {
         multiply: {
-            ice: -0.00125,
+            arcana: 0.01,
+        },
+    },
+    sacrifice: {
+        multiply: {
+            fish: 0.001,
+            sand: 0.001,
+            crystal: 0.001,
+            jellyfish: 0.001,
+        },
+    },
+    harvester: {
+        multiply: {
+            seaApple: 0.05,
+        },
+    },
+    // cool tooltip test shark
+    /*     shark: {
+        multiply: {
+            ray: 0.01,
+            crab: 0.1,
+        },
+        exponentiate: {
+            kelp: 0.95,
+            scientist: 1.02,
         },
     }, */
 };
@@ -1100,103 +1161,10 @@ SharkGame.ResourceSpecialProperties = {
 };
 
 SharkGame.ResourceCategories = {
-    special: {
-        name: "Special",
-        disposeMessage: ["What have you done??"],
-        resources: ["numen", "essence"],
-    },
-    frenzy: {
-        name: "Frenzy",
-        disposeMessage: [
-            "You bid farewell as your community gets smaller.",
-            "Goodbye, faithful workforce. There's plenty of other fish out in the sea.",
-            "Well, it was good while it lasted.",
-            "Perhaps one day they'll send you a message of how they're doing.",
-            "Yes, throw your friends away. Callously discard them. I won't judge you.",
-            "Was it something they said?",
-            "Are you happy with what you've done?",
-        ],
-        resources: ["shark", "ray", "crab", "shrimp", "lobster", "dolphin", "whale", "chimaera", "octopus", "eel", "squid", "urchin"],
-    },
-    breeders: {
-        name: "Breeders",
-        disposeMessage: [
-            "Parenting is hard work anyway.",
-            "Overpopulation is a real concern!",
-            "Responsible population management is always good to see.",
-            "You sure you want to disrupt this accelerated growth curve?",
-            "Back to a simpler life, maybe.",
-        ],
-        resources: ["nurse", "maker", "brood", "queen", "berrier", "biologist", "pit", "collective", "spawner"],
-    },
-    specialists: {
-        name: "Specialists",
-        disposeMessage: [
-            "All that training for nothing. Oh well.",
-            "Their equipment isn't salvageable, unfortunately, but that's how these things go. The ocean gives, and the ocean corrodes things away.",
-            "Well, they'll be waiting if you need them to take up their specialisation again.",
-            "They might be happier this way. Or maybe they were happier before. Well, 50-50 odds!",
-            "Back to their past jobs and simpler lives.",
-            "They return to what they once knew best.",
-        ],
-        resources: [
-            "scientist",
-            "diver",
-            "laser",
-            "planter",
-            "collector",
-            "treasurer",
-            "worker",
-            "harvester",
-            "historian",
-            "chorus",
-            "transmuter",
-            "explorer",
-            "investigator",
-            "scavenger",
-            "technician",
-            "sifter",
-            "extractionTeam",
-            //"prospector",
-            //"shoveler",
-            //"miller",
-            //"rockLobster",
-        ],
-    },
-    machines: {
-        name: "Machines",
-        disposeMessage: [
-            "The stopped machines are left as a home for tinier life.",
-            "The machines calculate your actions as inefficient and a danger to productivity.",
-            "The machines want to know if they will dream.",
-            "'Daisy, Daisy, give me your answer do...'",
-            "An engineer shark looks on as their hard work lies buried under the sands.",
-            "The other machines feel a little quieter and almost resentful.",
-        ],
-        resources: [
-            "crystalMiner",
-            "sandDigger",
-            "autoTransmuter",
-            "fishMachine",
-            "skimmer",
-            "purifier",
-            "heater",
-            "spongeFarmer",
-            "berrySprayer",
-            "glassMaker",
-            "silentArchivist",
-            "tirelessCrafter",
-            "clamCollector",
-            "sprongeSmelter",
-            "seaScourer",
-            "prostheticPolyp",
-            "eggBrooder",
-            "crimsonCombine",
-            "kelpCultivator",
-            //"coalescer",
-            //"crusher",
-            //"pulverizer",
-        ],
+    harmful: {
+        name: "Harmful",
+        disposeMessage: ["Oh, you'd like that, wouldn't you."],
+        resources: ["tar", "ice"],
     },
     scientific: {
         name: "Science",
@@ -1213,6 +1181,32 @@ SharkGame.ResourceCategories = {
             "science",
             //"knowledge",
         ],
+    },
+    magical: {
+        name: "Magical",
+        disposeMessage: [
+            "Pff, magic was overrated anyways.",
+            "Magic isn't real anyways! Right?",
+            "If magic was real before, then it sure isn't now.",
+            "Abra kadabra, your resources are gone!",
+            "All that magical stuff poofs away in an instant.",
+            "Seriously though, how DO you dispose of magic?",
+            "Magic wielders all across the sea feel a disturbance as the stuff is disposed of.",
+        ],
+        resources: ["arcana"],
+    },
+    frenzy: {
+        name: "Frenzy",
+        disposeMessage: [
+            "You bid farewell as your community gets smaller.",
+            "Goodbye, faithful workforce. There's plenty of other fish out in the sea.",
+            "Well, it was good while it lasted.",
+            "Perhaps one day they'll send you a message of how they're doing.",
+            "Yes, throw your friends away. Callously discard them. I won't judge you.",
+            "Was it something they said?",
+            "Are you happy with what you've done?",
+        ],
+        resources: ["shark", "ray", "crab", "shrimp", "lobster", "dolphin", "whale", "chimaera", "octopus", "eel", "squid", "urchin"],
     },
     animals: {
         name: "Animals",
@@ -1258,17 +1252,95 @@ SharkGame.ResourceCategories = {
             "The foundation of a modern shark frenzy, perhaps, but also sort of taking up all the space.",
             "Let's hope we don't regret it.",
         ],
-        resources: ["sharkonium", "coralglass", "delphinium", "spronge", "ancientPart", "junk", "filter"],
+        resources: ["sharkonium", "coralglass", "delphinium", "spronge", "calcinium", "ancientPart", "junk", "filter"],
     },
-    harmful: {
-        name: "Harmful",
-        disposeMessage: ["Oh, you'd like that, wouldn't you."],
-        resources: ["tar", "ice"],
+    breeders: {
+        name: "Breeders",
+        disposeMessage: [
+            "Parenting is hard work anyway.",
+            "Overpopulation is a real concern!",
+            "Responsible population management is always good to see.",
+            "You sure you want to disrupt this accelerated growth curve?",
+            "Back to a simpler life, maybe.",
+        ],
+        resources: ["nurse", "maker", "brood", "queen", "berrier", "biologist", "pit", "collective", "spawner"],
+    },
+    specialists: {
+        name: "Specialists",
+        disposeMessage: [
+            "All that training for nothing. Oh well.",
+            "Their equipment isn't salvageable, unfortunately, but that's how these things go. The ocean gives, and the ocean corrodes things away.",
+            "Well, they'll be waiting if you need them to take up their specialisation again.",
+            "They might be happier this way. Or maybe they were happier before. Well, 50-50 odds!",
+            "Back to their past jobs and simpler lives.",
+            "They return to what they once knew best.",
+        ],
+        resources: [
+            "scientist",
+            "diver",
+            "laser",
+            "planter",
+            "collector",
+            "treasurer",
+            "worker",
+            "harvester",
+            "historian",
+            "chorus",
+            "explorer",
+            "investigator",
+            "scavenger",
+            "sifter",
+            "extractionTeam",
+            "scholar",
+            "extractor",
+            //"prospector",
+            //"shoveler",
+            //"miller",
+            //"rockLobster",
+        ],
+    },
+    machines: {
+        name: "Machines",
+        disposeMessage: [
+            "The stopped machines are left as a home for tinier life.",
+            "The machines calculate your actions as inefficient and a danger to productivity.",
+            "The machines want to know if they will dream.",
+            "'Daisy, Daisy, give me your answer do...'",
+            "An engineer shark looks on as their hard work lies buried under the sands.",
+            "The other machines feel a little quieter and almost resentful.",
+        ],
+        resources: [
+            "crystalMiner",
+            "sandDigger",
+            "autoTransmuter",
+            "fishMachine",
+            "skimmer",
+            "heater",
+            "spongeFarmer",
+            "berrySprayer",
+            "glassMaker",
+            "tirelessCrafter",
+            "clamCollector",
+            "sprongeSmelter",
+            "eggBrooder",
+            "crimsonCombine",
+            "kelpCultivator",
+            "seabedStripper",
+            "calciniumConverter",
+            //"coalescer",
+            //"crusher",
+            //"pulverizer",
+        ],
+    },
+    special: {
+        name: "Special",
+        disposeMessage: ["What have you done??"],
+        resources: ["numen", "essence"],
     },
     hidden: {
         name: "Hidden",
         disposeMessage: ["Bad player! Stop it!"],
-        resources: ["world"],
+        resources: ["world", "sacrifice", "aspectAffect"],
     },
 };
 
@@ -1303,11 +1375,11 @@ SharkGame.InternalCategories = {
     },
     octopuses: {
         name: "Octopuses",
-        resources: ["octopus", "scavenger", "collector"],
+        resources: ["octopus", "scavenger", "investigator"],
     },
     eels: {
         name: "Eels",
-        resources: ["eel", "technician", "sifter", "pit"],
+        resources: ["eel", "sifter", "pit"],
     },
     squids: {
         name: "Squids",
@@ -1319,7 +1391,7 @@ SharkGame.InternalCategories = {
     },
     chimaeras: {
         name: "Chimaeras",
-        resources: ["chimaera", "explorer", "transmuter"],
+        resources: ["chimaera", "explorer"],
     },
     sharkmachines: {
         name: "Shark Machines",
@@ -1327,7 +1399,7 @@ SharkGame.InternalCategories = {
     },
     dolphinmachines: {
         name: "Dolphin Machines",
-        resources: ["delphinium", "silentArchivist", "tirelessCrafter", "kelpCultivator", "crimsonCombine"],
+        resources: ["delphinium", "tirelessCrafter", "kelpCultivator", "crimsonCombine"],
     },
     crustaceanmachines: {
         name: "Crustacean Machines",
@@ -1335,7 +1407,11 @@ SharkGame.InternalCategories = {
     },
     octopusmachines: {
         name: "Octopus Machines",
-        resources: ["spronge", "seaScourer", "prostheticPolyp", "clamCollector", "sprongeSmelter", "eggBrooder"],
+        resources: ["spronge", "clamCollector", "sprongeSmelter", "eggBrooder"],
+    },
+    lobstermachines: {
+        name: "Lobster Machines",
+        resources: ["calcinium", "seabedStripper", "calciniumConverter"],
     },
     basicmaterials: {
         resources: ["fish", "sand", "crystal", "science", "junk"],

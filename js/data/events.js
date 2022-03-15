@@ -32,16 +32,16 @@ SharkGame.Events = {
         handlingTime: "beforeTick",
         priority: 2,
         getAction() {
-            if (SharkGame.World.worldType === "frigid") {
-                if (SharkGame.Upgrades.purchased.indexOf("civilContact") > -1) {
-                    return "trigger";
-                }
-                return "pass";
+            if (SharkGame.World.worldType !== "frigid") {
+                return "remove";
             }
-            return "remove";
+            if (SharkGame.Upgrades.purchased.includes("civilContact")) {
+                return "trigger";
+            }
+            return "pass";
         },
         trigger() {
-            SharkGame.GeneratorIncomeAffectors.ice.multiply.world = -0.0015015;
+            SharkGame.GeneratorIncomeAffectors.ice.multiply.world = -(1 / 666);
             res.clearNetworks();
             res.buildIncomeNetwork();
         },
@@ -50,13 +50,13 @@ SharkGame.Events = {
         handlingTime: "beforeTick",
         priority: 3,
         getAction() {
-            if (SharkGame.World.worldType === "frigid") {
-                if (SharkGame.Upgrades.purchased.indexOf("rapidRecharging") > -1) {
-                    return "trigger";
-                }
-                return "pass";
+            if (SharkGame.World.worldType !== "frigid") {
+                return "remove";
             }
-            return "remove";
+            if (SharkGame.Upgrades.purchased.indexOf("rapidRecharging") > -1) {
+                return "trigger";
+            }
+            return "pass";
         },
         trigger() {
             res.applyModifier("planetaryIncome", "ice", -51);
@@ -75,13 +75,13 @@ SharkGame.Events = {
         handlingTime: "afterTick",
         priority: 0,
         getAction() {
-            if (SharkGame.World.worldType === "frigid") {
-                if (res.getResource("ice") > 999) {
-                    return "trigger";
-                }
-                return "pass";
+            if (SharkGame.World.worldType !== "frigid") {
+                return "remove";
             }
-            return "remove";
+            if (res.getResource("ice") > 999) {
+                return "trigger";
+            }
+            return "pass";
         },
         trigger() {
             res.setResource("ice", 999);
@@ -95,34 +95,92 @@ SharkGame.Events = {
             return "remove";
         },
         trigger() {
-            if (res.getResource("urchin") < 1) {
+            if (!SharkGame.flags.frigidAddedUrchin) {
                 SharkGame.Resources.changeResource("urchin", 1);
-                // I know this opens up an exploit for one free urchin if you load a save with none with this upgrade,
-                // but the exploit is meaningless, sooo
+                SharkGame.flags.frigidAddedUrchin = true;
             }
         },
     },
-    theMinuteHandEvent: {
+    revealBuyButtons: {
         handlingTime: "beforeTick",
         priority: 0,
         getAction() {
-            if (SharkGame.Settings.current.offlineModeActive) {
-                if (SharkGame.timestampSimulated - SharkGame.timestampRunStart < 60000 && SharkGame.Aspects.theMinuteHand.level) {
-                    return "trigger";
-                }
-            } else {
-                if (
-                    SharkGame.timestampSimulated + SharkGame.timestampLastSave - 2 * SharkGame.timestampRunStart < 60000 &&
-                    SharkGame.Aspects.theMinuteHand.level
-                ) {
-                    return "trigger";
-                }
+            if (SharkGame.persistentFlags.revealedBuyButtons) {
+                return "remove";
             }
-            res.specialMultiplier = 1;
-            return "remove";
+            if (res.getTotalResource("crab") > 12 || res.getTotalResource("crystal") > 12) {
+                return "trigger";
+            }
+            return "pass";
         },
         trigger() {
-            res.specialMultiplier = SharkGame.Aspects.theMinuteHand.level + 3;
+            SharkGame.persistentFlags.revealedBuyButtons = true;
+            SharkGame.TabHandler.setUpTab();
+        },
+    },
+    /*getAllAffordableUpgrades*/
+    updateLabNotifier: {
+        handlingTime: "afterTick",
+        priority: 0,
+        getAction() {
+            if (SharkGame.TabHandler.isTabUnlocked("lab")) {
+                return "trigger";
+            }
+            return "pass";
+        },
+        trigger() {
+            if (SharkGame.Lab.findAllAffordableUpgrades().length) {
+                $("#tab-lab").html("(<strong>!</strong>) Laboratory");
+            } else {
+                $("#tab-lab").html("Laboratory");
+            }
+            return true;
+        },
+    },
+    remindAboutBuyMax: {
+        handlingTime: "afterTick",
+        priority: 0,
+        getAction() {
+            if (SharkGame.persistentFlags.individuallyBoughtSharkonium === -1) {
+                return "remove";
+            }
+            if (SharkGame.persistentFlags.individuallyBoughtSharkonium >= 50) {
+                return "trigger";
+            }
+            return "pass";
+        },
+        trigger() {
+            if (sharkmath.getBuyAmount() === 1 && SharkGame.Tabs.current === "home") {
+                $("#buy--1").addClass("reminderShadow");
+            } else {
+                $("#buy--1").removeClass("reminderShadow");
+                SharkGame.persistentFlags.individuallyBoughtSharkonium = 49;
+            }
+            return true;
+        },
+    },
+    aspectRefresh: {
+        handlingTime: "beforeTick",
+        priority: 0,
+        getAction() {
+            return "trigger";
+        },
+        trigger() {
+            res.reapplyModifiers("aspectAffect", "crystal");
+            return true;
+        },
+    },
+    resetPressAllButtonsKeybind: {
+        handlingTime: "beforeTick",
+        priority: 0,
+        getAction() {
+            if (!SharkGame.gameOver) {
+                return "trigger";
+            }
+            return "pass";
+        },
+        trigger() {
+            SharkGame.flags.pressedAllButtonsThisTick = false;
             return true;
         },
     },

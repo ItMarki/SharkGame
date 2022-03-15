@@ -15,6 +15,13 @@ SharkGame.World = {
 
     init() {
         world.resetWorldProperties();
+        world.worldType = "start";
+    },
+
+    setup() {
+        res.setResource("world", 1);
+        res.setTotalResource("world", 1);
+        world.apply();
     },
 
     apply() {
@@ -30,8 +37,6 @@ SharkGame.World = {
         SharkGame.ResourceMap.forEach((_resourceData, resourceName) => {
             worldResources.set(resourceName, {});
             worldResources.get(resourceName).exists = true;
-            worldResources.get(resourceName).income = 0;
-            worldResources.get(resourceName).aspectMultiplier = 1;
         });
     },
 
@@ -94,5 +99,19 @@ SharkGame.World = {
 
     getGateCostMultiplier() {
         return 1;
+    },
+
+    isScoutingMission() {
+        if (SharkGame.flags.scouting) {
+            return true;
+        }
+
+        // if this is NOT marked as a scouting mission, make sure that's accurate
+        // (but if it IS marked as a scouting mission, we don't care if that's accurate, just blindly accept)
+        if (!gateway.completedWorlds.includes(world.worldType)) {
+            // this should be a scouting mission
+            SharkGame.flags.scouting = true;
+        }
+        return SharkGame.flags.scouting;
     },
 };
